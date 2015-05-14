@@ -1,0 +1,11 @@
+<Context>
+	<Resource name="jdbc/libraryDB"
+			  auth="Container"
+			  type="javax.sql.DataSource"
+			  driverClassName="org.postgresql.Driver"
+		      url="jdbc:postgresql://141.19.96.94/ss15-gruppe12_DB"
+    		  username="ss15-gruppe12"
+    		  password="Aho6Nob4"
+    		  maxActive="250" maxIdle="5"
+	/>
+</Context>
