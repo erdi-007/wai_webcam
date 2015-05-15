@@ -33,7 +33,7 @@ public class Image {
 		calendar.setTime(date);
 		
 		String dir = this.getClass().getClassLoader().getResource("").getPath();
-		String delete = "/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/db_test/WEB-INF/classes/";
+		String delete = "/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/wai_webcam/WEB-INF/classes/";
 		
 		dir = dir.replace(delete, "");
 		
