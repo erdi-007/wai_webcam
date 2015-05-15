@@ -7,35 +7,35 @@ public class User {
 	private String password;
 	private boolean is_admin;
 	
-    public Long get_id() {
+    public Long getId() {
         return id;
     }
 
-    public void set_id(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String get_name() {
+    public String getName() {
         return name;
     }
 
-    public void set_name(String name) {
+    public void setName(String name) {
         this.name = name;
     }
     
-    public String get_password() {
+    public String getPassword() {
         return password;
     }
 
-    public void set_password(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
     
-    public boolean get_admin_state() {
+    public boolean getAdmin() {
     	return is_admin;
     }
     
-    public void set_admin_state(boolean is_admin) {
+    public void setAdmin(boolean is_admin) {
     	this.is_admin = is_admin;
     }
 }

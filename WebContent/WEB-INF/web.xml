@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
-  <display-name>db_test</display-name>
+  <display-name>wai_webcam</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
@@ -9,4 +9,52 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <servlet-name>Index</servlet-name>
+    <servlet-class>servlets.Index</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Index</servlet-name>
+    <url-pattern>/index</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>UserList</servlet-name>
+    <servlet-class>servlets.UserList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserList</servlet-name>
+    <url-pattern>/userlist</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>UserEdit</servlet-name>
+    <servlet-class>servlets.UserEdit</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserEdit</servlet-name>
+    <url-pattern>/useredit</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>CameraList</servlet-name>
+    <servlet-class>servlets.CameraList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CameraList</servlet-name>
+    <url-pattern>/cameralist</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>CameraEdit</servlet-name>
+    <servlet-class>servlets.CameraEdit</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CameraEdit</servlet-name>
+    <url-pattern>/cameraedit</url-pattern>
+  </servlet-mapping>  
+  <servlet>
+    <servlet-name>PrivilegeList</servlet-name>
+    <servlet-class>servlets.PrivilegeList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PrivilegeList</servlet-name>
+    <url-pattern>/privilegelist</url-pattern>
+  </servlet-mapping>
 </web-app>

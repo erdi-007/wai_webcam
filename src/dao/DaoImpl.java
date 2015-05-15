@@ -14,6 +14,7 @@ import exception.CameraNotFoundException;
 import exception.CameraNotDeletedException;
 import exception.ImageNotSavedException;
 import exception.ImageNotFoundException;
+import exception.ImagesNotDeletedException;
 import exception.UserNotSavedException;
 import exception.UserNotFoundException;
 import exception.UserNotDeletedException;
@@ -35,12 +36,11 @@ public class DaoImpl implements Dao{
 			throw new IllegalArgumentException("image can not be null");
 		
 		Connection connection = null;		
-		try {
-			java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp(image.get_Date().getTime());			
+		try {			
 			connection = jndi.getConnection("jdbc/libraryDB");	
 			PreparedStatement pstmt = connection.prepareStatement("insert into public.images (cameraID, date) values (?,?)");
-			pstmt.setLong(1, image.get_cameraID());
-			pstmt.setTimestamp(2, sqlTimestamp);
+			pstmt.setLong(1, image.getCameraID());
+			pstmt.setTimestamp(2, image.getDate());
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			throw new ImageNotSavedException();
@@ -58,20 +58,18 @@ public class DaoImpl implements Dao{
 		Connection connection = null;		
 		try {
 			connection = jndi.getConnection("jdbc/libraryDB");			
-			if (camera.get_id() == null) {
-				PreparedStatement pstmt = connection.prepareStatement("insert into public.cameras (name, description, url, path) values (?,?,?,?)");
-				pstmt.setString(1, camera.get_name());
-				pstmt.setString(2, camera.get_description());
-				pstmt.setString(3, camera.get_url());
-				pstmt.setString(4, camera.get_path());
+			if (camera.getId() == null) {
+				PreparedStatement pstmt = connection.prepareStatement("insert into public.cameras (name, description, url) values (?,?,?)");
+				pstmt.setString(1, camera.getName());
+				pstmt.setString(2, camera.getDescription());
+				pstmt.setString(3, camera.getUrl());
 				pstmt.executeUpdate();
 			} else {
-				PreparedStatement pstmt = connection.prepareStatement("update public.cameras set name = ?, description = ?, url = ?, path = ? where cameraID = ?");
-				pstmt.setString(1, camera.get_name());
-				pstmt.setString(2, camera.get_description());
-				pstmt.setString(3, camera.get_url());
-				pstmt.setString(4, camera.get_path());
-				pstmt.setLong(5, camera.get_id());
+				PreparedStatement pstmt = connection.prepareStatement("update public.cameras set name = ?, description = ?, url = ? where cameraID = ?");
+				pstmt.setString(1, camera.getName());
+				pstmt.setString(2, camera.getDescription());
+				pstmt.setString(3, camera.getUrl());
+				pstmt.setLong(4, camera.getId());
 				pstmt.executeUpdate();
 			}			
 		} catch (Exception e) {
@@ -90,18 +88,18 @@ public class DaoImpl implements Dao{
 		Connection connection = null;		
 		try {
 			connection = jndi.getConnection("jdbc/libraryDB");			
-			if (user.get_id() == null) {
+			if (user.getId() == null) {
 				PreparedStatement pstmt = connection.prepareStatement("insert into public.user (is_admin, name, password) values (?,?,?)");
-				pstmt.setBoolean(1, user.get_admin_state());
-				pstmt.setString(2, user.get_name());
-				pstmt.setString(3, user.get_password());
+				pstmt.setBoolean(1, user.getAdmin());
+				pstmt.setString(2, user.getName());
+				pstmt.setString(3, user.getPassword());
 				pstmt.executeUpdate();
 			} else {
 				PreparedStatement pstmt = connection.prepareStatement("update public.user set is_admin = ?, name = ?, password = ? where userID = ?");
-				pstmt.setBoolean(1, user.get_admin_state());
-				pstmt.setString(2, user.get_name());
-				pstmt.setString(3, user.get_password());
-				pstmt.setLong(4, user.get_id());
+				pstmt.setBoolean(1, user.getAdmin());
+				pstmt.setString(2, user.getName());
+				pstmt.setString(3, user.getPassword());
+				pstmt.setLong(4, user.getId());
 				pstmt.executeUpdate();
 			}			
 		} catch (Exception e) {
@@ -112,14 +110,14 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public void save_privilege(Long userID, Long cameraID) {
+	public void savePrivilege(Long userID, Long cameraID) {
 		
 		if (userID == null || cameraID == null)
 			throw new IllegalArgumentException("userID or cameraID can not be null");
 		
 		Connection connection = null;		
 		try {
-			if(get_privilege(userID, cameraID) == false)
+			if(getPrivilege(userID, cameraID) == false)
 			{
 				connection = jndi.getConnection("jdbc/libraryDB");
 				PreparedStatement pstmt = connection.prepareStatement("insert into public.privileges (userID, cameraID) values (?,?)");
@@ -135,10 +133,13 @@ public class DaoImpl implements Dao{
 	}
 	
 	@Override
-	public void delete_camera(Long cameraID) {
+	public void deleteCamera(Long cameraID) {
 
 		if (cameraID == null)
 			throw new IllegalArgumentException("cameraID can not be null");
+		
+		deletePrivilegeCamera(cameraID);
+		deleteImages(cameraID);
 		
 		Connection connection = null;		
 		try {
@@ -152,12 +153,33 @@ public class DaoImpl implements Dao{
 			closeConnection(connection);
 		}		
 	}
+	
+	@Override
+	public void deleteImages(Long cameraID) {
+
+		if (cameraID == null)
+			throw new IllegalArgumentException("cameraID can not be null");
+				
+		Connection connection = null;		
+		try {
+			connection = jndi.getConnection("jdbc/libraryDB");
+			PreparedStatement pstmt = connection.prepareStatement("delete from public.images where cameraID = ?");
+			pstmt.setLong(1, cameraID);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ImagesNotDeletedException();
+		} finally {
+			closeConnection(connection);
+		}		
+	}
 
 	@Override
-	public void delete_user(Long userID) {
+	public void deleteUser(Long userID) {
 		
 		if (userID == null)
 			throw new IllegalArgumentException("userID can not be null");
+		
+		deletePrivilegeUser(userID);
 		
 		Connection connection = null;		
 		try {
@@ -173,14 +195,14 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public void delete_privilege(Long userID, Long cameraID) {
+	public void deletePrivilege(Long userID, Long cameraID) {
 		
 		if (userID == null || cameraID == null)
 			throw new IllegalArgumentException("userID or cameraID can not be null");
 		
 		Connection connection = null;		
 		try {
-			if(get_privilege(userID, cameraID) == true)	{
+			if(getPrivilege(userID, cameraID) == true)	{
 				connection = jndi.getConnection("jdbc/libraryDB");
 				PreparedStatement pstmt = connection.prepareStatement("delete from public.privileges where userID = ? and cameraID = ?");
 				pstmt.setLong(1, userID);
@@ -197,14 +219,14 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public void delete_privilege_camera(Long cameraID) {
+	public void deletePrivilegeCamera(Long cameraID) {
 		
 		if (cameraID == null)
 			throw new IllegalArgumentException("cameraID can not be null");
 		
 		Connection connection = null;		
 		try {
-			if(get_camera(cameraID) != null)	{
+			if(getCamera(cameraID) != null)	{
 				connection = jndi.getConnection("jdbc/libraryDB");
 				PreparedStatement pstmt = connection.prepareStatement("delete from public.privileges where cameraID = ?");
 				pstmt.setLong(1, cameraID);
@@ -220,20 +242,20 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public void delete_privilege_user(Long userID) {
+	public void deletePrivilegeUser(Long userID) {
 		
 		if (userID == null)
 			throw new IllegalArgumentException("userID can not be null");
 		
 		Connection connection = null;		
 		try {
-			if(get_camera(userID) != null)	{
+			if(getUser(userID) != null)	{
 				connection = jndi.getConnection("jdbc/libraryDB");
 				PreparedStatement pstmt = connection.prepareStatement("delete from public.privileges where userID = ?");
 				pstmt.setLong(1, userID);
 				pstmt.executeUpdate();
 			} else {
-				throw new CameraNotFoundException();
+				throw new UserNotFoundException();
 			}
 		} catch (Exception e) {
 			throw new PrivilegeNotDeletedException();
@@ -243,7 +265,7 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public User get_user(Long userID) {
+	public User getUser(Long userID) {
 		
 		if (userID == null)
 			throw new IllegalArgumentException("userID can not be null");
@@ -256,10 +278,10 @@ public class DaoImpl implements Dao{
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 				User user = new User();
-				user.set_id(rs.getLong("userID"));
-				user.set_admin_state(rs.getBoolean("is_admin"));
-				user.set_name(rs.getString("name"));
-				user.set_password(rs.getString("password"));
+				user.setId(rs.getLong("userID"));
+				user.setAdmin(rs.getBoolean("is_admin"));
+				user.setName(rs.getString("name"));
+				user.setPassword(rs.getString("password"));
 				return user;
 			} else {
 				throw new UserNotFoundException();
@@ -272,7 +294,7 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public Camera get_camera(Long cameraID) {
+	public Camera getCamera(Long cameraID) {
 		
 		if (cameraID == null)
 			throw new IllegalArgumentException("cameraID can not be null");
@@ -285,11 +307,10 @@ public class DaoImpl implements Dao{
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 				Camera camera = new Camera();
-				camera.set_id(rs.getLong("cameraID"));
-				camera.set_name(rs.getString("name"));
-				camera.set_description(rs.getString("description"));
-				camera.set_url(rs.getString("url"));
-				camera.set_path(rs.getString("path"));
+				camera.setId(rs.getLong("cameraID"));
+				camera.setName(rs.getString("name"));
+				camera.setDescription(rs.getString("description"));
+				camera.setUrl(rs.getString("url"));
 				return camera;
 			} else {
 				throw new CameraNotFoundException();
@@ -302,7 +323,7 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public boolean get_privilege(Long userID, Long cameraID) {
+	public boolean getPrivilege(Long userID, Long cameraID) {
 		
 		if (userID == null || cameraID == null)
 			throw new IllegalArgumentException("userID or cameraID can not be null");
@@ -327,7 +348,7 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public List<User> list_user() {
+	public List<User> getUserList() {
 			
 		List<User> userList = new ArrayList<User>();
 		
@@ -335,15 +356,15 @@ public class DaoImpl implements Dao{
 		try {
 			connection = jndi.getConnection("jdbc/libraryDB");			
 			
-			PreparedStatement pstmt = connection.prepareStatement("select * from public.user");				
+			PreparedStatement pstmt = connection.prepareStatement("select * from public.user order by userID");				
 			ResultSet rs = pstmt.executeQuery();
 							
 			while (rs.next()) {
 				User user = new User();
-				user.set_id(rs.getLong("userID"));
-				user.set_admin_state(rs.getBoolean("is_admin"));
-				user.set_name(rs.getString("name"));
-				user.set_password(rs.getString("password"));
+				user.setId(rs.getLong("userID"));
+				user.setAdmin(rs.getBoolean("is_admin"));
+				user.setName(rs.getString("name"));
+				user.setPassword(rs.getString("password"));
 				userList.add(user);
 			}			
 			
@@ -356,7 +377,7 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public List<Camera> list_camera() {
+	public List<Camera> getCameraList() {
 
 		List<Camera> cameraList = new ArrayList<Camera>();
 		
@@ -364,16 +385,15 @@ public class DaoImpl implements Dao{
 		try {
 			connection = jndi.getConnection("jdbc/libraryDB");			
 			
-			PreparedStatement pstmt = connection.prepareStatement("select * from public.cameras");				
+			PreparedStatement pstmt = connection.prepareStatement("select * from public.cameras order by cameraID");				
 			ResultSet rs = pstmt.executeQuery();
 							
 			while (rs.next()) {
 				Camera camera = new Camera();
-				camera.set_id(rs.getLong("cameraID"));
-				camera.set_name(rs.getString("name"));
-				camera.set_description(rs.getString("description"));
-				camera.set_url(rs.getString("url"));
-				camera.set_path(rs.getString("path"));
+				camera.setId(rs.getLong("cameraID"));
+				camera.setName(rs.getString("name"));
+				camera.setDescription(rs.getString("description"));
+				camera.setUrl(rs.getString("url"));
 				cameraList.add(camera);
 			}			
 			
@@ -386,7 +406,7 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public List<Long> privileges_user(Long userID) {
+	public List<Long> getPrivilegesUser(Long userID) {
 		
 		if (userID == null)
 			throw new IllegalArgumentException("userID can not be null");
@@ -397,7 +417,7 @@ public class DaoImpl implements Dao{
 		try {
 			connection = jndi.getConnection("jdbc/libraryDB");			
 			
-			PreparedStatement pstmt = connection.prepareStatement("select * from public.privileges where userID = ?");	
+			PreparedStatement pstmt = connection.prepareStatement("select * from public.privileges where userID = ? order by cameraID");	
 			pstmt.setLong(1, userID);			
 			ResultSet rs = pstmt.executeQuery();
 							
@@ -414,7 +434,7 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public List<Long> privileges_camera(Long cameraID) {
+	public List<Long> getPrivilegesCamera(Long cameraID) {
 		
 		if (cameraID == null)
 			throw new IllegalArgumentException("cameraID can not be null");
@@ -425,7 +445,7 @@ public class DaoImpl implements Dao{
 		try {
 			connection = jndi.getConnection("jdbc/libraryDB");			
 			
-			PreparedStatement pstmt = connection.prepareStatement("select * from public.privileges where cameraID = ?");
+			PreparedStatement pstmt = connection.prepareStatement("select * from public.privileges where cameraID = ? order by userID");
 			pstmt.setLong(1, cameraID);				
 			ResultSet rs = pstmt.executeQuery();
 							
@@ -442,7 +462,7 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public Image get_image(Long cameraID, Timestamp date) {
+	public Image getImage(Long cameraID, Timestamp date) {
 
 		if (cameraID == null || date == null)
 			throw new IllegalArgumentException("cameraID or date can not be null");
@@ -458,8 +478,8 @@ public class DaoImpl implements Dao{
 							
 			if (rs.next()) {
 				Image image = new Image();
-				image.set_cameraID(rs.getLong("cameraID"));
-				image.set_Date(rs.getTimestamp("date"));
+				image.setCameraID(rs.getLong("cameraID"));
+				image.setDate(rs.getTimestamp("date"));
 				
 				return image;
 			} else {
@@ -473,7 +493,7 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public List<Image> get_images(Long cameraID) {
+	public List<Image> getImages(Long cameraID) {
 		
 		if (cameraID == null)
 			throw new IllegalArgumentException("cameraID can not be null");
@@ -490,8 +510,8 @@ public class DaoImpl implements Dao{
 							
 			while (rs.next()) {
 				Image image = new Image();
-				image.set_cameraID(rs.getLong("cameraID"));
-				image.set_Date(rs.getTimestamp("date"));
+				image.setCameraID(rs.getLong("cameraID"));
+				image.setDate(rs.getTimestamp("date"));
 				imageList.add(image);
 			}			
 			
@@ -504,7 +524,7 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public List<Image> get_images(Long cameraID, Timestamp date) {
+	public List<Image> getImages(Long cameraID, Timestamp date) {
 		
 		if (cameraID == null || date == null)
 			throw new IllegalArgumentException("cameraID or date can not be null");
@@ -522,8 +542,8 @@ public class DaoImpl implements Dao{
 							
 			while (rs.next()) {
 				Image image = new Image();
-				image.set_cameraID(rs.getLong("cameraID"));
-				image.set_Date(rs.getTimestamp("date"));
+				image.setCameraID(rs.getLong("cameraID"));
+				image.setDate(rs.getTimestamp("date"));
 				imageList.add(image);
 			}			
 			
@@ -536,7 +556,7 @@ public class DaoImpl implements Dao{
 	}
 
 	@Override
-	public List<Image> get_images(Long cameraID, Timestamp start_date, Timestamp end_date) {
+	public List<Image> getImages(Long cameraID, Timestamp start_date, Timestamp end_date) {
 		
 		if (cameraID == null || start_date == null || end_date == null)
 			throw new IllegalArgumentException("cameraID or date can not be null");
@@ -554,8 +574,8 @@ public class DaoImpl implements Dao{
 							
 			while (rs.next()) {
 				Image image = new Image();
-				image.set_cameraID(rs.getLong("cameraID"));
-				image.set_Date(rs.getTimestamp("date"));
+				image.setCameraID(rs.getLong("cameraID"));
+				image.setDate(rs.getTimestamp("date"));
 				imageList.add(image);
 			}			
 			
