@@ -1,0 +1,19 @@
+IP des Servers: 
+141.19.96.94
+
+Username	Passwort	Datenbank
+ss15-gruppe1	Ugi7Dif2	ss15-gruppe1_DB
+ss15-gruppe2	Asa7Hin2	ss15-gruppe2_DB
+ss15-gruppe3	Edu6Ril3	ss15-gruppe3_DB
+ss15-gruppe4	Egu5Geh3	ss15-gruppe4_DB
+ss15-gruppe5	Olu4Bib3	ss15-gruppe5_DB
+ss15-gruppe6	Ebe5Del1	ss15-gruppe6_DB
+ss15-gruppe7	Owa1Kop1	ss15-gruppe7_DB
+ss15-gruppe8	Ase4Din7	ss15-gruppe8_DB
+ss15-gruppe9	Ine9Dis5	ss15-gruppe9_DB
+ss15-gruppe10	Etu2Rif5	ss15-gruppe10_DB
+ss15-gruppe11	Ahe4Fiw8	ss15-gruppe11_DB
+ss15-gruppe12	Aho6Nob4	ss15-gruppe12_DB
+ss15-gruppe13	Egu2Buw7	ss15-gruppe13_DB
+ss15-gruppe14	Ako2Raf9	ss15-gruppe14_DB
+
