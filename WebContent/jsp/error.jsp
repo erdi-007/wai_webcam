@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Kamera</title>
+<title>Fehler</title>
 </head>
 <body>
 <h1>Es ist ein Fehler aufgetreten!</h1>
