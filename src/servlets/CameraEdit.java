@@ -59,6 +59,7 @@ public class CameraEdit extends HttpServlet {
 		} else if(action.equals("cameradelete")) {			
 			try {
 				dao.deleteCamera(id);
+				controller.deleteDirectory(id);
 				response.sendRedirect(request.getContextPath() + "/cameralist");
 			} catch (CameraNotDeletedException e) {
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsp/error.jsp");

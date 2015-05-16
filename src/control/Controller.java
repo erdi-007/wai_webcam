@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+
 import dao.Dao;
 import dao.DaoFactory;
 import model.Camera;
@@ -64,6 +66,19 @@ public class Controller {
             	output.close();
 		}
 		return image;
+	}
+	
+	public void deleteDirectory(Long cameraID) throws IOException {
+		
+		String path = this.getClass().getClassLoader().getResource("").getPath();
+		String delete = "/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/wai_webcam/WEB-INF/classes/";
+		
+		path = path.replace(delete, "");
+		
+		path = path + "//images//cam_" + cameraID;
+		File dir = new File(path);
+		
+		FileUtils.deleteDirectory(dir);
 	}
 	
 	public List<Privilege> getPrivilegeList() {
