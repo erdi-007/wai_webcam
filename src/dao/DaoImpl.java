@@ -88,23 +88,49 @@ public class DaoImpl implements Dao{
 		
 		Connection connection = null;		
 		try {
-			connection = jndi.getConnection("jdbc/libraryDB");			
-			if (user.getId() == null) {
+			connection = jndi.getConnection("jdbc/libraryDB");	
+					
+			if (existsUser(user) == false) {
 				PreparedStatement pstmt = connection.prepareStatement("insert into public.user (is_admin, name, password) values (?,?,?)");
 				pstmt.setBoolean(1, user.isAdmin());
 				pstmt.setString(2, user.getName());
 				pstmt.setString(3, user.getPassword());
 				pstmt.executeUpdate();
 			} else {
-				PreparedStatement pstmt = connection.prepareStatement("update public.user set is_admin = ?, name = ?, password = ? where userID = ?");
+				PreparedStatement pstmt = connection.prepareStatement("update public.user set is_admin = ?, name = ?, password = ? where name = ?");
 				pstmt.setBoolean(1, user.isAdmin());
 				pstmt.setString(2, user.getName());
 				pstmt.setString(3, user.getPassword());
-				pstmt.setLong(4, user.getId());
+				pstmt.setString(4, user.getName());
 				pstmt.executeUpdate();
-			}			
+			}	
 		} catch (Exception e) {
 			throw new UserNotSavedException();
+		} finally {
+			closeConnection(connection);
+		}
+	}
+	
+	@Override
+	public boolean existsUser(User user) {
+		
+		if (user == null)
+			throw new IllegalArgumentException("user can not be null");
+		
+		Connection connection = null;		
+		try {
+			connection = jndi.getConnection("jdbc/libraryDB");	
+			
+			PreparedStatement pstmt = connection.prepareStatement("select * from public.user where name = ?");
+			pstmt.setString(1, user.getName());
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			throw new UserNotFoundException();
 		} finally {
 			closeConnection(connection);
 		}
@@ -265,6 +291,7 @@ public class DaoImpl implements Dao{
 		}	
 	}
 	
+	@Override
 	public User login(User user) {
 		if (user == null)
 			throw new IllegalArgumentException("user can not be null");
@@ -306,6 +333,35 @@ public class DaoImpl implements Dao{
 			connection = jndi.getConnection("jdbc/libraryDB");			
 			PreparedStatement pstmt = connection.prepareStatement("select * from public.user where userID = ?");
 			pstmt.setLong(1, userID);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				User user = new User();
+				user.setId(rs.getLong("userID"));
+				user.setAdmin(rs.getBoolean("is_admin"));
+				user.setName(rs.getString("name"));
+				user.setPassword(rs.getString("password"));
+				return user;
+			} else {
+				throw new UserNotFoundException();
+			}			
+		} catch (Exception e) {
+			throw new UserNotFoundException();
+		} finally {	
+			closeConnection(connection);
+		}
+	}
+	
+	@Override
+	public User getUser(String name) {
+		
+		if (name == null)
+			throw new IllegalArgumentException("name can not be null");
+		
+		Connection connection = null;		
+		try {
+			connection = jndi.getConnection("jdbc/libraryDB");			
+			PreparedStatement pstmt = connection.prepareStatement("select * from public.user where name = ?");
+			pstmt.setString(1, name);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 				User user = new User();

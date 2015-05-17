@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=US-ASCII"
-	pageEncoding="US-ASCII" import="model.User"%>
+	pageEncoding="US-ASCII"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,9 +27,9 @@
 	<nav>
 		<div class="nav">
 			<ul>
-				<li><a href="SettingsServlet?action=user">User</a></li>
-				<li><a href="SettingsServlet?action=cameras">Cameras</a></li>
-				<li><a href="SettingsServlet?action=privileges">Privileges</a></li>
+				<li><a href="UserServlet">User</a></li>
+				<li><a href="CameraServlet">Cameras</a></li>
+				<li><a href="PrivilegeServlet">Privileges</a></li>
 			</ul>
 		</div>		
 	</nav>

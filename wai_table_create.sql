@@ -13,7 +13,7 @@ CREATE TABLE public.cameras (
 CREATE TABLE public.user (
     userID		serial NOT NULL PRIMARY KEY,	
     is_admin		boolean NOT NULL,
-    name		varchar(256) NOT NULL,
+    name		varchar(256) UNIQUE NOT NULL,
     password		varchar(256) NOT NULL
 );
 

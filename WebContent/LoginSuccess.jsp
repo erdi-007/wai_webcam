@@ -42,7 +42,7 @@
 		<br>
 		<br>	
 		<div id="settings">
-			<form action="SettingsPage.jsp">
+			<form action="SettingsPage.jsp" method="get">
 				<input type="submit" value="Settings">
 			</form>
 			<br>
