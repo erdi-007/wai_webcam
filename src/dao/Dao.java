@@ -23,6 +23,8 @@ public interface Dao {
 	public void deletePrivilegeCamera(Long cameraID);	
 	public void deletePrivilegeUser(Long userID);
 	
+	public User login(User user);
+	
 	//einzelne Objekte
 	public User getUser(Long userID);
 	public Camera getCamera(Long cameraID);

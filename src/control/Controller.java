@@ -25,7 +25,7 @@ public class Controller {
 
 	final Dao dao = DaoFactory.getInstance().getDao();
 	
-	public Image save_image(Camera camera) throws IOException
+	public Image saveImage(Camera camera) throws IOException
 	{
 		BufferedInputStream input = null;
 		FileOutputStream output = null;
@@ -36,10 +36,9 @@ public class Controller {
 		
 		Image image = new Image();
 		image.setCameraID(camera.getId());
-		image.setDate(new Timestamp(new Date().getTime()));
-		
-		String path = image.getPath();
-		String name = image.getName();
+		image.setDate(new Timestamp(new Date().getTime()));				
+		String path = getPath(image.getCameraID(), image.getDate());		
+		image.setPath(path);
 		
 		try	{
 			URL image_url = new URL(camera.getUrl());
@@ -47,7 +46,7 @@ public class Controller {
 			input = new BufferedInputStream(image_url.openStream());
 			File file = new File(path);
 			file.mkdirs();
-			output = new FileOutputStream(path+name);
+			output = new FileOutputStream(path);
 			
 			byte data[] = new byte[1024];
 			int count;
@@ -66,6 +65,35 @@ public class Controller {
             	output.close();
 		}
 		return image;
+	}
+	
+	public String getPath(Long cameraID, Timestamp date) throws IOException {
+		
+		if(date == null || cameraID == null)
+			throw new IllegalArgumentException("date or cameraID can not be null");
+			
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		
+		String dir = this.getClass().getClassLoader().getResource("").getPath();
+		String delete = "/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/wai_webcam/WEB-INF/classes/";
+		
+		dir = dir.replace(delete, "");
+		
+		String month = Integer.toString(calendar.get(Calendar.MONTH)+1);
+		String day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
+		String hour = Integer.toString(calendar.get(Calendar.HOUR_OF_DAY));
+		String min = Integer.toString(calendar.get(Calendar.MINUTE));
+		
+		if((calendar.get(Calendar.MONTH)+1) < 10)
+			month = "0" + (calendar.get(Calendar.MONTH)+1);
+		if(calendar.get(Calendar.DAY_OF_MONTH) < 10)
+			day = "0" + calendar.get(Calendar.DAY_OF_MONTH);		
+		
+		String path = dir + "//images//cam_" + cameraID.toString() + "//" + calendar.get(Calendar.YEAR) + "//"
+				+ month + "//" + day + "//" + hour + "_" + min + ".jpg";				
+				
+		return path;
 	}
 	
 	public void deleteDirectory(Long cameraID) throws IOException {

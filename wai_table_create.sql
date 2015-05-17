@@ -28,15 +28,15 @@ CREATE TABLE public.privileges (
 );
 
 INSERT INTO public.user
-(is_admin, name, password) values (true, 'Klaus Schröder', '123');
+(is_admin, name, password) values (true, 'admin', 'admin');
 INSERT INTO public.user
-(is_admin, name, password) values (false, 'Sven Müller', '321');
+(is_admin, name, password) values (false, 'user1', 'user1');
 INSERT INTO public.user
-(is_admin, name, password) values (false, 'Christina Brandt', '111');
+(is_admin, name, password) values (false, 'user2', 'user2');
 INSERT INTO public.user
-(is_admin, name, password) values (false, 'Olaf Peterson', '222');
+(is_admin, name, password) values (false, 'user3', 'user3');
 INSERT INTO public.user
-(is_admin, name, password) values (true, 'Astrid Groß', '333');
+(is_admin, name, password) values (false, 'user4', 'user4');
 
 INSERT INTO public.cameras
 (name, description, url) values ('Mannheim', 'Webcam mit Blick auf den Wasserturm', 'https://www.mvv-energie.de/webcam_maritim/MA-Wasserturm.jpg');

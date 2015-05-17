@@ -5,7 +5,8 @@ public class User {
 	private Long id;
 	private String name;
 	private String password;
-	private boolean is_admin;
+	private boolean admin;
+	private boolean valid;
 	
     public Long getId() {
         return id;
@@ -31,11 +32,19 @@ public class User {
         this.password = password;
     }
     
-    public boolean getAdmin() {
-    	return is_admin;
+    public boolean isAdmin() {
+    	return admin;
     }
     
-    public void setAdmin(boolean is_admin) {
-    	this.is_admin = is_admin;
+    public void setAdmin(boolean admin) {
+    	this.admin = admin;
+    }
+    
+    public boolean isValid() {
+    	return valid;
+    }
+    
+    public void setValid(boolean valid) {
+    	this.valid = valid;
     }
 }

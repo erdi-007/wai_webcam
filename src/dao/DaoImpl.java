@@ -21,6 +21,7 @@ import exception.UserNotDeletedException;
 import exception.PrivilegeNotSavedException;
 import exception.PrivilegeNotDeletedException;
 import exception.PrivilegeNotFoundException;
+import exception.LoginFailedException;
 import model.User;
 import model.Image;
 import model.Camera;
@@ -90,13 +91,13 @@ public class DaoImpl implements Dao{
 			connection = jndi.getConnection("jdbc/libraryDB");			
 			if (user.getId() == null) {
 				PreparedStatement pstmt = connection.prepareStatement("insert into public.user (is_admin, name, password) values (?,?,?)");
-				pstmt.setBoolean(1, user.getAdmin());
+				pstmt.setBoolean(1, user.isAdmin());
 				pstmt.setString(2, user.getName());
 				pstmt.setString(3, user.getPassword());
 				pstmt.executeUpdate();
 			} else {
 				PreparedStatement pstmt = connection.prepareStatement("update public.user set is_admin = ?, name = ?, password = ? where userID = ?");
-				pstmt.setBoolean(1, user.getAdmin());
+				pstmt.setBoolean(1, user.isAdmin());
 				pstmt.setString(2, user.getName());
 				pstmt.setString(3, user.getPassword());
 				pstmt.setLong(4, user.getId());
@@ -262,6 +263,36 @@ public class DaoImpl implements Dao{
 		} finally {
 			closeConnection(connection);
 		}	
+	}
+	
+	public User login(User user) {
+		if (user == null)
+			throw new IllegalArgumentException("user can not be null");
+		
+		Connection connection = null;		
+		try {
+			connection = jndi.getConnection("jdbc/libraryDB");			
+			PreparedStatement pstmt = connection.prepareStatement("select * from public.user where name = ? and password = ?");
+			pstmt.setString(1, user.getName());
+			pstmt.setString(2, user.getPassword());
+			ResultSet rs = pstmt.executeQuery();
+			
+			boolean valid = rs.next();
+			
+			if(!valid) {
+				user.setValid(false);
+			} else if(valid) {
+				user.setAdmin(rs.getBoolean("is_admin"));
+				user.setValid(true);
+			}
+		
+		} catch (Exception e) {
+			throw new LoginFailedException();
+		} finally {	
+			closeConnection(connection);
+		}
+		
+		return user;
 	}
 
 	@Override

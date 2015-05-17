@@ -69,7 +69,7 @@ public class CameraEdit extends HttpServlet {
 			try {
 				List<Camera> cameraList = dao.getCameraList();
 				for(Integer i = 0; i < cameraList.size(); i++) {
-					controller.save_image(cameraList.get(i));
+					controller.saveImage(cameraList.get(i));
 				}
 				response.sendRedirect(request.getContextPath() + "/cameralist");
 			} catch (ImageNotSavedException e) {
