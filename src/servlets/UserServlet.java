@@ -1,7 +1,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -10,11 +9,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import dao.Dao;
 import dao.DaoFactory;
 import exception.AdminCantBeDeleted;
+import exception.AdminRightsCantBeRemoved;
 import exception.PasswordNotFilledExeption;
 import exception.UserExistsException;
 import exception.UserNotSavedException;
@@ -42,7 +41,7 @@ public class UserServlet extends HttpServlet {
 		}
 		request.setAttribute("userlist", userlist);
 		request.setAttribute("cameralist", cameralist);
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/UserPage.jsp");
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/UserSettings.jsp");
 		dispatcher.forward(request, response);	
 	}
 	
@@ -61,6 +60,10 @@ public class UserServlet extends HttpServlet {
 					user.setName(name);
 					user.setAdmin(admin);
 					user.setPassword(password);	
+					
+					if(name.equals("admin") && admin == false) {
+						throw new AdminRightsCantBeRemoved();
+					}
 					
 					try {		
 						dao.save(user);
@@ -107,7 +110,7 @@ public class UserServlet extends HttpServlet {
 							}
 						}
 					}  catch (UserNotSavedException e) {
-						RequestDispatcher rd = getServletContext().getRequestDispatcher("/UserPage.jsp");
+						RequestDispatcher rd = getServletContext().getRequestDispatcher("/UserSettings.jsp");
 						rd.include(request, response);
 					}
 				} else {

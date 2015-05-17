@@ -3,22 +3,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<% User userinfo = (User) (session.getAttribute("userinfo"));%>
-	
-	<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-	<title>User Logged Successfully</title>
-	<script type="text/javascript">
-		function validate() {
-			if (<%=userinfo.isAdmin()%> == true) {
-				document.getElementById('settings').style.display = 'block';
-			} else if (<%=userinfo.isAdmin()%> == false) {
-				document.getElementById('settings').style.display = 'none';
-			}
+<%
+	User userinfo = (User) (session.getAttribute("userinfo"));
+%>
+
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>User Logged Successfully</title>
+<script type="text/javascript">
+	function validate() {
+		if (
+<%=userinfo.isAdmin()%>
+	== true) {
+			document.getElementById('settings').style.display = 'block';
+		} else if (
+<%=userinfo.isAdmin()%>
+	== false) {
+			document.getElementById('settings').style.display = 'none';
 		}
-	</script>
+	}
+</script>
 </head>
 <body onload="validate()">
-	<%//allow access only if session exists
+	<%
+		//allow access only if session exists
 		String user = null;
 		if (session.getAttribute("userinfo") == null) {
 			response.sendRedirect("login.html");
@@ -34,22 +41,30 @@
 				if (cookie.getName().equals("JSESSIONID"))
 					sessionID = cookie.getValue();
 			}
-		}%>
+		}
+	%>
 	<center>
-		Name: <%=userinfo.getName()%>
-		<br>
-		Admin-Status: <%=userinfo.isAdmin() %>
-		<br>
-		<br>	
-		<div id="settings">
-			<form action="SettingsPage.jsp" method="get">
-				<input type="submit" value="Settings">
-			</form>
-			<br>
-		</div>
-		<form action="LogoutServlet" method="post">
-			<input type="submit" value="Logout">
-		</form>
+		Name:
+		<%=userinfo.getName()%>
+		<br> Admin-Status:
+		<%=userinfo.isAdmin()%>
+		<br> <br>
+		<table>
+			<tr>
+				<td>
+					<div id="settings">
+						<form action="UserServlet" method="get">
+							<input type="submit" value="Settings">
+						</form>
+					</div>
+				</td>
+				<td>
+					<form action="LogoutServlet" method="post">
+						<input type="submit" value="Logout">
+					</form>
+				</td>
+			</tr>
+		</table>
 	</center>
 </body>
 </html>
