@@ -90,12 +90,12 @@
 									value="${selectedUser.password}"></td>
 							</tr>
 							<tr>
-								<td colspan="3"><input type="submit" name="btnNeu"
-									value="New" onclick="form.action='UserServlet?button=new';">
-									<input type="submit" name="btnEdit" value="Edit"
-									onclick="form.action='UserServlet?button=edit';"> <input
-									type="submit" name="btnDelete" value="Delete"
-									onclick="form.action='UserServlet?button=delete';"></td>
+								<td colspan="3">
+									<input type="submit" name="btnNeu" value="New" onclick="form.action='UserServlet?button=new';">
+									<input type="submit" name="btnEdit" value="Edit" onclick="form.action='UserServlet?button=edit';">
+									<input type="submit" name="btnClear" value="Clear" onclick="form.action='UserServlet';">
+									<input type="submit" name="btnDelete" value="Delete" onclick="form.action='UserServlet?button=delete';">
+								</td>
 							</tr>
 						</tbody>
 					</table> <input type="hidden" id="admin_state"

@@ -14,7 +14,7 @@ import dao.Dao;
 import dao.DaoFactory;
 import exception.AdminCantBeDeleted;
 import exception.AdminRightsCantBeRemoved;
-import exception.PasswordNotFilledExeption;
+import exception.InputNotFilledExeption;
 import exception.UserExistsException;
 import exception.UserNotSavedException;
 import model.User;
@@ -114,8 +114,7 @@ public class UserServlet extends HttpServlet {
 						rd.include(request, response);
 					}
 				} else {
-					if(password == "")
-						throw new PasswordNotFilledExeption();
+					throw new InputNotFilledExeption();
 				}
 			} else if (button.equals("delete")) {
 				if(name.equals("admin")) {
@@ -123,7 +122,7 @@ public class UserServlet extends HttpServlet {
 				}
 				dao.deleteUser(dao.getUser(name).getId());
 			}
-			response.sendRedirect(request.getContextPath() + "/UserServlet");
 		} 
+		response.sendRedirect(request.getContextPath() + "/UserServlet");
     }
 }
