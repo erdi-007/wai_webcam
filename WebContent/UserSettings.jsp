@@ -102,13 +102,13 @@
 					value="${selectedUser.admin}">
 				</td>
 
-				<td valign="top">Rechte
+				<td valign="top">Cameras
 					<table border="1">
 						<tbody>
 							<tr>
 								<td>Id</td>
 								<td>Name</td>
-								<td>Recht</td>
+								<td>Privilege</td>
 							</tr>
 							<c:forEach var="camera_" items="${cameralist}">
 								<tr>
