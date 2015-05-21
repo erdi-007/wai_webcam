@@ -30,18 +30,22 @@ public class UserServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String id = request.getParameter("id");
+		String lastUser = request.getParameter("selected");
 			
 		List<User> userlist = dao.getUserList();
 		List<Camera> cameralist = dao.getCameraList();
-		if(id != null) {
+		if(id != null && !lastUser.equals(id)) {
 			User selectedUser = dao.getUser(Long.parseLong(id));
 			List<Long> privilegeList = dao.getPrivilegesUser(Long.parseLong(id));
 			request.setAttribute("selectedUser", selectedUser);
 			request.setAttribute("privilegeList", privilegeList);
+		} else {
+			request.removeAttribute("selectedUser");
+			request.removeAttribute("privilegeList");
 		}
 		request.setAttribute("userlist", userlist);
 		request.setAttribute("cameralist", cameralist);
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/UserSettings.jsp");
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/UserList.jsp");
 		dispatcher.forward(request, response);	
 	}
 	
@@ -110,7 +114,7 @@ public class UserServlet extends HttpServlet {
 							}
 						}
 					}  catch (UserNotSavedException e) {
-						RequestDispatcher rd = getServletContext().getRequestDispatcher("/UserSettings.jsp");
+						RequestDispatcher rd = getServletContext().getRequestDispatcher("/UserList.jsp");
 						rd.include(request, response);
 					}
 				} else {

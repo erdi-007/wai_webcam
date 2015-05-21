@@ -41,11 +41,11 @@ INSERT INTO public.user
 INSERT INTO public.cameras
 (name, description, url) values ('Mannheim', 'Webcam mit Blick auf den Wasserturm', 'https://www.mvv-energie.de/webcam_maritim/MA-Wasserturm.jpg');
 INSERT INTO public.cameras
-(name, description, url) values ('Hamburg', 'Webcam der "Deutsche Afrika-Linien John T. Essberger"', 'http://my.dal.biz/cgi-bin/webcam/getpics.cgi?Cam=east');
+(name, description, url) values ('Hamburg', 'Webcam der Deutsche Afrika-Linien John T. Essberger', 'http://my.dal.biz/cgi-bin/webcam/getpics.cgi?Cam=east');
 INSERT INTO public.cameras
 (name, description, url) values ('Hamburg', 'Webcam der MPC Münchmeyer Petersen & Co. GmbH', 'http://www.mpc-it.de/webcam/big.jpg');
 INSERT INTO public.cameras
-(name, description, url) values ('Ludwigshafen am Bodensee', 'Webcam mit Blick auf den Bodensee vom Zollhaus von Ludwigshafen nach Bodman', 'http://www.die-ersten-am-see.de/webcam/camluzo.jpg');
+(name, description, url) values ('Ludwigshafen am Bodensee', 'Webcam mit Blick auf den Bodensee vom Zollhaus', 'http://www.die-ersten-am-see.de/webcam/camluzo.jpg');
 INSERT INTO public.cameras
 (name, description, url) values ('Füssen', 'Webcam mit Blick in die Fussgängerzone (Reichenstrasse)', 'http://www.webcamfuessen.de/webcam/webcamfuessen.jpg');
 
@@ -57,6 +57,8 @@ INSERT INTO privileges
 (userid, cameraid) VALUES (1, 3);
 INSERT INTO privileges
 (userid, cameraid) VALUES (1, 4);
+INSERT INTO privileges
+(userid, cameraid) VALUES (1, 5);
 INSERT INTO privileges
 (userid, cameraid) VALUES (2, 5);
 INSERT INTO privileges
