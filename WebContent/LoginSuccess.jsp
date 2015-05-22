@@ -63,6 +63,11 @@
 						<input type="submit" value="Logout">
 					</form>
 				</td>
+				<td>
+					<form action="ImageServlet" method="get">
+						<input type="submit" value="Image">
+					</form>
+				</td>
 			</tr>
 		</table>
 	</center>
