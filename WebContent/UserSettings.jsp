@@ -112,8 +112,8 @@
 							</tr>
 							<c:forEach var="camera_" items="${cameralist}">
 								<tr>
-									<td><c:out value="${camera_.id}" /></td>
-									<td><c:out value="${camera_.name}" /></td>
+									<td><c:out value="${camera_.id}"/></td>
+									<td title="${camera_.description}"><c:out value="${camera_.name}" /></td>
 									<td><input type="checkbox" name="cam${camera_.id}"
 										value="true" id="cam${camera_.id}"></td>
 								</tr>

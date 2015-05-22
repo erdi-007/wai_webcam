@@ -443,7 +443,7 @@ public class DaoImpl implements Dao{
 		try {
 			connection = jndi.getConnection("jdbc/libraryDB");			
 			
-			PreparedStatement pstmt = connection.prepareStatement("select * from public.user order by userID");				
+			PreparedStatement pstmt = connection.prepareStatement("select * from public.user where name != 'admin' order by userID");				
 			ResultSet rs = pstmt.executeQuery();
 							
 			while (rs.next()) {
