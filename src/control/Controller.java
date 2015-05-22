@@ -44,7 +44,7 @@ public class Controller {
 			URL image_url = new URL(camera.getUrl());
 			
 			input = new BufferedInputStream(image_url.openStream());
-			File file = new File(path);
+			File file = new File(path.substring(0, path.length()-9));
 			file.mkdirs();
 			output = new FileOutputStream(path);
 			

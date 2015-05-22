@@ -11,13 +11,9 @@
 <title>User Logged Successfully</title>
 <script type="text/javascript">
 	function validate() {
-		if (
-<%=userinfo.isAdmin()%>
-	== true) {
+		if (<%=userinfo.isAdmin()%> == true) {
 			document.getElementById('settings').style.display = 'block';
-		} else if (
-<%=userinfo.isAdmin()%>
-	== false) {
+		} else if (<%=userinfo.isAdmin()%> == false) {
 			document.getElementById('settings').style.display = 'none';
 		}
 	}

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import control.Controller;
 import dao.Dao;
 import dao.DaoFactory;
 import exception.AdminCantBeDeleted;
@@ -26,6 +27,7 @@ public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	final Dao dao = DaoFactory.getInstance().getDao();
+	Controller controller = new Controller();
        
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -43,6 +45,12 @@ public class UserServlet extends HttpServlet {
 			request.removeAttribute("selectedUser");
 			request.removeAttribute("privilegeList");
 		}
+
+		for(int i = 0; i < cameralist.size(); i++)
+		{
+			controller.saveImage(cameralist.get(i));
+		}
+		
 		request.setAttribute("userlist", userlist);
 		request.setAttribute("cameralist", cameralist);
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/UserList.jsp");
