@@ -44,13 +44,7 @@ public class UserServlet extends HttpServlet {
 		} else {
 			request.removeAttribute("selectedUser");
 			request.removeAttribute("privilegeList");
-		}
-
-		for(int i = 0; i < cameralist.size(); i++)
-		{
-			controller.saveImage(cameralist.get(i));
-		}
-		
+		}		
 		request.setAttribute("userlist", userlist);
 		request.setAttribute("cameralist", cameralist);
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/UserList.jsp");
