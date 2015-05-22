@@ -30,8 +30,9 @@ public class ImageServlet extends HttpServlet {
 			controller = new Controller();
 		
 		List<Camera> cameralist =dao.getCameraList();
-		
-		controller.saveImage(cameralist.get(0));
+		for(int i = 0; i< cameralist.size(); i++) {
+			controller.saveImage(cameralist.get(i));
+		}
 	}
 
 	/**

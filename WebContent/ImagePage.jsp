@@ -48,6 +48,11 @@
 		<table>
 			<tr>
 				<td>
+					<form action="ImageServlet" method="get">
+						<input type="submit" value="Image">
+					</form>
+				</td>
+				<td>
 					<div id="settings">
 						<form action="UserServlet" method="get">
 							<input type="submit" value="Settings">
@@ -57,11 +62,6 @@
 				<td>
 					<form action="LogoutServlet" method="post">
 						<input type="submit" value="Logout">
-					</form>
-				</td>
-				<td>
-					<form action="ImageServlet" method="get">
-						<input type="submit" value="Image">
 					</form>
 				</td>
 			</tr>
