@@ -45,6 +45,14 @@
 		<br> Admin-Status:
 		<%=userinfo.isAdmin()%>
 		<br> <br>
+		Bildinformationen:
+		<br>
+		Kamera: ${image.cameraID}
+		<br>
+		Pfad: ${image.path}
+		<br>
+		Datum: ${image.date}
+		<br> <br>
 		<table>
 			<tr>
 				<td>

@@ -3,11 +3,14 @@ package dao;
 import java.sql.Timestamp;
 import java.util.List;
 
+import control.Controller;
 import model.User;
 import model.Image;
 import model.Camera;
 
 public interface Dao {
+
+	Controller controller = new Controller();
 	
 	//speichern
 	public void save(Image image);

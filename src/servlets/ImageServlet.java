@@ -1,8 +1,11 @@
 package servlets;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Camera;
+import model.Image;
 import control.Controller;
 import dao.Dao;
 import dao.DaoFactory;
@@ -31,8 +35,15 @@ public class ImageServlet extends HttpServlet {
 		
 		List<Camera> cameralist =dao.getCameraList();
 		for(int i = 0; i< cameralist.size(); i++) {
-			controller.saveImage(cameralist.get(i));
+			dao.save(controller.saveImage(cameralist.get(i)));
 		}
+		
+		Timestamp currentTimestamp = new Timestamp(new Date().getTime());
+		Image image = dao.getImage(cameralist.get(0).getId(), currentTimestamp);
+		
+		request.setAttribute("image", image);
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**
