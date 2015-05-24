@@ -51,7 +51,7 @@
 		<input type="text" name="datumEnde">
 		<input type="submit"name="datum" value="Suchen">
 		</form>
-		<img src="${param.imagePath}"/>
+		<img src="${image.path}">
 		Bildinformationen:
 		<br>
 		Kamera: ${image.cameraID}
