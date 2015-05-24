@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=US-ASCII"
 	pageEncoding="US-ASCII" import="model.User"%>
+<%@ page import="model.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -51,7 +53,9 @@
 		<input type="text" name="datumEnde">
 		<input type="submit"name="datum" value="Suchen">
 		</form>
-		<img src="${image.path}">
+		<c:forEach var="images" items="${imageList}">
+		<img src="${images.path}">
+		</c:forEach>
 		Bildinformationen:
 		<br>
 		Kamera: ${image.cameraID}

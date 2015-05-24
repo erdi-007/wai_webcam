@@ -51,10 +51,10 @@ public class ImageServlet extends HttpServlet {
 
 			List<Image> images = dao.getImages(dao.getCameraList().get(0).getId(), timeStart, timeEnde);
 
-		Image image = images.get(0);
-		image.setPath(image.getPath().substring(1));
-		System.out.println("Image pfad: "+image.getPath());
-		request.setAttribute("image", image);
+		for(int i=0;i<images.size();i++)
+			images.get(i).setPath(images.get(i).getPath().substring(1));
+		
+		request.setAttribute("imageList", images);
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
 		dispatcher.forward(request, response);
 		}
