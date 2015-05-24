@@ -50,7 +50,7 @@
 		<br> <br>
 		
 		<form action="ImageServlet" method="get">
-			Datum: <input type="text"name="date"id="date"value=""><br>
+			Datum: <input type="text"name="dateStart"id="dateStart"value="">bis <input type="text"name="dateEnd"id="dateEnd"value=""><br>
 			
 			Uhrzeit: <input type="text" id="timeStart" name="timeStart"readonly value="10:00">
 			<input type="text"id="timeEnd" name="timeEnd"readonly value="20:00"> <br>
@@ -91,10 +91,12 @@
 <script src="jquery-ui.js"></script>
 <script src="jquery-ui-timepicker-addon.js"></script>
 <script>
-$( "#date" ).datepicker({
+$( "#dateStart" ).datepicker({
 	dateFormat: "yy-mm-dd"
 });
-
+$( "#dateEnd" ).datepicker({
+	dateFormat: "yy-mm-dd"
+});
 $( "#time-range" ).slider({
     range: true,
     min: 0,

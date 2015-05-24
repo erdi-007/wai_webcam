@@ -45,10 +45,12 @@ public class ImageServlet extends HttpServlet {
 			
 			String timeStart =request.getParameter("timeStart");
 			String timeEnd = request.getParameter("timeEnd");
-			String datum = request.getParameter("date");
+			String dateStart = request.getParameter("dateStart");
+			String dateEnd = request.getParameter("dateEnd");
+			
 //Vorbereitung um timestamp zu erzeugen
-			String startDate = datum + " " + timeStart+":00";
-			String endDate = datum +" " + timeEnd+":00";
+			String startDate = dateStart + " " + timeStart+":00";
+			String endDate = dateEnd +" " + timeEnd+":00";
 			
 			List<Image> images = dao.getImages(dao.getCameraList().get(0).getId(), Timestamp.valueOf(startDate),Timestamp.valueOf(endDate));
 //Problem im Pfad ist das erste Zeichen ein / muss entfern werden
