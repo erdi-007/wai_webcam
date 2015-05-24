@@ -7,12 +7,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
+
+
+
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.imgscalr.Scalr;
 
 import dao.Dao;
 import dao.DaoFactory;
@@ -40,7 +51,7 @@ public class Controller {
 		String path = getPath(image.getCameraID(), image.getDate());		
 		image.setPath(path);
 		
-		try	{
+//		try	{
 			URL image_url = new URL(camera.getUrl());
 			
 			input = new BufferedInputStream(image_url.openStream());
@@ -48,23 +59,30 @@ public class Controller {
 			file.mkdirs();
 			output = new FileOutputStream(path);
 			
-			byte data[] = new byte[1024];
-			int count;
-			while ((count = input.read(data, 0, 1024)) != -1) {
-				output.write(data, 0, count);
-            }
-			
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-            if (input != null)
-            	input.close();
-            if (output != null)
-            	output.close();
-		}
+//			byte data[] = new byte[1024];
+//			int count;
+//			while ((count = input.read(data, 0, 1024)) != -1) {
+//				output.write(data, 0, count);
+//            }
+//			
+//		} catch (MalformedURLException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} finally {
+//            if (input != null)
+//            	input.close();
+//            if (output != null)
+//            	output.close();
+//		}
+		
+		BufferedImage bufferedImage = ImageIO.read(input);
+		ImageIO.write(bufferedImage, "jpg", output);
+		
+		BufferedImage thumbnail = Scalr.resize(bufferedImage, 100);
+		ImageIO.write(thumbnail, "jpg", output);
 		return image;
+		
 	}
 	
 	public String getPath(Long cameraID, Timestamp date) throws IOException {
