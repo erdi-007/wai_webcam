@@ -3,6 +3,6 @@ package exception;
 public class ImageNotSavedException extends RuntimeException {
 	
 	public ImageNotSavedException() {
-		super("Bild konnte nicht gespeichert werden!");
+		super("Image couldn't be saved!");
 	}
 }

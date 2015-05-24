@@ -7,6 +7,6 @@
 <title>Bibliothek</title>
 </head>
 <body>
-<h1>Es ist ein Fehler aufgetreten!</h1>
+<h1>Error! ${error}</h1>
 </body>
 </html>

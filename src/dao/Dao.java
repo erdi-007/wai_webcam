@@ -27,7 +27,6 @@ public interface Dao {
 	public void deletePrivilegeUser(Long userID);
 	
 	public User login(User user);
-	public boolean existsUser(User user);
 	
 	//einzelne Objekte
 	public User getUser(Long userID);

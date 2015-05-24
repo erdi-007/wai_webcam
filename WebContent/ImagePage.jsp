@@ -79,7 +79,7 @@
 					</div>
 				</td>
 				<td>
-					<form action="LogoutServlet" method="post">
+					<form action="LogoutServlet" method="get">
 						<input type="submit" value="Logout">
 					</form>
 				</td>

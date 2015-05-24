@@ -3,6 +3,6 @@ package exception;
 public class UserNotFoundException extends RuntimeException {
 	
 	public UserNotFoundException() {
-		super("User konnte nicht gefunden werden!");
+		super("User couldn't be found!");
 	}
 }

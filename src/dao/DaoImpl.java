@@ -90,47 +90,22 @@ public class DaoImpl implements Dao{
 		try {
 			connection = jndi.getConnection("jdbc/libraryDB");	
 					
-			if (existsUser(user) == false) {
+			if (user.getId() == null) {
 				PreparedStatement pstmt = connection.prepareStatement("insert into public.user (is_admin, name, password) values (?,?,?)");
 				pstmt.setBoolean(1, user.isAdmin());
 				pstmt.setString(2, user.getName());
 				pstmt.setString(3, user.getPassword());
 				pstmt.executeUpdate();
 			} else {
-				PreparedStatement pstmt = connection.prepareStatement("update public.user set is_admin = ?, name = ?, password = ? where name = ?");
+				PreparedStatement pstmt = connection.prepareStatement("update public.user set is_admin = ?, name = ?, password = ? where userID = ?");
 				pstmt.setBoolean(1, user.isAdmin());
 				pstmt.setString(2, user.getName());
 				pstmt.setString(3, user.getPassword());
-				pstmt.setString(4, user.getName());
+				pstmt.setLong(4, user.getId());
 				pstmt.executeUpdate();
 			}	
 		} catch (Exception e) {
 			throw new UserNotSavedException();
-		} finally {
-			closeConnection(connection);
-		}
-	}
-	
-	@Override
-	public boolean existsUser(User user) {
-		
-		if (user == null)
-			throw new IllegalArgumentException("user can not be null");
-		
-		Connection connection = null;		
-		try {
-			connection = jndi.getConnection("jdbc/libraryDB");	
-			
-			PreparedStatement pstmt = connection.prepareStatement("select * from public.user where name = ?");
-			pstmt.setString(1, user.getName());
-			ResultSet rs = pstmt.executeQuery();
-			if(rs.next()) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (Exception e) {
-			throw new UserNotFoundException();
 		} finally {
 			closeConnection(connection);
 		}

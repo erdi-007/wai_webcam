@@ -3,6 +3,6 @@ package exception;
 public class UserNotDeletedException extends RuntimeException {
 	
 	public UserNotDeletedException() {
-		super("User konnte nicht gelöscht werden!");
+		super("User couldn't be deleted!");
 	}
 }

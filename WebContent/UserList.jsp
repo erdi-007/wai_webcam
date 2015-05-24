@@ -54,55 +54,49 @@
 			</ul>
 		</div>
 	</nav>
-		<table>
-			<tr>
-				<td valign="top">User-Liste
-					<table id="usertable" border="1">
-						<tbody>
-							<tr>
-								<td>Id</td>
-								<td>Name</td>
-								<td>Admin</td>
-							</tr>
-							<c:forEach var="user_" items="${userlist}">
-								<tr>
-									<c:choose>
-										<c:when test="${selectedUser.name == user_.name}">										
-											<td><c:out value="${user_.id}" /></td>
-											<td><a href="UserServlet"><font color=red><c:out value="${user_.name}" /></font></a></td>
-											<td><c:out value="${user_.admin}" /></td>
-										</c:when>
-										<c:otherwise>
-											<td><c:out value="${user_.id}" /></td>
-											<td><a href="UserServlet?id=${user_.id}&selected=${selectedUser.id}"><c:out value="${user_.name}" /></a></td>
-											<td><c:out value="${user_.admin}" /></td>
-										</c:otherwise>
-									</c:choose>
-								</tr>
-							</c:forEach>														
-							<tr id="editButton">
-								<td colspan=2></td>
-								<td>
-									<form action="UserEdit.jsp" method="post">
-										<input type="submit" value="Edit">
-									</form>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<table>
+	<br>
+	<p>${status}</p>
+	<br>
+	<table>
+		<tr>
+			<td valign="top">User-Liste
+				<table id="usertable" border="1">
+					<tbody>
 						<tr>
-							<td>					
-
-							</td>
-							<td>						
-
+							<td>Id</td>
+							<td>Name</td>
+							<td>Admin</td>
+						</tr>
+						<c:forEach var="user_" items="${userlist}">
+							<tr>
+								<c:choose>
+									<c:when test="${selectedUser.name == user_.name}">										
+										<td><c:out value="${user_.id}" /></td>
+										<td><a href="UserServlet"><font color=red><c:out value="${user_.name}" /></font></a></td>
+										<td><c:out value="${user_.admin}" /></td>
+									</c:when>
+									<c:otherwise>
+										<td><c:out value="${user_.id}" /></td>
+										<td><a href="UserServlet?id=${user_.id}&selected=${selectedUser.id}"><c:out value="${user_.name}" /></a></td>
+										<td><c:out value="${user_.admin}" /></td>
+									</c:otherwise>
+								</c:choose>
+							</tr>
+						</c:forEach>														
+						<tr id="editButton">
+							<td colspan="3">
+								<form>
+									<input type="submit" value="Edit" onclick="form.action='UserServlet?action=edit&id=${selectedUser.id}';  form.method='post'">
+									<input type="submit" value="Delete" onclick="form.action='UserServlet?action=delete&id=${selectedUser.id}';  form.method='post'">	
+								</form>								
 							</td>
 						</tr>
-					</table>
-				</td>
-				<td valign="top" >				
-					<div id="privileges">
+					</tbody>
+				</table>
+			</td>
+			<td valign="top" >									
+				<div id="privileges">
+					<form action="UserServlet?action=privilege&id=${selectedUser.id}" method="post">
 						Cameras
 						<table border="1">
 							<tbody>
@@ -121,21 +115,20 @@
 								</c:forEach>
 								<tr>
 									<td colspan=2></td>
-									<td>					
-										<form action="UserEdit.jsp" method="post">
-											<input type="submit" value="Save">
-										</form>
+									<td>
+										<input type="submit" value="Save">
 									</td>
 								</tr>
 							</tbody>
-						</table>					
-					</div>
-				</td>
-			</tr>
-		</table>
-		
-		<form action="UserEdit.jsp" method="post">
-			<input type="submit" value="New User">
-		</form>
+						</table>
+					</form>					
+				</div>
+			</td>
+		</tr>
+	</table>
+	<br>
+	<form action="UserServlet?action=new" method="post">
+		<input type="submit" value="New User">
+	</form>
 </body>
 </html>
