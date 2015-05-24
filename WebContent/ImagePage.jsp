@@ -50,12 +50,11 @@
 		<br> <br>
 		
 		<form action="ImageServlet" method="get">
-			<input type="text"name="date"id="date"value="">
+			Datum: <input type="text"name="date"id="date"value=""><br>
 			
-			<label for="time">Uhrzeit: </label>
-			<input type="text" id="timeStart" name="timeStart">
-			<input type="text"id="timeEnd" name="timeEnd">
-			<div id="time-range"></div>
+			Uhrzeit: <input type="text" id="timeStart" name="timeStart"readonly value="10:00">
+			<input type="text"id="timeEnd" name="timeEnd"readonly value="20:00"> <br>
+			<div id="time-range"></div> 
 			
 			<input type="submit"name="datum" value="Suchen">
 		</form>
@@ -122,7 +121,7 @@ $( "#time-range" ).slider({
       $("#timeEnd").val(hours2+":"+minutes2);
     }
   });
-
+  
 /* $( "#timeStart" ).val($( "#time-range" ).slider( "values", 0 ));
 $( "#timeEnd" ).val($( "#time-range" ).slider( "values", 1 )); */
 
