@@ -5,6 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link rel="stylesheet" href="jquery-ui.css">
 <%
 	User userinfo = (User) (session.getAttribute("userinfo"));
 %>
@@ -49,20 +50,20 @@
 		<br> <br>
 		
 		<form action="ImageServlet" method="get">
-		<input type="text" name="datumStart">
-		<input type="text" name="datumEnde">
-		<input type="submit"name="datum" value="Suchen">
+			<input type="text"name="date"id="date"value="">
+			
+			<label for="time">Uhrzeit: </label>
+			<input type="text" id="timeStart" name="timeStart">
+			<input type="text"id="timeEnd" name="timeEnd">
+			<div id="time-range"></div>
+			
+			<input type="submit"name="datum" value="Suchen">
 		</form>
+		
 		<c:forEach var="images" items="${imageList}">
-		<img src="${images.path}">
+			<img src="${images.path}">
 		</c:forEach>
-		Bildinformationen:
-		<br>
-		Kamera: ${image.cameraID}
-		<br>
-		Pfad: ${image.path}
-		<br>
-		Datum: ${image.date}
+		
 		<br> <br>
 		<table>
 			<tr>
@@ -86,5 +87,46 @@
 			</tr>
 		</table>
 	</center>
+	
+	<script src="jquery.js"></script>
+<script src="jquery-ui.js"></script>
+<script src="jquery-ui-timepicker-addon.js"></script>
+<script>
+$( "#date" ).datepicker({
+	dateFormat: "yy-mm-dd"
+});
+
+$( "#time-range" ).slider({
+    range: true,
+    min: 0,
+    max: 1440,
+    values: [ 600, 1200 ],
+    step: 15,
+    slide: function( event, ui ) {
+    	var hours1 = Math.floor(ui.values[0] / 60);
+        var minutes1 = ui.values[0] - (hours1 * 60);
+
+        if(hours1.length < 10) hours1= '0' + hours;
+        if(minutes1.length < 10) minutes1 = '0' + minutes;
+
+        if(minutes1 == 0) minutes1 = '00';
+
+        var hours2 = Math.floor(ui.values[1] / 60);
+        var minutes2 = ui.values[1] - (hours2 * 60);
+
+        if(hours2.length < 10) hours2= '0' + hours;
+        if(minutes2.length < 10) minutes2 = '0' + minutes;
+
+        if(minutes2 == 0) minutes2 = '00';
+      $( "#timeStart" ).val(hours1+':'+minutes1 );
+      $("#timeEnd").val(hours2+":"+minutes2);
+    }
+  });
+
+/* $( "#timeStart" ).val($( "#time-range" ).slider( "values", 0 ));
+$( "#timeEnd" ).val($( "#time-range" ).slider( "values", 1 )); */
+
+</script>
+
 </body>
 </html>

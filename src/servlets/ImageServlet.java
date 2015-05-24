@@ -43,14 +43,15 @@ public class ImageServlet extends HttpServlet {
 		
 		if(request.getParameter("datum")!=null){
 			
-			String datumStart =request.getParameter("datumStart");
-			System.out.println("StartDatum: "+datumStart);
-			String datumEnde = request.getParameter("datumEnde");
-			Timestamp timeStart = new Timestamp(115, 4, 24, Integer.parseInt(datumStart), 0, 0, 0);
-			Timestamp timeEnde = new Timestamp(115, 4, 24, Integer.parseInt(datumEnde), 0, 0, 0);
-
-			List<Image> images = dao.getImages(dao.getCameraList().get(0).getId(), timeStart, timeEnde);
-
+			String timeStart =request.getParameter("timeStart");
+			String timeEnd = request.getParameter("timeEnd");
+			String datum = request.getParameter("date");
+//Vorbereitung um timestamp zu erzeugen
+			String startDate = datum + " " + timeStart+":00";
+			String endDate = datum +" " + timeEnd+":00";
+			
+			List<Image> images = dao.getImages(dao.getCameraList().get(0).getId(), Timestamp.valueOf(startDate),Timestamp.valueOf(endDate));
+//Problem im Pfad ist das erste Zeichen ein / muss entfern werden
 		for(int i=0;i<images.size();i++)
 			images.get(i).setPath(images.get(i).getPath().substring(1));
 		
