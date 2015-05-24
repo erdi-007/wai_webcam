@@ -45,11 +45,18 @@
 		<br> Admin-Status:
 		<%=userinfo.isAdmin()%>
 		<br> <br>
+		
+		<form action="ImageServlet" method="get">
+		<input type="text" name="datumStart">
+		<input type="text" name="datumEnde">
+		<input type="submit"name="datum" value="Suchen">
+		</form>
+		<img src="${param.imagePath}"/>
 		<table>
 			<tr>
 				<td>
 					<form action="ImageServlet" method="get">
-						<input type="submit" value="Image">
+						<input type="submit" name ="image"value="Image">
 					</form>
 				</td>
 				<td>

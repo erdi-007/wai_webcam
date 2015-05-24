@@ -1,8 +1,11 @@
 package servlets;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Camera;
+import model.Image;
 import control.Controller;
 import dao.Dao;
 import dao.DaoFactory;
@@ -29,9 +33,31 @@ public class ImageServlet extends HttpServlet {
 		if (controller ==null)
 			controller = new Controller();
 		
-		List<Camera> cameralist =dao.getCameraList();
-		for(int i = 0; i< cameralist.size(); i++) {
-			controller.saveImage(cameralist.get(i));
+		if(request.getParameter("image")!=null){
+			List<Camera> cameralist =dao.getCameraList();
+			for(int i = 0; i< cameralist.size(); i++) {
+				controller.saveImage(cameralist.get(i));
+			}
+		}
+		
+		if(request.getParameter("datum")!=null){
+			String datumStart =request.getParameter("datumStart");
+			System.out.println("StartDatum: "+datumStart);
+			String datumEnde = request.getParameter("datumEnde");
+			Timestamp timeStart = new Timestamp(115, 4, 23, Integer.parseInt(datumStart), 0, 0, 0);
+			Timestamp timeEnde = new Timestamp(115, 4, 23, Integer.parseInt(datumEnde), 0, 0, 0);
+			timeEnde.setYear(115);
+//			List<Image> images = dao.getImages(dao.getCameraList().get(0).getId(), timeStart, timeEnde);
+			System.out.println(dao.getCameraList().get(0).getId());
+			List<Image>images = dao.getImages(dao.getCameraList().get(0).getId());
+			List<String> pfad = new ArrayList<String>();
+			for(int i=0;i<images.size();i++){
+				pfad.add(i, images.get(i).getPath());
+			}
+			request.setAttribute("imagePath", pfad);
+			
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
+			dispatcher.forward(request, response);
 		}
 	}
 
@@ -39,7 +65,7 @@ public class ImageServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	
 	}
 
 }
