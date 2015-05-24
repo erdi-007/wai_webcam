@@ -36,16 +36,19 @@ public class UserServlet extends HttpServlet {
 			
 		List<User> userlist = dao.getUserList();
 		List<Camera> cameralist = dao.getCameraList();
-		if(id != null && !lastUser.equals(id)) {
-			User selectedUser = dao.getUser(Long.parseLong(id));
-			List<Long> privilegeList = dao.getPrivilegesUser(Long.parseLong(id));
-			request.setAttribute("selectedUser", selectedUser);
-			request.setAttribute("privilegeList", privilegeList);
+		if(id != null && lastUser != null) {
+			if(!lastUser.equals(id)){
+				User selectedUser = dao.getUser(Long.parseLong(id));
+				List<Long> privilegeList = dao.getPrivilegesUser(Long.parseLong(id));
+				request.setAttribute("selectedUser", selectedUser);
+				request.setAttribute("privilegeList", privilegeList);
+			}
 		} else {
 			request.removeAttribute("selectedUser");
 			request.removeAttribute("privilegeList");
-		}		
-		request.setAttribute("status", status);
+		}
+		if(status != null)
+			request.setAttribute("status", status);
 		request.setAttribute("userlist", userlist);
 		request.setAttribute("cameralist", cameralist);
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/UserList.jsp");
@@ -80,8 +83,9 @@ public class UserServlet extends HttpServlet {
     	
     	if(action.equals("delete")) {
     		Long id = Long.valueOf(request.getParameter("id"));
+    		String name = dao.getUser(id).getName();
 
-			status = "User has been deleted!";
+			status = name + " has been deleted!";
     		
 			try {		
 	    		dao.deleteUser(id);    		
@@ -154,7 +158,7 @@ public class UserServlet extends HttpServlet {
 					} else {					
 						user.setPassword(password);	
 					}
-					status = "User has been added!";
+					status = name + " has been added!";
 				}
 			} else {
 				if(password != "") {
@@ -163,7 +167,7 @@ public class UserServlet extends HttpServlet {
 					user.setPassword(dao.getUser(id).getPassword());
 				}
 
-				status = "User has been edited!";
+				status = name + " has been edited!";
 			}
 			
 			try {		
