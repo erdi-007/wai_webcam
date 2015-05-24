@@ -52,6 +52,14 @@
 		<input type="submit"name="datum" value="Suchen">
 		</form>
 		<img src="${param.imagePath}"/>
+		Bildinformationen:
+		<br>
+		Kamera: ${image.cameraID}
+		<br>
+		Pfad: ${image.path}
+		<br>
+		Datum: ${image.date}
+		<br> <br>
 		<table>
 			<tr>
 				<td>

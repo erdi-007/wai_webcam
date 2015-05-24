@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -41,26 +42,35 @@ public class ImageServlet extends HttpServlet {
 		}
 		
 		if(request.getParameter("datum")!=null){
+			
 			String datumStart =request.getParameter("datumStart");
 			System.out.println("StartDatum: "+datumStart);
 			String datumEnde = request.getParameter("datumEnde");
 			Timestamp timeStart = new Timestamp(115, 4, 23, Integer.parseInt(datumStart), 0, 0, 0);
 			Timestamp timeEnde = new Timestamp(115, 4, 23, Integer.parseInt(datumEnde), 0, 0, 0);
-			timeEnde.setYear(115);
 //			List<Image> images = dao.getImages(dao.getCameraList().get(0).getId(), timeStart, timeEnde);
 			System.out.println(dao.getCameraList().get(0).getId());
+			
 			List<Image>images = dao.getImages(dao.getCameraList().get(0).getId());
 			List<String> pfad = new ArrayList<String>();
+			
 			for(int i=0;i<images.size();i++){
 				pfad.add(i, images.get(i).getPath());
 			}
-			request.setAttribute("imagePath", pfad);
-			
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
-			dispatcher.forward(request, response);
-		}
-	}
 
+			List<Camera> cameralist =dao.getCameraList();
+		for(int i = 0; i< cameralist.size(); i++) {
+			dao.save(controller.saveImage(cameralist.get(i)));
+		}
+		
+		Timestamp currentTimestamp = new Timestamp(new Date().getTime());
+		Image image = dao.getImage(cameralist.get(0).getId(), currentTimestamp);
+		
+		request.setAttribute("image", image);
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
+		dispatcher.forward(request, response);
+	}
+	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
