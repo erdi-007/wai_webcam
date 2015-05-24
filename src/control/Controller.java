@@ -1,17 +1,11 @@
 package control;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -24,7 +18,6 @@ import javax.imageio.ImageIO;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.imgscalr.Scalr;
-
 import dao.Dao;
 import dao.DaoFactory;
 import model.Camera;

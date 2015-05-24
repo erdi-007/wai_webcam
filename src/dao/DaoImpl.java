@@ -507,7 +507,7 @@ public class DaoImpl implements Dao{
 		try {
 			connection = jndi.getConnection("jdbc/libraryDB");			
 			
-			PreparedStatement pstmt = connection.prepareStatement("select * from public.privileges where cameraID = ? order by userID");
+			PreparedStatement pstmt = connection.prepareStatement("select * from public.privileges where cameraID = ? and userID != 1 order by userID");
 			pstmt.setLong(1, cameraID);				
 			ResultSet rs = pstmt.executeQuery();
 							
