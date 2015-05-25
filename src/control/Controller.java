@@ -14,10 +14,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-
-
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.imgscalr.Scalr;
+
 import dao.Dao;
 import dao.DaoFactory;
 import model.Camera;
@@ -44,22 +43,27 @@ public class Controller {
 		image.setDate(new Timestamp(new Date().getTime()));				
 		String path = getPath(image.getCameraID(), image.getDate());
 		String pathThumbnail = getPathThumbnail(image.getCameraID(), image.getDate());
-		image.setPath(path);
-		image.setPathThumbnail(pathThumbnail);		
-
-		File file = new File(pathThumbnail.substring(0, pathThumbnail.length()-9));
-		file.mkdirs();
 		
+		image.setPath(path);
+		image.setPathThumbnail(pathThumbnail);
+		
+		String dir = this.getClass().getClassLoader().getResource("").getPath();
+		String delete = "/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/wai_webcam/WEB-INF/classes/";
+		
+		dir = dir.replace(delete, "");
+
+		File file = new File(dir + pathThumbnail.substring(0, pathThumbnail.length()-9));
+		file.mkdirs();		
 		
 		URL image_url = new URL(camera.getUrl());
 		
 		input = new BufferedInputStream(image_url.openStream());
-		output = new FileOutputStream(path);
+		output = new FileOutputStream(dir+path);
 		
 		BufferedImage bufferedImage = ImageIO.read(input);
 		ImageIO.write(bufferedImage, "jpg", output);
 		
-		outputthumb = new FileOutputStream(pathThumbnail);
+		outputthumb = new FileOutputStream(dir+pathThumbnail);
 		BufferedImage thumbnail = Scalr.resize(bufferedImage, 100);
 		ImageIO.write(thumbnail, "jpg", outputthumb);
 		
@@ -81,10 +85,7 @@ public class Controller {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		
-		String dir = this.getClass().getClassLoader().getResource("").getPath();
-		String delete = "/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/wai_webcam/WEB-INF/classes/";
-		
-		dir = dir.replace(delete, "");
+
 		
 		String month = Integer.toString(calendar.get(Calendar.MONTH)+1);
 		String day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
@@ -96,7 +97,7 @@ public class Controller {
 		if(calendar.get(Calendar.DAY_OF_MONTH) < 10)
 			day = "0" + calendar.get(Calendar.DAY_OF_MONTH);		
 		
-		String path = dir + "/images/cam_" + cameraID.toString() + "/" + calendar.get(Calendar.YEAR) + "_"
+		String path = "/wai_webcam/WebContent/img/cam_" + cameraID.toString() + "/" + calendar.get(Calendar.YEAR) + "_"
 				+ month + "_" + day + "/" + hour + "_" + min + ".jpg";				
 				
 		return path;
@@ -110,11 +111,6 @@ public class Controller {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		
-		String dir = this.getClass().getClassLoader().getResource("").getPath();
-		String delete = "/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/wai_webcam/WEB-INF/classes/";
-		
-		dir = dir.replace(delete, "");
-		
 		String month = Integer.toString(calendar.get(Calendar.MONTH)+1);
 		String day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
 		String hour = Integer.toString(calendar.get(Calendar.HOUR_OF_DAY));
@@ -123,9 +119,9 @@ public class Controller {
 		if((calendar.get(Calendar.MONTH)+1) < 10)
 			month = "0" + (calendar.get(Calendar.MONTH)+1);
 		if(calendar.get(Calendar.DAY_OF_MONTH) < 10)
-			day = "0" + calendar.get(Calendar.DAY_OF_MONTH);		
+			day = "0" + calendar.get(Calendar.DAY_OF_MONTH);	
 		
-		String path = dir + "/images/cam_" + cameraID.toString() + "/" + calendar.get(Calendar.YEAR) + "_"
+		String path = "/wai_webcam/WebContent/img/cam_" + cameraID.toString() + "/" + calendar.get(Calendar.YEAR) + "_"
 				+ month + "_" + day + "/thumbnail/" + hour + "_" + min + ".jpg";				
 				
 		return path;

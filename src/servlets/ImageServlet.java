@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -53,14 +54,13 @@ public class ImageServlet extends HttpServlet {
 			String endDate = dateEnd +" " + timeEnd+":00";
 			
 			List<Image> images = dao.getImages(dao.getCameraList().get(0).getId(), Timestamp.valueOf(startDate),Timestamp.valueOf(endDate));
-//Problem im Pfad ist das erste Zeichen ein / muss entfern werden und auf _resize.jpg ändern um thumbnail anzuzeigen
 			for(int i=0;i<images.size();i++){
-				images.get(i).setPath(images.get(i).getPath().substring(1));
-				images.get(i).setPathThumbnail("file:///"+images.get(i).getPathThumbnail().substring(1));
+				images.get(i).setPath(images.get(i).getPath().replaceFirst("WebContent/", ""));
+				images.get(i).setPathThumbnail(images.get(i).getPathThumbnail().replaceFirst("WebContent/", ""));
+				System.out.println("thumb pfad: "+images.get(i).getPathThumbnail());
 			}
-System.out.println("image pfad: "+images.get(images.size()-1).getPath());
-System.out.println("thumb pfad: "+images.get(images.size()-1).getPathThumbnail());
-		request.setAttribute("imageList", images);
+
+			request.setAttribute("imageList", images);
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
 		dispatcher.forward(request, response);
 		}
