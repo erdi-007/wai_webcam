@@ -55,9 +55,7 @@ public class ImageServlet extends HttpServlet {
 			
 			List<Image> images = dao.getImages(dao.getCameraList().get(0).getId(), Timestamp.valueOf(startDate),Timestamp.valueOf(endDate));
 			for(int i=0;i<images.size();i++){
-				images.get(i).setPath(images.get(i).getPath().replaceFirst("D:/waigithub", ""));
 				images.get(i).setPath(images.get(i).getPath().replaceFirst("WebContent/", ""));
-				images.get(i).setPathThumbnail(images.get(i).getPathThumbnail().replaceFirst("D:/waigithub", ""));
 				images.get(i).setPathThumbnail(images.get(i).getPathThumbnail().replaceFirst("WebContent/", ""));
 				System.out.println("thumb pfad: "+images.get(i).getPathThumbnail());
 			}
