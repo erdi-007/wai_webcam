@@ -1,2 +1,6 @@
 /control/
+/dao/
+/exception/
+/jndi/
+/model/
 /servlets/

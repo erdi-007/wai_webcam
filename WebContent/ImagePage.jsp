@@ -60,11 +60,6 @@
 			
 			<input type="submit"name="datum" value="Suchen">
 		</form>
-		
-		<c:forEach var="images" items="${imageList}">
-			<img src="${images.pathThumbnail}">
-		</c:forEach>
-		
 		<br> <br>
 		<table>
 			<tr>

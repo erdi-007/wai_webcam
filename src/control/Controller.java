@@ -16,8 +16,12 @@ import javax.imageio.ImageIO;
 
 
 
+import javax.naming.InsufficientResourcesException;
+import javax.servlet.ServletContext;
+
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.imgscalr.Scalr;
+
 import dao.Dao;
 import dao.DaoFactory;
 import model.Camera;
@@ -44,6 +48,7 @@ public class Controller {
 		image.setDate(new Timestamp(new Date().getTime()));				
 		String path = getPath(image.getCameraID(), image.getDate());
 		String pathThumbnail = getPathThumbnail(image.getCameraID(), image.getDate());
+		
 		image.setPath(path);
 		image.setPathThumbnail(pathThumbnail);		
 
@@ -96,6 +101,7 @@ public class Controller {
 		if(calendar.get(Calendar.DAY_OF_MONTH) < 10)
 			day = "0" + calendar.get(Calendar.DAY_OF_MONTH);		
 		
+		dir="D:/waigithub/wai_webcam/WebContent/img";
 		String path = dir + "/images/cam_" + cameraID.toString() + "/" + calendar.get(Calendar.YEAR) + "_"
 				+ month + "_" + day + "/" + hour + "_" + min + ".jpg";				
 				
@@ -124,7 +130,7 @@ public class Controller {
 			month = "0" + (calendar.get(Calendar.MONTH)+1);
 		if(calendar.get(Calendar.DAY_OF_MONTH) < 10)
 			day = "0" + calendar.get(Calendar.DAY_OF_MONTH);		
-		
+		dir="D:/waigithub/wai_webcam/WebContent/img";
 		String path = dir + "/images/cam_" + cameraID.toString() + "/" + calendar.get(Calendar.YEAR) + "_"
 				+ month + "_" + day + "/thumbnail/" + hour + "_" + min + ".jpg";				
 				
