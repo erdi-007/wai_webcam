@@ -140,6 +140,8 @@ public class UserServlet extends HttpServlet {
 			user.setAdmin(admin);
 			
 			if(id == null) {
+				
+				//Neuer User wird angelegt
 				try {
 					dao.getUser(name);
 					
@@ -161,6 +163,8 @@ public class UserServlet extends HttpServlet {
 					status = name + " has been added!";
 				}
 			} else {
+				
+				//Vorhandener User editiert
 				if(password != "") {
 					user.setPassword(password);	
 				} else {
@@ -203,7 +207,7 @@ public class UserServlet extends HttpServlet {
 				}
 			}
     	} catch (PrivilegeNotSavedException e) {
-			//User konnte nicht gespeichert werden
+			//Privilegien konnte nicht gespeichert werden
 			request.setAttribute("error", e.getMessage());
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
 			dispatcher.forward(request, response);

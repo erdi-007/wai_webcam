@@ -545,6 +545,7 @@ public class DaoImpl implements Dao{
 				image.setCameraID(cameraId);
 				image.setDate(timestamp);
 				image.setPath(controller.getPath(cameraId, timestamp));
+				image.setPathThumbnail(controller.getPathThumbnail(cameraId, timestamp));
 				return image;
 			} else {
 				throw new ImageNotFoundException();
@@ -579,6 +580,7 @@ public class DaoImpl implements Dao{
 				image.setCameraID(cameraId);
 				image.setDate(timestamp);
 				image.setPath(controller.getPath(cameraId, timestamp));
+				image.setPathThumbnail(controller.getPathThumbnail(cameraId, timestamp));
 				imageList.add(image);
 			}			
 			
@@ -614,6 +616,7 @@ public class DaoImpl implements Dao{
 				image.setCameraID(cameraId);
 				image.setDate(timestamp);
 				image.setPath(controller.getPath(cameraId, timestamp));
+				image.setPathThumbnail(controller.getPathThumbnail(cameraId, timestamp));
 				imageList.add(image);
 			}			
 			
@@ -649,6 +652,7 @@ public class DaoImpl implements Dao{
 				image.setCameraID(cameraId);
 				image.setDate(timestamp);
 				image.setPath(controller.getPath(cameraId, timestamp));
+				image.setPathThumbnail(controller.getPathThumbnail(cameraId, timestamp));
 				imageList.add(image);
 			}			
 			

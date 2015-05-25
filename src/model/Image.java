@@ -6,6 +6,7 @@ public class Image {
 	private Long cameraID;
 	private Timestamp date;
 	private String path;
+	private String pathThumbnail;
 	
 	public Long getCameraID() {
 		return cameraID;
@@ -29,6 +30,14 @@ public class Image {
 	
 	public void setPath(String path) {
 		this.path = path;
+	}
+	
+	public String getPathThumbnail() {
+		return pathThumbnail;
+	}
+	
+	public void setPathThumbnail(String pathThumbnail) {
+		this.pathThumbnail = pathThumbnail;
 	}
 
 }

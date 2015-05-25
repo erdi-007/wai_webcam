@@ -191,7 +191,7 @@ public class CameraServlet extends HttpServlet {
 			}
 			dao.savePrivilege(Long.valueOf(1), id);
     	} catch (PrivilegeNotSavedException e) {
-			//User konnte nicht gespeichert werden
+			//Privilegien konnte nicht gespeichert werden
 			request.setAttribute("error", e.getMessage());
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
 			dispatcher.forward(request, response);
