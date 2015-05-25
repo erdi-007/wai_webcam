@@ -42,39 +42,24 @@ public class Controller {
 		Image image = new Image();
 		image.setCameraID(camera.getId());
 		image.setDate(new Timestamp(new Date().getTime()));				
-		String path = getPath(image.getCameraID(), image.getDate());		
+		String path = getPath(image.getCameraID(), image.getDate());
+		String pathThumbnail = getPathThumbnail(image.getCameraID(), image.getDate());
 		image.setPath(path);
+		image.setPathThumbnail(pathThumbnail);		
+
+		File file = new File(pathThumbnail.substring(0, pathThumbnail.length()-9));
+		file.mkdirs();
 		
-//		try	{
-			URL image_url = new URL(camera.getUrl());
-			
-			input = new BufferedInputStream(image_url.openStream());
-			File file = new File(path.substring(0, path.length()-9));
-			file.mkdirs();
-			output = new FileOutputStream(path);
-			
-//			byte data[] = new byte[1024];
-//			int count;
-//			while ((count = input.read(data, 0, 1024)) != -1) {
-//				output.write(data, 0, count);
-//            }
-//			
-//		} catch (MalformedURLException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} finally {
-//            if (input != null)
-//            	input.close();
-//            if (output != null)
-//            	output.close();
-//		}
+		
+		URL image_url = new URL(camera.getUrl());
+		
+		input = new BufferedInputStream(image_url.openStream());
+		output = new FileOutputStream(path);
 		
 		BufferedImage bufferedImage = ImageIO.read(input);
 		ImageIO.write(bufferedImage, "jpg", output);
 		
-		String thumbpath = path.replaceAll(".jpg", "_resize.jpg");
-		outputthumb = new FileOutputStream(thumbpath);
+		outputthumb = new FileOutputStream(pathThumbnail);
 		BufferedImage thumbnail = Scalr.resize(bufferedImage, 100);
 		ImageIO.write(thumbnail, "jpg", outputthumb);
 		
