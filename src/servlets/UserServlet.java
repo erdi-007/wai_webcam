@@ -67,9 +67,9 @@ public class UserServlet extends HttpServlet {
     		request.setAttribute("cameralist", cameralist);        	
     		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/UserEdit.jsp");
     		dispatcher.forward(request, response);	
-    	} 
-    	
-    	if(action.equals("edit")) {
+    	}    	
+    	else if(action.equals("edit")) 
+    	{
     		
         	String id = request.getParameter("id");
         	User selectedUser = dao.getUser(Long.parseLong(id));
@@ -80,16 +80,17 @@ public class UserServlet extends HttpServlet {
     		request.setAttribute("cameralist", cameralist);        	
     		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/UserEdit.jsp");
     		dispatcher.forward(request, response);	
-    	} 
-    	
-    	if(action.equals("delete")) {
-    		Long id = Long.valueOf(request.getParameter("id"));
+    	}    	
+    	else if(action.equals("delete")) 
+    	{
+    		Long id = extractID(request.getParameter("id"));
     		String name = dao.getUser(id).getName();
-
-			status = name + " has been deleted!";
     		
 			try {		
-	    		dao.deleteUser(id);    		
+	    		dao.deleteUser(id);
+	    		
+	    		status = name + " has been deleted!";
+	    		
 	    		List<User> userlist = dao.getUserList();
 	    		List<Camera> cameralist = dao.getCameraList();
 	    		request.setAttribute("userlist", userlist);
@@ -104,89 +105,67 @@ public class UserServlet extends HttpServlet {
 				dispatcher.forward(request, response);
 	    		return;
 			}  
-    	} 
-    	
-    	if(action.equals("privilege")) {
-    		Long id = Long.valueOf(request.getParameter("id"));  
+    	}     	
+    	else if(action.equals("privilege")) 
+    	{
+    		Long id = extractID(request.getParameter("id")); 
 			savePrivileges(request, response, id);
 			status = "Privileges from "+dao.getUser(id).getName()+" has been edited!";
 			response.sendRedirect("UserServlet?id="+id+"&selected=&status="+status);
-    	}
-    	
-    	if(action.equals("save")) {
-    		
-    		Long id = null;
-    		String name = null;
-    		
-    		if(request.getParameter("id") != null && request.getParameter("id") != "") {
-    			id = Long.valueOf(request.getParameter("id"));
-    		} 
-    		
-    		if(request.getParameter("name") != null && request.getParameter("name") != "") {
-        		name = request.getParameter("name");
-    		} else {
-				//kein Name eingegeben
-				request.setAttribute("error", "No name entered!");
+    	}    	
+    	else if(action.equals("save")) 
+    	{   		
+    		if(nameIsEmpty(request.getParameter("name")))
+    		{
+    			request.setAttribute("error", "No name entered!");
 	    		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
 	    		dispatcher.forward(request, response);
 	    		return;
     		}
     		
-    		boolean admin = Boolean.parseBoolean(request.getParameter("admin"));
-    		
-    		// hashing
-    		String password = request.getParameter("password");
-    		if(!password.isEmpty())
-	    		password = MD5.create(password);
-    		
-			User user = new User();
-			user.setId(id);
-			user.setName(name);
-			user.setAdmin(admin);
-			
-			if(id == null) {
-				
-				//Neuer User wird angelegt
-				try {
-					dao.getUser(name);
-					
-					//Username bereits vorhanden
+    		User user = new User();
+    		   		
+    		if(isKnownUser(request.getParameter("id")))
+    			user.setId(extractID(request.getParameter("id")));
+    	
+    		user.setName(request.getParameter("name"));	
+    		user.setAdmin(Boolean.parseBoolean(request.getParameter("admin")));
+    		user.setPassword(hashIfNecessary(request.getParameter("password")));
+        					
+			if(newUser(user)) 
+			{	
+				if(usernameExists(user.getName()))
+				{
 					request.setAttribute("error", "User already exists!");
 		    		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
 		    		dispatcher.forward(request, response);
 		    		return;
-				} catch (UserNotFoundException e) {
-					if(password == "") {
-						//kein Passwort eingegeben
-						request.setAttribute("error", "No password entered!");
-			    		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
-			    		dispatcher.forward(request, response);
-			    		return;
-					} else {					
-						user.setPassword(password);	
-					}
-					status = name + " has been added!";
-				}
-			} else {
-				
-				//Vorhandener User editiert
-				if(password != "") {
-					user.setPassword(password);	
-				} else {
-					user.setPassword(dao.getUser(id).getPassword());
 				}
 
-				status = name + " has been edited!";
-			}
+				if(user.getPassword().isEmpty()) {
+					request.setAttribute("error", "No password entered!");
+		    		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
+		    		dispatcher.forward(request, response);
+		    		return;
+				} 
+
+				status = user.getName() + " has been added!";
+			} 
+			else // User exists -> edit
+			{
+				if(user.getPassword().isEmpty())
+					user.setPassword(dao.getUser(user.getId()).getPassword());
+				
+				status = user.getName() + " has been edited!";
+			}			
 			
 			try {		
 				dao.save(user);
-				id = dao.getUser(name).getId();	
+				Long id = dao.getUser(user.getName()).getId();
 				savePrivileges(request, response, id);
 				response.sendRedirect("UserServlet?id="+id+"&selected=&status="+status);
 				
 			}  catch (UserNotSavedException e) {
-				//User konnte nicht gespeichert werden
 				request.setAttribute("error", e.getMessage());
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
 				dispatcher.forward(request, response);
@@ -219,4 +198,42 @@ public class UserServlet extends HttpServlet {
     		return;
     	}
 	}	
+
+	private boolean usernameExists(String name) {
+		try 
+		{
+			dao.getUser(name);
+			return true;
+
+		} 
+		catch (UserNotFoundException e) 
+		{
+			return false;
+		}
+	}
+
+	private boolean newUser(User user) {
+		if(user.getId() == null)
+			return true;
+		return false;
+	}
+
+	private String hashIfNecessary(String password) {
+		if(!password.isEmpty())
+    		password = MD5.create(password);
+		
+		return password;
+	}
+
+	private boolean nameIsEmpty(String name) {
+    	return name == null || name == "";
+	}
+
+	private Long extractID(String id) {
+			return Long.valueOf(id);
+	}
+
+	private boolean isKnownUser(String id) {
+    	return id != null && id != "";
+	}
 }
