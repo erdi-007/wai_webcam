@@ -21,7 +21,6 @@ import exception.UserNotDeletedException;
 import exception.PrivilegeNotSavedException;
 import exception.PrivilegeNotDeletedException;
 import exception.PrivilegeNotFoundException;
-import exception.LoginFailedException;
 import model.User;
 import model.Image;
 import model.Camera;
@@ -264,37 +263,6 @@ public class DaoImpl implements Dao{
 		} finally {
 			closeConnection(connection);
 		}	
-	}
-	
-	@Override
-	public User login(User user) {
-		if (user == null)
-			throw new IllegalArgumentException("user can not be null");
-		
-		Connection connection = null;		
-		try {
-			connection = jndi.getConnection("jdbc/libraryDB");			
-			PreparedStatement pstmt = connection.prepareStatement("select * from public.user where name = ? and password = ?");
-			pstmt.setString(1, user.getName());
-			pstmt.setString(2, user.getPassword());
-			ResultSet rs = pstmt.executeQuery();
-			
-			boolean valid = rs.next();
-			
-			if(!valid) {
-				user.setValid(false);
-			} else if(valid) {
-				user.setAdmin(rs.getBoolean("is_admin"));
-				user.setValid(true);
-			}
-		
-		} catch (Exception e) {
-			throw new LoginFailedException();
-		} finally {	
-			closeConnection(connection);
-		}
-		
-		return user;
 	}
 
 	@Override

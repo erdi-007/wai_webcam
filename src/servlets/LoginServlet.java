@@ -15,6 +15,7 @@ import crypto.MD5;
 import model.User;
 import dao.Dao;
 import dao.DaoFactory;
+import exception.UserNotFoundException;
 
 /** * Servlet implementation class LoginServlet */
 
@@ -29,16 +30,25 @@ public class LoginServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException,
 			java.io.IOException {
 
+		
+		User loginCredentials = new User();
+		loginCredentials.setName(request.getParameter("un"));
+		loginCredentials.setPassword(request.getParameter("pw"));
+		
+		Boolean isValid = false;
 		User user = new User();
-		user.setName(request.getParameter("un"));
 		
-		// Hashing
-		String rawPassword = request.getParameter("pw");
-		String hashedPassword = MD5.create(rawPassword);
-		user.setPassword(hashedPassword);	
+		try
+		{
+			user = dao.getUser(loginCredentials.getName());
+			isValid = MD5.validate(loginCredentials.getPassword(), user.getPassword());
+		}
+		catch (UserNotFoundException e)
+		{
+			e.printStackTrace();
+		}	
 		
-		user = dao.login(user);
-		if (user.isValid()) {
+		if (isValid) {
 			HttpSession session = request.getSession();
 			session.setAttribute("userinfo", user);
 			session.setMaxInactiveInterval(30 * 60);

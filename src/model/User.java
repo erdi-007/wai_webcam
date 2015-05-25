@@ -6,7 +6,6 @@ public class User {
 	private String name;
 	private String password;
 	private boolean admin;
-	private boolean valid;
 	
     public Long getId() {
         return id;
@@ -38,13 +37,5 @@ public class User {
     
     public void setAdmin(boolean admin) {
     	this.admin = admin;
-    }
-    
-    public boolean isValid() {
-    	return valid;
-    }
-    
-    public void setValid(boolean valid) {
-    	this.valid = valid;
     }
 }

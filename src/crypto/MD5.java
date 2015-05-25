@@ -26,4 +26,10 @@ public class MD5 {
 		
 		return "";
 	}
+
+	public static Boolean validate(String raw, String hashed) 
+	{
+		String data = MD5.create(raw);
+		return data.equals(hashed);
+	}
 }
