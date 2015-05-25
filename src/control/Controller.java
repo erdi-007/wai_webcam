@@ -33,6 +33,7 @@ public class Controller {
 	{
 		BufferedInputStream input = null;
 		FileOutputStream output = null;
+		FileOutputStream outputthumb =null;
 		
 		Date date = new Date();
 		Calendar calendar = Calendar.getInstance();
@@ -72,8 +73,17 @@ public class Controller {
 		BufferedImage bufferedImage = ImageIO.read(input);
 		ImageIO.write(bufferedImage, "jpg", output);
 		
+		String thumbpath = path.replaceAll(".jpg", "_resize.jpg");
+		outputthumb = new FileOutputStream(thumbpath);
 		BufferedImage thumbnail = Scalr.resize(bufferedImage, 100);
-		ImageIO.write(thumbnail, "jpg", output);
+		ImageIO.write(thumbnail, "jpg", outputthumb);
+		
+      if (input != null)
+    	input.close();
+    if (output != null)
+    	output.close();
+    if (outputthumb != null)
+    	outputthumb.close();
 		return image;
 		
 	}

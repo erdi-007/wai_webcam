@@ -5,7 +5,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="jquery-ui.css">
+<link rel="stylesheet" href="css/jquery-ui.css">
+<link rel="stylesheet" href="css/screen.css">
+<link rel="stylesheet" href="css/lightbox.css">
 <%
 	User userinfo = (User) (session.getAttribute("userinfo"));
 %>
@@ -86,10 +88,22 @@
 			</tr>
 		</table>
 	</center>
-	
-	<script src="jquery.js"></script>
-<script src="jquery-ui.js"></script>
-<script src="jquery-ui-timepicker-addon.js"></script>
+
+<section id="examples" class="examples-section">
+<div class="container">
+			<div class="image-row">
+				<div class="image-set">
+					<c:forEach var="images" items="${imageList}">
+						<a class="example-image-link" href="images.path" data-lightbox="example-set" data-title="Click the right half of the image to move forward."><img class="example-image" src="img/demopage/thumb-3.jpg" alt=""/></a>
+					</c:forEach>
+				</div>
+			</div>
+	</div>
+	</section>		
+				
+	<script src="jquery/jquery.js"></script>
+<script src="jquery/jquery-ui.js"></script>
+	<script src="jquery/lightbox.js"></script>
 <script>
 $( "#dateStart" ).datepicker({
 	dateFormat: "yy-mm-dd"
