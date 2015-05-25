@@ -62,7 +62,7 @@
 		</form>
 		
 		<c:forEach var="images" items="${imageList}">
-			<img src="${images.path}">
+			<img src="${images.pathThumbnail}">
 		</c:forEach>
 		
 		<br> <br>

@@ -54,10 +54,7 @@ public class ImageServlet extends HttpServlet {
 			
 			List<Image> images = dao.getImages(dao.getCameraList().get(0).getId(), Timestamp.valueOf(startDate),Timestamp.valueOf(endDate));
 //Problem im Pfad ist das erste Zeichen ein / muss entfern werden und auf _resize.jpg ändern um thumbnail anzuzeigen
-		for(int i=0;i<images.size();i++){
-			images.get(i).setPath(images.get(i).getPath().substring(1));
-			images.get(i).setPath(images.get(i).getPath().replaceAll(".jpg", "_resize.jpg"));
-		}
+
 		request.setAttribute("imageList", images);
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
 		dispatcher.forward(request, response);

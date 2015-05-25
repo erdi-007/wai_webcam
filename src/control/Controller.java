@@ -96,8 +96,8 @@ public class Controller {
 		if(calendar.get(Calendar.DAY_OF_MONTH) < 10)
 			day = "0" + calendar.get(Calendar.DAY_OF_MONTH);		
 		
-		String path = dir + "//images//cam_" + cameraID.toString() + "//" + calendar.get(Calendar.YEAR) + "_"
-				+ month + "_" + day + "//" + hour + "_" + min + ".jpg";				
+		String path = dir + "/images/cam_" + cameraID.toString() + "/" + calendar.get(Calendar.YEAR) + "_"
+				+ month + "_" + day + "/" + hour + "_" + min + ".jpg";				
 				
 		return path;
 	}
@@ -125,8 +125,8 @@ public class Controller {
 		if(calendar.get(Calendar.DAY_OF_MONTH) < 10)
 			day = "0" + calendar.get(Calendar.DAY_OF_MONTH);		
 		
-		String path = dir + "//images//cam_" + cameraID.toString() + "//" + calendar.get(Calendar.YEAR) + "_"
-				+ month + "_" + day + "//thumbnail//" + hour + "_" + min + ".jpg";				
+		String path = dir + "/images/cam_" + cameraID.toString() + "/" + calendar.get(Calendar.YEAR) + "_"
+				+ month + "_" + day + "/thumbnail/" + hour + "_" + min + ".jpg";				
 				
 		return path;
 	}
