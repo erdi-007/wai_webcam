@@ -94,7 +94,7 @@
 			<div class="image-row">
 				<div class="image-set">
 					<c:forEach var="images" items="${imageList}">
-						<a class="example-image-link" href="images.path" data-lightbox="example-set" data-title="Click the right half of the image to move forward."><img class="example-image" src="img/demopage/thumb-3.jpg" alt=""/></a>
+						<a class="example-image-link" href="${images.path}" data-lightbox="example-set" data-title="Click the right half of the image to move forward."><img class="example-image" src="${images.pathThumbnail}" alt=""/></a>
 					</c:forEach>
 				</div>
 			</div>
