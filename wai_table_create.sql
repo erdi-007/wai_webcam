@@ -28,15 +28,7 @@ CREATE TABLE public.privileges (
 );
 
 INSERT INTO public.user
-(is_admin, name, password) values (true, 'admin', 'admin');
-INSERT INTO public.user
-(is_admin, name, password) values (false, 'user1', 'user1');
-INSERT INTO public.user
-(is_admin, name, password) values (false, 'user2', 'user2');
-INSERT INTO public.user
-(is_admin, name, password) values (false, 'user3', 'user3');
-INSERT INTO public.user
-(is_admin, name, password) values (false, 'user4', 'user4');
+(is_admin, name, password) values (true, 'admin', '787d3fc47a13db0a666568cff7dbda20');
 
 INSERT INTO public.cameras
 (name, description, url) values ('Mannheim', 'Webcam mit Blick auf den Wasserturm', 'https://www.mvv-energie.de/webcam_maritim/MA-Wasserturm.jpg');
@@ -59,10 +51,5 @@ INSERT INTO privileges
 (userid, cameraid) VALUES (1, 4);
 INSERT INTO privileges
 (userid, cameraid) VALUES (1, 5);
-INSERT INTO privileges
-(userid, cameraid) VALUES (2, 5);
-INSERT INTO privileges
-(userid, cameraid) VALUES (2, 3);
-INSERT INTO privileges
-(userid, cameraid) VALUES (3, 1);
+
 

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import control.Controller;
+import crypto.MD5;
 import dao.Dao;
 import dao.DaoFactory;
 import exception.PrivilegeNotSavedException;
@@ -132,7 +133,11 @@ public class UserServlet extends HttpServlet {
     		}
     		
     		boolean admin = Boolean.parseBoolean(request.getParameter("admin"));
+    		
+    		// hashing
     		String password = request.getParameter("password");
+    		if(!password.isEmpty())
+	    		password = MD5.create(password);
     		
 			User user = new User();
 			user.setId(id);

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import crypto.MD5;
 import model.User;
 import dao.Dao;
 import dao.DaoFactory;
@@ -30,7 +31,12 @@ public class LoginServlet extends HttpServlet {
 
 		User user = new User();
 		user.setName(request.getParameter("un"));
-		user.setPassword(request.getParameter("pw"));
+		
+		// Hashing
+		String rawPassword = request.getParameter("pw");
+		String hashedPassword = MD5.create(rawPassword);
+		user.setPassword(hashedPassword);	
+		
 		user = dao.login(user);
 		if (user.isValid()) {
 			HttpSession session = request.getSession();
