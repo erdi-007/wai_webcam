@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="css/jquery-ui.css">
 <link rel="stylesheet" href="css/screen.css">
 <link rel="stylesheet" href="css/lightbox.css">
+<link rel="stylesheet" href="css/ImagePage.css">
 <%
 	User userinfo = (User) (session.getAttribute("userinfo"));
 %>
@@ -51,15 +52,47 @@
 		<%=userinfo.isAdmin()%>
 		<br> <br>
 		
-		<form action="ImageServlet" method="get">
-			Datum: <input type="text"name="dateStart"id="dateStart"value="">bis <input type="text"name="dateEnd"id="dateEnd"value=""><br>
-			
-			Uhrzeit: <input type="text" id="timeStart" name="timeStart"readonly value="10:00">
-			<input type="text"id="timeEnd" name="timeEnd"readonly value="20:00"> <br>
-			<div id="time-range"></div> 
-			
-			<input type="submit"name="datum" value="Suchen">
-		</form>
+		<fieldset>
+			<legend>Bilder suche</legend>
+			<form action="ImageServlet" method="get">
+				
+				<div class="zeile">
+					<label for="dateStart">Startdatum </label>
+					<input type="text"name="dateStart"id="dateStart"value=""class="datum">
+				</div>
+				
+				<div class="zeile">
+					<label for="dateEnd">Enddatum</label>
+					<input type="text"name="dateEnd"id="dateEnd"value=""class="datum">
+				</div>
+				
+				<div class="zeile">
+					<label for="uhrzeitStart"class="uhr">Uhrzeit</label>
+				</div>
+				
+				<div class="zeile">
+				<div	 id="time-range"></div>
+				</div>
+				
+				<div class="zeile">
+					<input type="text" id="timeStart" name="timeStart"readonly value="10:00">
+					<input type="text"id="timeEnd" name="timeEnd"readonly value="20:00">
+				 </div>
+				
+				<div class="zeile">
+					<label for="cameras">Kamera</label>
+				</div>
+				
+				<div class="zeile">	
+					<select name="cameras"id="cameras">
+						<c:forEach var="camera" items="${cameraList}">
+							<option>${camera.id}</option>
+						</c:forEach>
+					</select>
+				</div>
+				<input type="submit"name="datum" value="Suchen">
+			</form>
+		</fieldset>
 		<br> <br>
 		<table>
 			<tr>
@@ -100,12 +133,7 @@
 <script src="jquery/jquery-ui.js"></script>
 	<script src="jquery/lightbox.js"></script>
 <script>
-$( "#dateStart" ).datepicker({
-	dateFormat: "yy-mm-dd"
-});
-$( "#dateEnd" ).datepicker({
-	dateFormat: "yy-mm-dd"
-});
+
 $( "#time-range" ).slider({
     range: true,
     min: 0,
@@ -132,7 +160,14 @@ $( "#time-range" ).slider({
       $("#timeEnd").val(hours2+":"+minutes2);
     }
   });
-  
+$("#cameras").selectmenu();  
+
+$( "#dateStart" ).datepicker({
+	dateFormat: "yy-mm-dd"
+});
+$( "#dateEnd" ).datepicker({
+	dateFormat: "yy-mm-dd"
+});
 /* $( "#timeStart" ).val($( "#time-range" ).slider( "values", 0 ));
 $( "#timeEnd" ).val($( "#time-range" ).slider( "values", 1 )); */
 

@@ -40,15 +40,13 @@ public class ImageServlet extends HttpServlet {
 			for(int i = 0; i< cameralist.size(); i++) {
 				dao.save(controller.saveImage(cameralist.get(i)));
 			}
-		}
-		
-		if(request.getParameter("datum")!=null){
+		}else if(request.getParameter("datum")!=null){
 			
 			String timeStart =request.getParameter("timeStart");
 			String timeEnd = request.getParameter("timeEnd");
 			String dateStart = request.getParameter("dateStart");
 			String dateEnd = request.getParameter("dateEnd");
-			
+			String cam = request.getParameter("cameras");
 //Vorbereitung um timestamp zu erzeugen
 			String startDate = dateStart + " " + timeStart+":00";
 			String endDate = dateEnd +" " + timeEnd+":00";
@@ -63,13 +61,18 @@ public class ImageServlet extends HttpServlet {
 			request.setAttribute("imageList", images);
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
 		dispatcher.forward(request, response);
+		} else {
+			List<Camera> cameras = dao.getCameraList();
+			request.setAttribute("cameraList", cameras);
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
+			dispatcher.forward(request, response);
 		}
 	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+	System.out.println("doPost");
 	}
 
 }
