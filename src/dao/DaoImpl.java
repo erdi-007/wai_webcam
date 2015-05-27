@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.sql.Timestamp;
 import java.util.List;
 
-import jndi.JndiFactory;
+import utils.JndiFactory;
 import exception.CameraNotSavedException;
 import exception.CameraNotFoundException;
 import exception.CameraNotDeletedException;
