@@ -29,7 +29,7 @@ public class CameraServlet extends HttpServlet {
        
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Long id = extractID(request.getParameter("id"));
+		String id = request.getParameter("id");
 		String lastCamera = request.getParameter("selected");
 		String status = request.getParameter("status");
 			
@@ -37,8 +37,8 @@ public class CameraServlet extends HttpServlet {
 		List<Camera> cameralist = dao.getCameraList();
 		if(id != null && lastCamera != null) {
 			if(!lastCamera.equals(id)){
-				Camera selectedCamera = dao.getCamera(id);
-				List<Long> privilegeList = dao.getPrivilegesCamera(id);
+				Camera selectedCamera = dao.getCamera(extractID(id));
+				List<Long> privilegeList = dao.getPrivilegesCamera(extractID(id));
 				request.setAttribute("selectedCamera", selectedCamera);
 				request.setAttribute("privilegeList", privilegeList);
 			} else {
@@ -59,11 +59,11 @@ public class CameraServlet extends HttpServlet {
     	String action = request.getParameter("action");
     	
     	switch(action) {
-			case "new": actionNew(request, response);
-			case "edit": actionEdit(request, response);
-			case "delete": actionDelete(request, response);
-			case "privilege": actionPrivilege(request, response);
-			case "save": actionSave(request, response);
+			case "new": actionNew(request, response); break;
+			case "edit": actionEdit(request, response); break;
+			case "delete": actionDelete(request, response); break;
+			case "privilege": actionPrivilege(request, response); break;
+			case "save": actionSave(request, response); break;
     	}
     }
     
@@ -148,8 +148,10 @@ public class CameraServlet extends HttpServlet {
     		return;
     	}
     	
-		status = "Privileges from "+dao.getCamera(id).getName()+" has been edited!";
-		response.sendRedirect("CameraServlet?id="+id+"&selected=&status="+status);
+	    if(request.getParameter("action").equals("privilege")) {
+			status = "Privileges from "+dao.getCamera(id).getName()+" has been edited!";
+			response.sendRedirect("CameraServlet?id="+id+"&selected=&status="+status);
+    	}
     }
     
     void actionSave(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -163,7 +165,7 @@ public class CameraServlet extends HttpServlet {
     		return;
 		}
 		
-		if(urlIsEmpty(request.getParameter("name"))) {
+		if(urlIsEmpty(request.getParameter("url"))) {
 			request.setAttribute("error", "No url entered!");
     		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
     		dispatcher.forward(request, response);
@@ -220,7 +222,7 @@ public class CameraServlet extends HttpServlet {
 	}
 	
 	private Long getNewCameraID() {
-		List<User> cameralist = dao.getUserList();
+		List<Camera> cameralist = dao.getCameraList();
  		return cameralist.get(cameralist.size()-1).getId();
 	}
 }

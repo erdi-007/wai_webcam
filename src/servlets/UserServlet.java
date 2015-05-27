@@ -31,7 +31,7 @@ public class UserServlet extends HttpServlet {
        
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Long id = extractID(request.getParameter("id"));
+		String id = request.getParameter("id");
 		String lastUser = request.getParameter("selected");
 		String status = request.getParameter("status");
 			
@@ -39,8 +39,8 @@ public class UserServlet extends HttpServlet {
 		List<Camera> cameralist = dao.getCameraList();
 		if(id != null && lastUser != null) {
 			if(!lastUser.equals(id)){
-				User selectedUser = dao.getUser(id);
-				List<Long> privilegeList = dao.getPrivilegesUser(id);
+				User selectedUser = dao.getUser(extractID(id));
+				List<Long> privilegeList = dao.getPrivilegesUser(extractID(id));
 				request.setAttribute("selectedUser", selectedUser);
 				request.setAttribute("privilegeList", privilegeList);
 			}
@@ -61,11 +61,11 @@ public class UserServlet extends HttpServlet {
     	String action = request.getParameter("action");
     	
     	switch(action) {
-    		case "new": actionNew(request, response);
-    		case "edit": actionEdit(request, response);
-    		case "delete": actionDelete(request, response);
-    		case "privilege": actionPrivilege(request, response);
-    		case "save": actionSave(request, response);
+    		case "new": actionNew(request, response); break;
+    		case "edit": actionEdit(request, response); break;
+    		case "delete": actionDelete(request, response); break;
+    		case "privilege": actionPrivilege(request, response); break;
+    		case "save": actionSave(request, response); break;
     	}
     }
     
@@ -149,8 +149,10 @@ public class UserServlet extends HttpServlet {
     		return;
     	}
 		
-		status = "Privileges from "+dao.getUser(id).getName()+" has been edited!";
-		response.sendRedirect("UserServlet?id="+id+"&selected=&status="+status);
+    	if(request.getParameter("action").equals("privilege")) {
+			status = "Privileges from "+dao.getUser(id).getName()+" has been edited!";
+			response.sendRedirect("UserServlet?id="+id+"&selected=&status="+status);
+    	}
     }
     
     void actionSave(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
