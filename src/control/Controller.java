@@ -16,6 +16,9 @@ import javax.imageio.ImageIO;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.imgscalr.Scalr;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 import dao.PrivilegeDao;
 import dao.UserDao;
@@ -24,7 +27,7 @@ import model.Image;
 import model.Privilege;
 import model.User;
 
-public class Controller {
+public class Controller implements Job {
 
 	final UserDao userDao = new UserDao();
 	final PrivilegeDao privilegeDao = new PrivilegeDao();
@@ -157,5 +160,15 @@ public class Controller {
 		}
 		
 		return privileges;
+	}
+	
+	public void execute(JobExecutionContext context)
+			throws JobExecutionException {
+		try {
+			System.out.println("Timer geht!!!!!!");
+			//TODO TimerStart mach irgendwas...
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

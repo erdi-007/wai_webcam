@@ -4,7 +4,7 @@ import java.sql.*;
 
 import javax.naming.NamingException;
 
-import jndi.JndiFactory;
+import utils.JndiFactory;
 
 import exception.DataBaseAccessException;
 

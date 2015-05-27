@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<job-scheduling-data xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
+    version="1.8">
+
+
+	<!--
+
+		cron expressions:
+		1. Seconds
+		2. Minutes
+		3. Hours
+		4. Day-of-Month
+		5. Month
+		6. Day-of-Week
+		7. Year (optional field)
+
+	-->
+
+    <schedule>
+		<job>
+			<name>WAI-Job</name>
+			<group>GROUP-1</group>
+			<job-class>control.Controller</job-class>
+		</job>
+	
+		<trigger>
+			<cron>
+				<name>WAITrigger</name>
+				<group>MYTRIGGER_GROUP</group>
+				<job-name>WAI-Job</job-name>
+				<job-group>GROUP-1</job-group>
+				<cron-expression>0 0/1 * * * ?</cron-expression>
+			</cron>
+		</trigger>
+	</schedule>    
+	
+</job-scheduling-data>
+
+
+
+
+
+
+
+
+
