@@ -125,7 +125,7 @@ public class UserServlet extends HttpServlet {
     	if(isKnownUser(request.getParameter("id")))
     		id = extractID(request.getParameter("id"));
     	else
-    		id = dao.getUserList().get(dao.getUserList().size()-1).getId();
+    		id = getNewUserID();
 
     	try {
 			List<Camera> cameralist = dao.getCameraList();
@@ -236,5 +236,10 @@ public class UserServlet extends HttpServlet {
 
 	private boolean isKnownUser(String id) {
     	return id != null && id != "";
+	}
+	
+	private Long getNewUserID() {
+		List<User> userlist = dao.getUserList();
+ 		return userlist.get(userlist.size()-1).getId();
 	}
 }
