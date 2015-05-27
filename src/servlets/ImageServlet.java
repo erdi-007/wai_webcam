@@ -17,8 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import model.Camera;
 import model.Image;
 import control.Controller;
-import dao.Dao;
-import dao.DaoFactory;
+import dao.CameraDao;
+import dao.ImageDao;
+import dao.UserDao;
 
 /**
  * Servlet implementation class ImageServlet
@@ -27,7 +28,12 @@ import dao.DaoFactory;
 public class ImageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	Controller controller;
-	final Dao dao = DaoFactory.getInstance().getDao();
+	
+	
+	final CameraDao cameraDao = new CameraDao();
+	final UserDao userDao = new UserDao();
+	final ImageDao imageDao = new ImageDao();
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -35,10 +41,11 @@ public class ImageServlet extends HttpServlet {
 		if (controller ==null)
 			controller = new Controller();
 		
+		/*
 		if(request.getParameter("image")!=null){
-			List<Camera> cameralist =dao.getCameraList();
+			List<Camera> cameralist = cameraDao.getListOfAllCameras();
 			for(int i = 0; i< cameralist.size(); i++) {
-				dao.save(controller.saveImage(cameralist.get(i)));
+				imageDao.saveImage(controller.saveImage(cameralist.get(i)));
 			}
 		}else if(request.getParameter("datum")!=null){
 			
@@ -62,11 +69,12 @@ public class ImageServlet extends HttpServlet {
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
 		dispatcher.forward(request, response);
 		} else {
-			List<Camera> cameras = dao.getCameraList();
+			List<Camera> cameras = cameraDao.getListOfAllCameras();
 			request.setAttribute("cameraList", cameras);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
 			dispatcher.forward(request, response);
 		}
+		*/
 	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

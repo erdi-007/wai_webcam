@@ -17,8 +17,8 @@ import javax.imageio.ImageIO;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.imgscalr.Scalr;
 
-import dao.Dao;
-import dao.DaoFactory;
+import dao.PrivilegeDao;
+import dao.UserDao;
 import model.Camera;
 import model.Image;
 import model.Privilege;
@@ -26,7 +26,8 @@ import model.User;
 
 public class Controller {
 
-	final Dao dao = DaoFactory.getInstance().getDao();
+	final UserDao userDao = new UserDao();
+	final PrivilegeDao privilegeDao = new PrivilegeDao();
 	
 	public Image saveImage(Camera camera) throws IOException
 	{
@@ -142,11 +143,11 @@ public class Controller {
 	
 	public List<Privilege> getPrivilegeList() {
 				
-		List<User> user = dao.getUserList();
+		List<User> user = userDao.getListOfAllUsers();
 		List<Privilege> privileges = new ArrayList<Privilege>();
 		
 		for(int i = 0; i< user.size(); i++) {
-			List<Long> cameras = dao.getPrivilegesUser(user.get(i).getId());
+			List<Long> cameras = privilegeDao.getPrivilegesForUser(user.get(i).getId());
 			for(int j = 0; j < cameras.size(); j++) {
 				Privilege privilege = new Privilege();
 				privilege.setCameraId(cameras.get(j));

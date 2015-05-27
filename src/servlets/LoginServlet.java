@@ -12,9 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import crypto.MD5;
+import dao.UserDao;
 import model.User;
-import dao.Dao;
-import dao.DaoFactory;
 import exception.UserNotFoundException;
 
 /** * Servlet implementation class LoginServlet */
@@ -24,7 +23,7 @@ public class LoginServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	final Dao dao = DaoFactory.getInstance().getDao();
+	final UserDao userDao = new UserDao();
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException,
@@ -40,7 +39,7 @@ public class LoginServlet extends HttpServlet {
 		
 		try
 		{
-			user = dao.getUser(loginCredentials.getName());
+			user = userDao.getUser(loginCredentials.getName());
 			isValid = MD5.validate(loginCredentials.getPassword(), user.getPassword());
 		}
 		catch (UserNotFoundException e)

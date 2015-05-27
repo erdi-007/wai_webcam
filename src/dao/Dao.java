@@ -1,49 +1,102 @@
 package dao;
 
-import java.sql.Timestamp;
-import java.util.List;
+import java.sql.*;
 
-import control.Controller;
-import model.User;
-import model.Image;
-import model.Camera;
+import javax.naming.NamingException;
 
-public interface Dao {
+import jndi.JndiFactory;
 
-	Controller controller = new Controller();
-	
-	//speichern
-	public void save(Image image);
-	public void save(Camera camera);
-	public void save(User user);
-	public void savePrivilege(Long userID, Long cameraID);	
-	
-	//löschen
-	public void deleteCamera(Long cameraID);
-	public void deleteUser(Long userID);	
-	public void deleteImages(Long cameraID);
-	public void deletePrivilege(Long userID, Long cameraID);	
-	public void deletePrivilegeCamera(Long cameraID);	
-	public void deletePrivilegeUser(Long userID);
-	
-	//einzelne Objekte
-	public User getUser(Long userID);
-	public User getUser(String name);
-	public Camera getCamera(Long cameraID);
-	public boolean getPrivilege(Long userID, Long cameraID);
-	
-	//allgemeine Listen
-	public List<User> getUserList();
-	public List<Camera> getCameraList();
-	public List<Long> getPrivilegesUser(Long userID);	
-	public List<Long> getPrivilegesCamera(Long cameraID);
+import exception.DataBaseAccessException;
 
-	//ein Bild von einer camera
-	public Image getImage(Long cameraID, Timestamp date);
-	//alle Bilder einer camera
-	public List<Image> getImages(Long cameraID);
-	//alle Bilder ab einem Datum
-	public List<Image> getImages(Long cameraID, Timestamp date);
-	//alle Bilder in einem Zeitraum
-	public List<Image> getImages(Long cameraID, Timestamp start_date, Timestamp end_date);
+public class Dao {
+	
+	final String DATABASE = "jdbc/libraryDB";
+	final JndiFactory jndi = JndiFactory.getInstance();
+	
+	private Connection connection = null;
+	
+	protected void executeUpdate(String SqlStatement, Object[] values)
+	{		
+		try
+		{
+			connection = connectToDB(DATABASE);
+			PreparedStatement preparedStatement = connection.prepareStatement(SqlStatement);
+			setValues(preparedStatement, values);
+			preparedStatement.executeUpdate();
+		}
+		catch (Exception e)
+		{
+			e.getStackTrace();
+			throw new DataBaseAccessException();
+		}
+	}
+	
+	protected ResultSet executeQuery(String SqlStatement)
+	{
+		ResultSet resultSet = null;
+		
+		try
+		{
+			connection = connectToDB(DATABASE);
+			PreparedStatement preparedStatement = connection.prepareStatement(SqlStatement);
+			resultSet = preparedStatement.executeQuery();
+		}
+		catch (Exception e)
+		{
+			e.getStackTrace();
+			throw new DataBaseAccessException();
+		}
+		
+		return resultSet;
+	}
+	
+	protected ResultSet executeQuery(String SqlStatement, Object[] values)
+	{
+		ResultSet resultSet = null;
+		
+		try
+		{
+			connection = connectToDB(DATABASE);
+			PreparedStatement preparedStatement = connection.prepareStatement(SqlStatement);
+			setValues(preparedStatement, values);
+			resultSet = preparedStatement.executeQuery();
+		}
+		catch (Exception e)
+		{
+			e.getStackTrace();
+			throw new DataBaseAccessException();
+		}
+		
+		return resultSet;
+	}
+	
+	private Connection connectToDB(String DB) throws NamingException, SQLException
+	{
+		return jndi.getConnection(DB);
+	}
+	
+	
+	private void setValues(PreparedStatement preparedStatement, Object[] values) throws SQLException
+	{
+		for(int i = 0; i < values.length; i++)
+		{
+			preparedStatement.setObject(i + 1, values[i]);
+		}
+	}
+	
+	protected void closeConnectionToDB()
+	{
+		if (connection != null) 
+		{
+			try 
+			{
+				connection.close();
+				connection = null;
+			} 
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}				
+		}
+	}
 }

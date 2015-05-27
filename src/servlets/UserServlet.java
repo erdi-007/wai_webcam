@@ -12,8 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import control.Controller;
 import crypto.MD5;
-import dao.Dao;
-import dao.DaoFactory;
+import dao.CameraDao;
+import dao.PrivilegeDao;
+import dao.UserDao;
 import exception.PrivilegeNotSavedException;
 import exception.UserNotDeletedException;
 import exception.UserNotFoundException;
@@ -26,7 +27,10 @@ public class UserServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	
-	final Dao dao = DaoFactory.getInstance().getDao();
+	final UserDao userDao = new UserDao();
+	final CameraDao cameraDao = new CameraDao();
+	final PrivilegeDao privilegeDao = new PrivilegeDao();
+	
 	Controller controller = new Controller();
        
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -35,12 +39,12 @@ public class UserServlet extends HttpServlet {
 		String lastUser = request.getParameter("selected");
 		String status = request.getParameter("status");
 			
-		List<User> userlist = dao.getUserList();
-		List<Camera> cameralist = dao.getCameraList();
+		List<User> userlist = userDao.getListOfAllUsers();
+		List<Camera> cameralist = cameraDao.getListOfAllCameras();
 		if(id != null && lastUser != null) {
 			if(!lastUser.equals(id)){
-				User selectedUser = dao.getUser(extractID(id));
-				List<Long> privilegeList = dao.getPrivilegesUser(extractID(id));
+				User selectedUser = userDao.getUser(extractID(id));
+				List<Long> privilegeList = privilegeDao.getPrivilegesForUser(extractID(id));
 				request.setAttribute("selectedUser", selectedUser);
 				request.setAttribute("privilegeList", privilegeList);
 			}
@@ -71,7 +75,7 @@ public class UserServlet extends HttpServlet {
     
     void actionNew(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-    	List<Camera> cameralist = dao.getCameraList();
+    	List<Camera> cameralist = cameraDao.getListOfAllCameras();
 		request.setAttribute("cameralist", cameralist);        	
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/UserEdit.jsp");
 		dispatcher.forward(request, response);	
@@ -80,9 +84,9 @@ public class UserServlet extends HttpServlet {
     void actionEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
     	String id = request.getParameter("id");
-    	User selectedUser = dao.getUser(Long.parseLong(id));
-    	List<Camera> cameralist = dao.getCameraList();
-		List<Long> privilegeList = dao.getPrivilegesUser(Long.parseLong(id));
+    	User selectedUser = userDao.getUser(Long.parseLong(id));
+    	List<Camera> cameralist = cameraDao.getListOfAllCameras();
+		List<Long> privilegeList = privilegeDao.getPrivilegesForUser(Long.parseLong(id));
 		request.setAttribute("privilegeList", privilegeList);
     	request.setAttribute("selectedUser", selectedUser);
 		request.setAttribute("cameralist", cameralist);        	
@@ -93,16 +97,16 @@ public class UserServlet extends HttpServlet {
     void actionDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		Long id = extractID(request.getParameter("id"));
-		String name = dao.getUser(id).getName();
+		String name = userDao.getUser(id).getName();
     	String status = null;
 		
 		try {		
-    		dao.deleteUser(id);
+    		userDao.deleteUser(id);
     		
     		status = name + " has been deleted!";
     		
-    		List<User> userlist = dao.getUserList();
-    		List<Camera> cameralist = dao.getCameraList();
+    		List<User> userlist = userDao.getListOfAllUsers();
+    		List<Camera> cameralist = cameraDao.getListOfAllCameras();
     		request.setAttribute("userlist", userlist);
     		request.setAttribute("cameralist", cameralist);
     		request.setAttribute("status", status);
@@ -128,17 +132,17 @@ public class UserServlet extends HttpServlet {
     		id = getNewUserID();
 
     	try {
-			List<Camera> cameralist = dao.getCameraList();
+			List<Camera> cameralist = cameraDao.getListOfAllCameras();
 			for(int i = 0; i<cameralist.size(); i++) {
 				Long cameraId = cameralist.get(i).getId();
 				String stringId = request.getParameter("cam"+cameraId);
 				boolean isPrivilege = Boolean.parseBoolean(stringId);
 				
 				if(isPrivilege == true) {
-					dao.savePrivilege(id, cameraId);
+					privilegeDao.savePrivilege(id, cameraId);
 				} else {
-					if(dao.getPrivilege(id, cameraId))
-						dao.deletePrivilege(id, cameraId);
+					if(privilegeDao.isUserAuthorizedForCamera(id, cameraId))
+						privilegeDao.deletePrivilege(id, cameraId);
 				}
 			}
     	} catch (PrivilegeNotSavedException e) {
@@ -150,7 +154,7 @@ public class UserServlet extends HttpServlet {
     	}
 		
     	if(request.getParameter("action").equals("privilege")) {
-			status = "Privileges from "+dao.getUser(id).getName()+" has been edited!";
+			status = "Privileges from "+userDao.getUser(id).getName()+" has been edited!";
 			response.sendRedirect("UserServlet?id="+id+"&selected=&status="+status);
     	}
     }
@@ -175,7 +179,7 @@ public class UserServlet extends HttpServlet {
 			
 			user.setId(extractID(request.getParameter("id")));
 			if(user.getPassword().isEmpty())
-				user.setPassword(dao.getUser(user.getId()).getPassword());
+				user.setPassword(userDao.getUser(user.getId()).getPassword());
 			
 			status = user.getName() + " has been edited!";
 			
@@ -198,8 +202,8 @@ public class UserServlet extends HttpServlet {
 		}			
 		
 		try {		
-			dao.save(user);
-			Long id = dao.getUser(user.getName()).getId();
+			userDao.saveUser(user);
+			Long id = userDao.getUser(user.getName()).getId();
 			actionPrivilege(request, response);
 			response.sendRedirect("UserServlet?id="+id+"&selected=&status="+status);
 			
@@ -213,7 +217,7 @@ public class UserServlet extends HttpServlet {
 
 	private boolean usernameExists(String name) {
 		try {
-			dao.getUser(name);
+			userDao.getUser(name);
 			return true;
 		} 
 		catch (UserNotFoundException e) {
@@ -241,7 +245,7 @@ public class UserServlet extends HttpServlet {
 	}
 	
 	private Long getNewUserID() {
-		List<User> userlist = dao.getUserList();
+		List<User> userlist = userDao.getListOfAllUsers();
  		return userlist.get(userlist.size()-1).getId();
 	}
 }
