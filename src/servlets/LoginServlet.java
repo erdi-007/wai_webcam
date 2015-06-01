@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import crypto.MD5;
 import dao.UserDao;
 import model.User;
@@ -22,6 +24,8 @@ import exception.UserNotFoundException;
 public class LoginServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static Logger jlog = Logger.getLogger(LoginServlet.class);
 
 	final UserDao userDao = new UserDao();
 
@@ -55,6 +59,7 @@ public class LoginServlet extends HttpServlet {
 			userName.setMaxAge(30 * 60);
 			response.addCookie(userName);
 //			response.sendRedirect("ImagePage.jsp");
+			jlog.info("User: " + user.getName()+" logged in." );
 			getServletContext().getRequestDispatcher("/ImagePage.jsp").forward(request, response);
 		} else {
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");

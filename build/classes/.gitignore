@@ -1,2 +1,7 @@
+/crypto/
+/utils/
+/control/
 /dao/
-/jndi/
+/exception/
+/model/
+/servlets/

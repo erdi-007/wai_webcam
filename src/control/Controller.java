@@ -166,7 +166,10 @@ public class Controller implements Job {
 			throws JobExecutionException {
 		try {
 			System.out.println("Timer geht!!!!!!");
-			//TODO TimerStart mach irgendwas...
+			/*Controller core = new Controller();
+			List<Camera> cameralist =CameraDao.getListOfAllCameras();
+			for(int i = 0; i< cameralist.size(); i++) {
+				dao.save(core.saveImage(cameralist.get(i)));*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
