@@ -31,6 +31,7 @@ public class Controller implements Job {
 
 	final UserDao userDao = new UserDao();
 	final PrivilegeDao privilegeDao = new PrivilegeDao();
+	final String PATH = "C:/wai/images/cam_"; 
 	
 	public Image saveImage(Camera camera) throws IOException
 	{
@@ -44,101 +45,75 @@ public class Controller implements Job {
 		
 		Image image = new Image();
 		image.setCameraID(camera.getId());
-		image.setDate(new Timestamp(new Date().getTime()));				
-		String path = getPath(image.getCameraID(), image.getDate());
-		String pathThumbnail = getPathThumbnail(image.getCameraID(), image.getDate());
+		image.setDate(new Timestamp(new Date().getTime()));	
 		
-		image.setPath(path);
-		image.setPathThumbnail(pathThumbnail);
+		String path = generatePath(camera);
+		String pathThumbnail = generatePathThumbnail(camera);
 		
-		String dir = this.getClass().getClassLoader().getResource("").getPath();
-		String delete = "/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/wai_webcam/WEB-INF/classes/";
-		
-		dir = dir.replace(delete, "");
+		String name = generateName(image.getDate());
 
-		File file = new File(dir + pathThumbnail.substring(0, pathThumbnail.length()-9));
+		File file = new File(pathThumbnail);
 		file.mkdirs();		
 		
 		URL image_url = new URL(camera.getUrl());
 		
 		input = new BufferedInputStream(image_url.openStream());
-		output = new FileOutputStream(dir+path);
+		output = new FileOutputStream(path+name);
 		
 		BufferedImage bufferedImage = ImageIO.read(input);
 		ImageIO.write(bufferedImage, "jpg", output);
 		
-		outputthumb = new FileOutputStream(dir+pathThumbnail);
+		outputthumb = new FileOutputStream(pathThumbnail + name);
 		BufferedImage thumbnail = Scalr.resize(bufferedImage, 100);
 		ImageIO.write(thumbnail, "jpg", outputthumb);
 		
-      if (input != null)
+		if (input != null)
     	input.close();
-    if (output != null)
-    	output.close();
-    if (outputthumb != null)
-    	outputthumb.close();
-		return image;
+	    if (output != null)
+	    	output.close();
+	    if (outputthumb != null)
+	    	outputthumb.close();
+			return image;
 		
 	}
 	
-	public String getPath(Long cameraID, Timestamp date) throws IOException {
+	public String generateName(Timestamp date) {
 		
-		if(date == null || cameraID == null)
-			throw new IllegalArgumentException("date or cameraID can not be null");
-			
+		String name;
+		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		
-
-		
-		String month = Integer.toString(calendar.get(Calendar.MONTH)+1);
-		String day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
 		String hour = Integer.toString(calendar.get(Calendar.HOUR_OF_DAY));
 		String min = Integer.toString(calendar.get(Calendar.MINUTE));
 		
-		if((calendar.get(Calendar.MONTH)+1) < 10)
-			month = "0" + (calendar.get(Calendar.MONTH)+1);
-		if(calendar.get(Calendar.DAY_OF_MONTH) < 10)
-			day = "0" + calendar.get(Calendar.DAY_OF_MONTH);		
+		if((calendar.get(Calendar.HOUR_OF_DAY)) < 10)
+			hour = "0" + hour;
+		if(calendar.get(Calendar.MINUTE) < 10)
+			min = "0" + min;	
 		
-		String path = "/wai_webcam/WebContent/img/cam_" + cameraID.toString() + "/" + calendar.get(Calendar.YEAR) + "_"
-				+ month + "_" + day + "/" + hour + "_" + min + ".jpg";				
-				
-		return path;
+		name = hour + "_" + min + ".jpg";
+		
+		return name;
 	}
 	
-	public String getPathThumbnail(Long cameraID, Timestamp date) throws IOException {
+	public String generatePath(Camera camera) throws IOException {
 		
-		if(date == null || cameraID == null)
-			throw new IllegalArgumentException("date or cameraID can not be null");
-			
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		
-		String month = Integer.toString(calendar.get(Calendar.MONTH)+1);
-		String day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
-		String hour = Integer.toString(calendar.get(Calendar.HOUR_OF_DAY));
-		String min = Integer.toString(calendar.get(Calendar.MINUTE));
-		
-		if((calendar.get(Calendar.MONTH)+1) < 10)
-			month = "0" + (calendar.get(Calendar.MONTH)+1);
-		if(calendar.get(Calendar.DAY_OF_MONTH) < 10)
-			day = "0" + calendar.get(Calendar.DAY_OF_MONTH);	
-		
-		String path = "/wai_webcam/WebContent/img/cam_" + cameraID.toString() + "/" + calendar.get(Calendar.YEAR) + "_"
-				+ month + "_" + day + "/thumbnail/" + hour + "_" + min + ".jpg";				
-				
-		return path;
+		if(camera == null)
+			throw new IllegalArgumentException("camera can not be null");
+		return  PATH + camera.getId() + "/";
 	}
 	
-	public void deleteDirectory(Long cameraID) throws IOException {
+	public String generatePathThumbnail(Camera camera) throws IOException {
 		
-		String path = this.getClass().getClassLoader().getResource("").getPath();
-		String delete = "/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/wai_webcam/WEB-INF/classes/";
+		if(camera == null)
+			throw new IllegalArgumentException("camera can not be null");
+		return  PATH + camera.getId() + "/thumbnail/";
+	}
+	
+	public void deleteDirectory(Camera camera) throws IOException {
 		
-		path = path.replace(delete, "");
-		
-		path = path + "//images//cam_" + cameraID;
+		String path = generatePath(camera);
 		File dir = new File(path);
 		
 		FileUtils.deleteDirectory(dir);

@@ -5,8 +5,7 @@ import java.sql.Timestamp;
 public class Image {
 	private Long cameraID;
 	private Timestamp date;
-	private String path;
-	private String pathThumbnail;
+	private String name;
 	
 	public Long getCameraID() {
 		return cameraID;
@@ -24,20 +23,12 @@ public class Image {
 		this.date = date;
 	}
 	
-	public String getPath() {
-		return path;
+	public String getName() {
+		return name;
 	}
 	
-	public void setPath(String path) {
-		this.path = path;
-	}
-	
-	public String getPathThumbnail() {
-		return pathThumbnail;
-	}
-	
-	public void setPathThumbnail(String pathThumbnail) {
-		this.pathThumbnail = pathThumbnail;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

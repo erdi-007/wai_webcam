@@ -41,13 +41,13 @@ public class ImageServlet extends HttpServlet {
 		if (controller ==null)
 			controller = new Controller();
 		
-		/*
+		
 		if(request.getParameter("image")!=null){
 			List<Camera> cameralist = cameraDao.getListOfAllCameras();
 			for(int i = 0; i< cameralist.size(); i++) {
 				imageDao.saveImage(controller.saveImage(cameralist.get(i)));
 			}
-		}else if(request.getParameter("datum")!=null){
+		}/*else if(request.getParameter("datum")!=null){
 			
 			String timeStart =request.getParameter("timeStart");
 			String timeEnd = request.getParameter("timeEnd");

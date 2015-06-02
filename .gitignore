@@ -1,2 +1,4 @@
 *.classpath
 *.class
+WebContent/config/quartz.properties
+WebContent/META-INF/context.xml
