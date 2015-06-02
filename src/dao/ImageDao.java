@@ -1,33 +1,49 @@
 package dao;
 
-import exception.DataBaseAccessException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import utils.JndiFactory;
 import exception.ImageNotSavedException;
 import model.Image;
 
-public class ImageDao extends Dao {
+public class ImageDao {
+	
+	final String DATABASE = "jdbc/libraryDB";
+	final JndiFactory jndi = JndiFactory.getInstance();
 	
 	private final String SQL_ADD_NEW_IMAGE = "insert into public.images (cameraID, date) values (?,?)";
 	
-	public void saveImage(Image image)
+	public void save(Image image)
 	{
 		if (image == null)
 			throw new IllegalArgumentException("image can not be null");
 		
-		try
-		{
-			Object[] values = new Object[2];
-			values[0] = image.getCameraID();
-			values[1] = image.getDate();
+		Connection connection = null;
+		try {
+			connection = jndi.getConnection(DATABASE);
+			PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_NEW_IMAGE);
+			preparedStatement.setLong(1, image.getCameraID());
+			preparedStatement.setTimestamp(2, image.getDate());
 			
-			executeUpdate(SQL_ADD_NEW_IMAGE, values);
-		}
-		catch (DataBaseAccessException e)
-		{
+			preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error - saving new image: " + e.getMessage());
 			throw new ImageNotSavedException();
-		}
-		finally
-		{
-			closeConnectionToDB();
+		} finally {
+			closeConnection(connection);
 		}
 	}	
+	
+	private void closeConnection(Connection connection) {
+		try {
+			if (connection == null || !connection.isClosed())
+				connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error - closing connection: " + e.getMessage());
+		}
+	}
 }

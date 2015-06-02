@@ -121,11 +121,11 @@ public class Controller implements Job {
 	
 	public List<Privilege> getPrivilegeList() {
 				
-		List<User> user = userDao.getListOfAllUsers();
+		List<User> user = userDao.list();
 		List<Privilege> privileges = new ArrayList<Privilege>();
 		
 		for(int i = 0; i< user.size(); i++) {
-			List<Long> cameras = privilegeDao.getPrivilegesForUser(user.get(i).getId());
+			List<Long> cameras = privilegeDao.listPrivileges(user.get(i));
 			for(int j = 0; j < cameras.size(); j++) {
 				Privilege privilege = new Privilege();
 				privilege.setCameraId(cameras.get(j));

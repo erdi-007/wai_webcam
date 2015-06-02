@@ -43,7 +43,7 @@ public class LoginServlet extends HttpServlet {
 		
 		try
 		{
-			user = userDao.getUser(loginCredentials.getName());
+			user = userDao.find(loginCredentials.getName());
 			isValid = MD5.validate(loginCredentials.getPassword(), user.getPassword());
 		}
 		catch (UserNotFoundException e)

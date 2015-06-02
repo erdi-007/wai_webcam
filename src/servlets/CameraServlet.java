@@ -36,12 +36,12 @@ public class CameraServlet extends HttpServlet {
 		String lastCamera = request.getParameter("selected");
 		String status = request.getParameter("status");
 			
-		List<User> userlist = userDao.getListOfAllUsers();
-		List<Camera> cameralist = cameraDao.getListOfAllCameras();
+		List<User> userlist = userDao.list();
+		List<Camera> cameralist = cameraDao.list();
 		if(id != null && lastCamera != null) {
 			if(!lastCamera.equals(id)){
-				Camera selectedCamera = cameraDao.getCamera(extractID(id));
-				List<Long> privilegeList = privilegeDao.getPrivilegesForCamera(extractID(id));
+				Camera selectedCamera = cameraDao.find(extractID(id));
+				List<Long> privilegeList = privilegeDao.listPrivileges(selectedCamera);
 				request.setAttribute("selectedCamera", selectedCamera);
 				request.setAttribute("privilegeList", privilegeList);
 			} else {
@@ -72,7 +72,7 @@ public class CameraServlet extends HttpServlet {
     
     void actionNew(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-    	List<User> userlist = userDao.getListOfAllUsers();
+    	List<User> userlist = userDao.list();
 		request.setAttribute("userlist", userlist);        	
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/CameraEdit.jsp");
 		dispatcher.forward(request, response);	
@@ -81,9 +81,9 @@ public class CameraServlet extends HttpServlet {
     void actionEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
     	String id = request.getParameter("id");
-    	Camera selectedCamera = cameraDao.getCamera(Long.parseLong(id));
-    	List<User> userlist = userDao.getListOfAllUsers();
-    	List<Long> privilegeList = privilegeDao.getPrivilegesForCamera(Long.parseLong(id));
+    	Camera selectedCamera = cameraDao.find(Long.parseLong(id));
+    	List<User> userlist = userDao.list();
+    	List<Long> privilegeList = privilegeDao.listPrivileges(selectedCamera);
 		request.setAttribute("privilegeList", privilegeList);
     	request.setAttribute("selectedCamera", selectedCamera);
 		request.setAttribute("userlist", userlist);        	
@@ -96,14 +96,15 @@ public class CameraServlet extends HttpServlet {
     	String status = null;
     	
     	Long id = extractID(request.getParameter("id"));
-		String name = cameraDao.getCamera(id).getName();
-	
-		status = name + " has been deleted!";
 		
-		try {		
-			cameraDao.deleteCamera(id);    		
-			List<User> userlist = userDao.getListOfAllUsers();
-			List<Camera> cameralist = cameraDao.getListOfAllCameras();
+		try {
+			Camera camera = cameraDao.find(id);
+			cameraDao.delete(camera);    
+			
+			status = camera.getName() + " has been deleted!";
+			
+			List<User> userlist = userDao.list();
+			List<Camera> cameralist = cameraDao.list();
 			request.setAttribute("userlist", userlist);
 			request.setAttribute("cameralist", cameralist);
 			request.setAttribute("status", status);
@@ -121,28 +122,31 @@ public class CameraServlet extends HttpServlet {
     void actionPrivilege(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     	String status = null;
-    	Long id = null;
+    	Long cameraID = null;
     	
     	if(isKnownCamera(request.getParameter("id")))
-    		id = extractID(request.getParameter("id"));
+    		cameraID = extractID(request.getParameter("id"));
     	else
-    		id = getNewCameraID();
-		
+    		cameraID = getNewCameraID();
+		  	
+    	Camera camera = cameraDao.find(cameraID);
+    	
     	try {
-			List<User> userlist = userDao.getListOfAllUsers();
+			List<User> userlist = userDao.list();
 			for(int i = 0; i<userlist.size(); i++) {
-				Long userId = userlist.get(i).getId();
-				String stringId = request.getParameter("user"+userId);
+				User user = userlist.get(i);
+				String stringId = request.getParameter("user" + user.getId());
 				boolean isPrivilege = Boolean.parseBoolean(stringId);
-				
+								
 				if(isPrivilege == true) {
-					privilegeDao.savePrivilege(userId, id);
+					privilegeDao.create(user, camera);
 				} else {
-					if(privilegeDao.isUserAuthorizedForCamera(userId, id));
-						privilegeDao.deletePrivilege(userId, id);
+					if(privilegeDao.isUserAuthorizedForCamera(user, camera));
+						privilegeDao.delete(user, camera);
 				}
 			}
-			privilegeDao.savePrivilege(Long.valueOf(1), id);
+			User admin = userDao.find(Long.valueOf(1));
+			privilegeDao.create(admin, camera);
     	} catch (PrivilegeNotSavedException e) {
 			//Privilegien konnte nicht gespeichert werden
 			request.setAttribute("error", e.getMessage());
@@ -152,8 +156,8 @@ public class CameraServlet extends HttpServlet {
     	}
     	
 	    if(request.getParameter("action").equals("privilege")) {
-			status = "Privileges from "+cameraDao.getCamera(id).getName()+" has been edited!";
-			response.sendRedirect("CameraServlet?id="+id+"&selected=&status="+status);
+			status = "Privileges from "+cameraDao.find(cameraID).getName()+" has been edited!";
+			response.sendRedirect("CameraServlet?id="+cameraID+"&selected=&status="+status);
     	}
     }
     
@@ -188,7 +192,7 @@ public class CameraServlet extends HttpServlet {
 		}
 		
 		try {		
-			cameraDao.saveCamera(camera);
+			cameraDao.create(camera);
 			actionPrivilege(request, response);
 			
 			Long id = null;
@@ -225,7 +229,7 @@ public class CameraServlet extends HttpServlet {
 	}
 	
 	private Long getNewCameraID() {
-		List<Camera> cameralist = cameraDao.getListOfAllCameras();
+		List<Camera> cameralist = cameraDao.list();
  		return cameralist.get(cameralist.size()-1).getId();
 	}
 }

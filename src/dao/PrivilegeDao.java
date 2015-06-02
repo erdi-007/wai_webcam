@@ -1,19 +1,24 @@
 package dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import exception.CameraNotFoundException;
-import exception.DataBaseAccessException;
+import model.Camera;
+import model.User;
+import utils.JndiFactory;
 import exception.PrivilegeNotDeletedException;
 import exception.PrivilegeNotFoundException;
 import exception.PrivilegeNotSavedException;
-import exception.UserNotFoundException;
 
-public class PrivilegeDao extends Dao {
-	
+public class PrivilegeDao {
+
+	final String DATABASE = "jdbc/libraryDB";
+	final JndiFactory jndi = JndiFactory.getInstance();
+
 	private final String SQL_ADD_NEW_PRIVILEGE = "insert into public.privileges (userID, cameraID) values (?,?)";
 	private final String SQL_DELETE_PRIVILEGE = "delete from public.privileges where userID = ? and cameraID = ?";
 	private final String SQL_DELETE_PRIVILEGES_FROM_USER = "delete from public.privileges where userID = ?";
@@ -22,198 +27,179 @@ public class PrivilegeDao extends Dao {
 	private final String SQL_SELECT_PRIVILEGES_FOR_USER = "select * from public.privileges where userID = ? order by cameraID";
 	private final String SQL_SELECT_PRIVILEGES_FOR_CAMERA = "select * from public.privileges where cameraID = ? and userID != 1 order by userID";
 
-	public void savePrivilege(Long userID, Long cameraID)
-	{
-		if (userID == null || cameraID == null)
+	public void create(User user, Camera camera) {
+		if (user == null || camera == null || user.getId() == null || camera.getId() == null)
 			throw new IllegalArgumentException("userID or cameraID can not be null");
+
+		if(isUserAuthorizedForCamera(user, camera))
+			return;
 		
-		try
-		{
-			Object[] values = new Object[2];
-			values[0] = userID;
-			values[1] = cameraID;
-			
-			executeUpdate(SQL_ADD_NEW_PRIVILEGE, values);
-		}
-		catch (DataBaseAccessException e)
-		{
+		Connection connection = null;
+		try {
+			connection = jndi.getConnection(DATABASE);
+			PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_NEW_PRIVILEGE);
+			preparedStatement.setLong(1, user.getId());
+			preparedStatement.setLong(2, camera.getId());
+
+			preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error - creating new privilege: " + e.getMessage());
 			throw new PrivilegeNotSavedException();
-		}
-		finally
-		{
-			closeConnectionToDB();
+		} finally {
+			closeConnection(connection);
 		}
 	}
-	
-	public void deletePrivilege(Long userID, Long cameraID)
-	{
-		if (userID == null || cameraID == null)
+
+	public void delete(User user, Camera camera) {
+		if (user == null || camera == null || user.getId() == null || camera.getId() == null)
 			throw new IllegalArgumentException("userID or cameraID can not be null");
-		
-		try
-		{
-			Object[] values = new Object[2];
-			values[0] = userID;
-			values[1] = cameraID;
+
+		Connection connection = null;
+		try {
+			connection = jndi.getConnection(DATABASE);
+			PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_PRIVILEGE);
+			preparedStatement.setLong(1, user.getId());
+			preparedStatement.setLong(2, camera.getId());
 			
-			executeUpdate(SQL_DELETE_PRIVILEGE, values);
-		}
-		catch (DataBaseAccessException e)
-		{
+			preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error - deleting privilege: " + e.getMessage());
 			throw new PrivilegeNotDeletedException();
-		}
-		finally
-		{
-			closeConnectionToDB();
+		} finally {
+			closeConnection(connection);
 		}
 	}
-	
-	public void deletePrivilegesFromUser(Long userID)
-	{
-		if (userID == null)
+
+	public void deletePrivilegesFor(User user) {
+		if (user == null || user.getId() == null)
 			throw new IllegalArgumentException("userID can not be null");
-		
-		try
-		{
-			Object[] values = new Object[1];
-			values[0] = userID;
+
+		Connection connection = null;
+		try {
+			connection = jndi.getConnection(DATABASE);
+			PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_PRIVILEGES_FROM_USER);
+			preparedStatement.setLong(1, user.getId());
 			
-			executeUpdate(SQL_DELETE_PRIVILEGES_FROM_USER, values);
-		}
-		catch (DataBaseAccessException e)
-		{
+			preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error - deleting privileges from userid " + user.getId() + ": " + e.getMessage());
 			throw new PrivilegeNotDeletedException();
-		}
-		finally
-		{
-			closeConnectionToDB();
+		} finally {
+			closeConnection(connection);
 		}
 	}
-	
-	public void deletePrivilegesFromCamera(Long cameraID)
-	{
-		if (cameraID == null)
+
+	public void deletePrivilegesFor(Camera camera) {
+		if (camera == null || camera.getId() ==  null)
 			throw new IllegalArgumentException("cameraID can not be null");
-		
-		try
-		{
-			Object[] values = new Object[1];
-			values[0] = cameraID;
+
+		Connection connection = null;
+		try {
+			connection = jndi.getConnection(DATABASE);
+			PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_PRIVILEGES_FROM_CAMERA);
+			preparedStatement.setLong(1, camera.getId());
 			
-			executeUpdate(SQL_DELETE_PRIVILEGES_FROM_CAMERA, values);
-		}
-		catch (DataBaseAccessException e)
-		{
+			preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error - deleting privileges from cameraid " + camera.getId() + ": " + e.getMessage());
 			throw new PrivilegeNotDeletedException();
-		}
-		finally
-		{
-			closeConnectionToDB();
+		} finally {
+			closeConnection(connection);
 		}
 	}
-	
-	public boolean isUserAuthorizedForCamera(Long userID, Long cameraID)
-	{
-		if (userID == null || cameraID == null)
-			throw new IllegalArgumentException("userID or cameraID can not be null");
-		
-		try
-		{
-			Object[] values = new Object[2];
-			values[0] = userID;
-			values[1] = cameraID;
-			
-			ResultSet resultSet = executeQuery(SQL_SELECT_PRIVILEGE, values);
-			
-			if (resultSet.next()) 
+
+	public boolean isUserAuthorizedForCamera(User user, Camera camera) {
+		if (user == null || camera == null || user.getId() == null || camera.getId() == null)
+			throw new IllegalArgumentException(
+					"userID or cameraID can not be null");
+
+		Connection connection = null;
+		try {
+			connection = jndi.getConnection(DATABASE);
+			PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_PRIVILEGE);
+			preparedStatement.setLong(1, user.getId());
+			preparedStatement.setLong(2, camera.getId());
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			if (resultSet.next())
 				return true;
-			else 
+			else
 				return false;
-		}
-		catch (DataBaseAccessException e)
-		{
-			throw new PrivilegeNotFoundException();
-		} 
-		catch (SQLException e) 
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("Error - deleting privileges from cameraid " + camera.getId() + ": " + e.getMessage());
 			throw new PrivilegeNotFoundException();
-		}
-		finally
-		{
-			closeConnectionToDB();
+		} finally {
+			closeConnection(connection);
 		}
 	}
-	
-	public List<Long> getPrivilegesForUser(Long userID)
-	{
-		if (userID == null)
+
+	public List<Long> listPrivileges(User user) {
+		if (user == null || user.getId() == null)
 			throw new IllegalArgumentException("userID can not be null");
-		
-		try
-		{
-			Object[] values = new Object[1];
-			values[0] = userID;
+
+		Connection connection = null;
+		try {
+			connection = jndi.getConnection(DATABASE);
+			PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_PRIVILEGES_FOR_USER);
+			preparedStatement.setLong(1, user.getId());
 			
-			ResultSet resultSet = executeQuery(SQL_SELECT_PRIVILEGES_FOR_USER, values);
-			
-			List<Long> cameras = new ArrayList<Long>();
-			
-			while (resultSet.next()) 
-			{
-				cameras.add(resultSet.getLong("cameraID"));
-			}			
-			
-			return cameras;
-		}
-		catch (DataBaseAccessException e)
-		{
-			throw new UserNotFoundException();
-		} 
-		catch (SQLException e) 
-		{
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			List<Long> cameraIDs = new ArrayList<Long>();
+			while (resultSet.next()) {
+				cameraIDs.add(resultSet.getLong("cameraID"));
+			}
+
+			return cameraIDs;
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw new UserNotFoundException();
-		}
-		finally
-		{
-			closeConnectionToDB();
+			System.out.println("Error - listing privileges for userid " + user.getId() + ": " + e.getMessage());
+			throw new PrivilegeNotFoundException();
+		} finally {
+			closeConnection(connection);
 		}
 	}
-	
-	public List<Long> getPrivilegesForCamera(Long cameraID)
-	{
-		if (cameraID == null)
+
+	public List<Long> listPrivileges(Camera camera) {
+		if (camera == null || camera.getId() == null)
 			throw new IllegalArgumentException("userID can not be null");
-		
-		try
-		{
-			Object[] values = new Object[1];
-			values[0] = cameraID;
+
+		Connection connection = null;
+		try {
+			connection = jndi.getConnection(DATABASE);
+			PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_PRIVILEGES_FOR_CAMERA);
+			preparedStatement.setLong(1, camera.getId());
 			
-			ResultSet resultSet = executeQuery(SQL_SELECT_PRIVILEGES_FOR_CAMERA, values);
-			
-			List<Long> users = new ArrayList<Long>();
-			
-			while (resultSet.next()) 
-			{
-				users.add(resultSet.getLong("cameraID"));
-			}			
-			
-			return users;
-		}
-		catch (DataBaseAccessException e)
-		{
-			throw new CameraNotFoundException();
-		} 
-		catch (SQLException e) 
-		{
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			List<Long> userIDs = new ArrayList<Long>();
+			while (resultSet.next()) {
+				userIDs.add(resultSet.getLong("cameraID"));
+			}
+
+			return userIDs;
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw new CameraNotFoundException();
-		}	
-		finally
-		{
-			closeConnectionToDB();
+			System.out.println("Error - listing privileges for cameraid " + camera.getId() + ": " + e.getMessage());
+			throw new PrivilegeNotFoundException();
+		} finally {
+			closeConnection(connection);
+		}
+	}
+
+	private void closeConnection(Connection connection) {
+		try {
+			if (connection == null || !connection.isClosed())
+				connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error - closing connection: " + e.getMessage());
 		}
 	}
 }
