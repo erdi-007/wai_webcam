@@ -16,6 +16,15 @@
 		<c:forEach var="privilege_" items="${privilegeList}">
 		document.getElementById('cam' + "${privilege_}").checked = true;
 		</c:forEach>	
+
+		<c:choose>
+			<c:when test="${empty selectedUser}">
+				document.getElementById('updateButton').style.display = 'none';				
+			</c:when>
+			<c:otherwise>
+				document.getElementById('saveButton').style.display = 'none';			
+			</c:otherwise>
+		</c:choose>
 	}
 </script>
 </head>
@@ -70,7 +79,8 @@
 								</tr>
 								<tr>
 									<td colspan="3">
-										<input type="submit" value="Save" onclick="form.action='UserServlet?action=save'; form.method='post'">
+										<input type="submit" id="saveButton" value="Save" onclick="form.action='UserServlet?action=save'; form.method='post'">
+										<input type="submit" id="updateButton" value="Update" onclick="form.action='UserServlet?action=update'; form.method='post'">
 										<input type="submit" value="Cancel" onclick="form.action='UserServlet'; form.method='get'">										
 									</td>
 								</tr>
