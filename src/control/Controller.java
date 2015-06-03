@@ -20,6 +20,8 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import dao.CameraDao;
+import dao.ImageDao;
 import dao.PrivilegeDao;
 import dao.UserDao;
 import model.Camera;
@@ -141,11 +143,17 @@ public class Controller implements Job {
 			throws JobExecutionException {
 		try {
 			System.out.println("Timer geht!!!!!!");
-			/*Controller core = new Controller();
-			List<Camera> cameralist =CameraDao.getListOfAllCameras();
-			for(int i = 0; i< cameralist.size(); i++) {
-				dao.save(core.saveImage(cameralist.get(i)));*/
-		} catch (Exception e) {
+			
+			Controller core = new Controller();
+			CameraDao camdao = new CameraDao();
+			ImageDao imadao = new ImageDao();
+			
+			List<Camera>cameralist = camdao.list();
+			for(int i = 0; i< cameralist.size(); i++) 
+			{
+				imadao.save(core.saveImage(cameralist.get(i)));
+			}
+			} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
