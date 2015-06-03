@@ -33,7 +33,7 @@ public class Controller implements Job {
 
 	final UserDao userDao = new UserDao();
 	final PrivilegeDao privilegeDao = new PrivilegeDao();
-	final String PATH = "C:/wai/images/"; 
+	final String PATH = "C:/wai/images"; 
 	
 	public Image saveImage(Camera camera) throws IOException
 	{
@@ -116,7 +116,7 @@ public class Controller implements Job {
 		if(calendar.get(Calendar.DAY_OF_MONTH) < 10)
 			day = "0" + day;	
 		
-		return  "cam_" + camera.getId() + "/" + year + "_" + month + "_" + day + "/";
+		return  "/cam_" + camera.getId() + "/" + year + "_" + month + "_" + day + "/";
 	}
 	
 	public String generatePathThumbnail(Camera camera, Timestamp date) throws IOException {
