@@ -33,7 +33,7 @@ public class Controller implements Job {
 
 	final UserDao userDao = new UserDao();
 	final PrivilegeDao privilegeDao = new PrivilegeDao();
-	final String PATH = "C:/wai/images/cam_"; 
+	final String PATH = "C:/wai/images/"; 
 	
 	public Image saveImage(Camera camera) throws IOException
 	{
@@ -54,18 +54,18 @@ public class Controller implements Job {
 		
 		String name = generateName(image.getDate());
 
-		File file = new File(pathThumbnail);
+		File file = new File(PATH + pathThumbnail);
 		file.mkdirs();		
 		
 		URL image_url = new URL(camera.getUrl());
 		
 		input = new BufferedInputStream(image_url.openStream());
-		output = new FileOutputStream(path+name);
+		output = new FileOutputStream(PATH+path+name);
 		
 		BufferedImage bufferedImage = ImageIO.read(input);
 		ImageIO.write(bufferedImage, "jpg", output);
 		
-		outputthumb = new FileOutputStream(pathThumbnail + name);
+		outputthumb = new FileOutputStream(PATH + pathThumbnail + name);
 		BufferedImage thumbnail = Scalr.resize(bufferedImage, 100);
 		ImageIO.write(thumbnail, "jpg", outputthumb);
 		
@@ -116,7 +116,7 @@ public class Controller implements Job {
 		if(calendar.get(Calendar.DAY_OF_MONTH) < 10)
 			day = "0" + day;	
 		
-		return  PATH + camera.getId() + "/" + year + "_" + month + "_" + day + "/";
+		return  "cam_" + camera.getId() + "/" + year + "_" + month + "_" + day + "/";
 	}
 	
 	public String generatePathThumbnail(Camera camera, Timestamp date) throws IOException {
