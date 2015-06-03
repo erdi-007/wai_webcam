@@ -23,9 +23,18 @@
 			document.getElementById('settings').style.display = 'none';
 		}
 	}
+	
+	 
 </script>
 </head>
 <body onload="validate()">
+
+
+<div id="dialog-message" title"Datum">
+<div id="datepicker"></div>
+<input type="text"id="time_text">
+<div id="time_slider"></div>
+</div>
 	<%
 		//allow access only if session exists
 		String user = null;
@@ -51,7 +60,8 @@
 		<br> Admin-Status:
 		<%=userinfo.isAdmin()%>
 		<br> <br>
-		
+<!-- 		<img src="/images/15_32.jpg">
+		<img src="/images/image-1.jpg"> -->
 		<fieldset>
 			<legend>Bilder suche</legend>
 			<form action="ImageServlet" method="get">
@@ -134,40 +144,59 @@
 	<script src="jquery/lightbox.js"></script>
 <script>
 
-$( "#time-range" ).slider({
-    range: true,
-    min: 0,
-    max: 1440,
-    values: [ 600, 1200 ],
-    step: 15,
-    slide: function( event, ui ) {
-    	var hours1 = Math.floor(ui.values[0] / 60);
-        var minutes1 = ui.values[0] - (hours1 * 60);
 
-        if(hours1.length < 10) hours1= '0' + hours;
-        if(minutes1.length < 10) minutes1 = '0' + minutes;
-
-        if(minutes1 == 0) minutes1 = '00';
-
-        var hours2 = Math.floor(ui.values[1] / 60);
-        var minutes2 = ui.values[1] - (hours2 * 60);
-
-        if(hours2.length < 10) hours2= '0' + hours;
-        if(minutes2.length < 10) minutes2 = '0' + minutes;
-
-        if(minutes2 == 0) minutes2 = '00';
-      $( "#timeStart" ).val(hours1+':'+minutes1 );
-      $("#timeEnd").val(hours2+":"+minutes2);
-    }
-  });
 $("#cameras").selectmenu();  
 
-$( "#dateStart" ).datepicker({
-	dateFormat: "yy-mm-dd"
+$( "#dateStart" ).click({param1:"test"},function(){
+	$("#datepicker").datepicker('setDate','2015-05-01');
+	$("#dialog-message").dialog( "open" );
 });
-$( "#dateEnd" ).datepicker({
-	dateFormat: "yy-mm-dd"
-});
+
+$(function() {
+    $( "#dialog-message" ).dialog({
+      	autoOpen:false,
+    	modal: true,
+    	height:600,
+    	width:500,
+      	buttons: {
+	        Ok: function() {
+	        	var date = $("#datepicker").datepicker().val();
+	        	var time = $("#time_text").val();
+	        	$("#dateStart").val(date+' '+time);
+	          $( this ).dialog( "close" );
+	        }
+      }
+    });
+  });
+
+$(function() {
+    $( "#datepicker" ).datepicker({
+    	dateFormat:"yy-mm-dd"
+    });
+  });
+
+$(function() {
+$( "#time_slider" ).slider({
+   orientation:"vertical",
+    min: 0,
+    max: 1440,
+    value:  600,
+    step: 15,
+    slide: function( event, ui ) {
+    	var hours = Math.floor(ui.value/ 60);
+        var minutes = ui.value - (hours * 60);
+
+        if(hours.length < 10) hours= '0' + hours;
+        if(minutes.length < 10) minutes = '0' + minutes;
+
+        if(minutes == 0) minutes = '00';
+
+       $("#time_text").val(hours+':'+minutes);
+    /*   $( "#timeStart" ).val(hours1+':'+minutes1 ); */
+     
+    }
+  });
+});  
 /* $( "#timeStart" ).val($( "#time-range" ).slider( "values", 0 ));
 $( "#timeEnd" ).val($( "#time-range" ).slider( "values", 1 )); */
 
