@@ -31,10 +31,12 @@
 
 
 <div id="dialog-message" title"Datum">
-<div id="datepicker"></div>
-<input type="text"id="time_text">
-<div id="time_slider"></div>
-</div>
+	<div id="datepicker"></div>
+	<div id="time_div">
+		<input type="text"id="time_text">
+		<div id="time_slider"></div>
+	</div>
+</div>	
 	<%
 		//allow access only if session exists
 		String user = null;
