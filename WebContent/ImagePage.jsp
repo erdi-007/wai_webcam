@@ -67,28 +67,16 @@
 			<form action="ImageServlet" method="get">
 				
 				<div class="zeile">
-					<label for="dateStart">Startdatum </label>
+					<label for="dateStart">Start</label>
 					<input type="text"name="dateStart"id="dateStart"value=""class="datum">
 				</div>
 				
 				<div class="zeile">
-					<label for="dateEnd">Enddatum</label>
+					<label for="dateEnd">Ende</label>
 					<input type="text"name="dateEnd"id="dateEnd"value=""class="datum">
 				</div>
 				
-				<div class="zeile">
-					<label for="uhrzeitStart"class="uhr">Uhrzeit</label>
-				</div>
-				
-				<div class="zeile">
-				<div	 id="time-range"></div>
-				</div>
-				
-				<div class="zeile">
-					<input type="text" id="timeStart" name="timeStart"readonly value="10:00">
-					<input type="text"id="timeEnd" name="timeEnd"readonly value="20:00">
-				 </div>
-				
+							
 				<div class="zeile">
 					<label for="cameras">Kamera</label>
 				</div>
@@ -147,8 +135,15 @@
 
 $("#cameras").selectmenu();  
 
-$( "#dateStart" ).click({param1:"test"},function(){
-	$("#datepicker").datepicker('setDate','2015-05-01');
+$( "#dateStart" ).click(function(){
+	$("#datepicker").datepicker('setDate','2015-06-03');
+	$("#dialog-message").data("textfield",'dateStart');
+	$("#dialog-message").dialog( "open" );
+});
+
+$( "#dateEnd" ).click(function(){
+	$("#datepicker").datepicker('setDate','2015-06-03');
+	$("#dialog-message").data("textfield",'dateEnd');
 	$("#dialog-message").dialog( "open" );
 });
 
@@ -162,7 +157,9 @@ $(function() {
 	        Ok: function() {
 	        	var date = $("#datepicker").datepicker().val();
 	        	var time = $("#time_text").val();
-	        	$("#dateStart").val(date+' '+time);
+	        	
+	        	var text = $("#dialog-message").data("textfield");
+	        	$("#"+text).val(date+' '+time+':00');
 	          $( this ).dialog( "close" );
 	        }
       }
