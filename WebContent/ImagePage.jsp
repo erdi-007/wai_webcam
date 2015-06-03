@@ -62,8 +62,7 @@
 		<br> Admin-Status:
 		<%=userinfo.isAdmin()%>
 		<br> <br>
-<!-- 		<img src="/images/15_32.jpg">
-		<img src="/images/image-1.jpg"> -->
+<!--		<img src="/images/image-1.jpg"> -->
 		<fieldset>
 			<legend>Bilder suche</legend>
 			<form action="ImageServlet" method="get">
@@ -117,13 +116,14 @@
 			</tr>
 		</table>
 	</center>
-
+<a class="example-image-link" href="/cam_1/2015_06_03/23_30.jpg" data-lightbox="example-set" data-title="Click the right half of the image to move forward."><img class="example-image" src="/cam_1/2015_06_03/thumbnail/23_30.jpg" alt="Bild"/></a>
 <section id="examples" class="examples-section">
 <div class="container">
 			<div class="image-row">
 				<div class="image-set">
 					<c:forEach var="images" items="${imageList}">
 						<a class="example-image-link" href="${images.path}" data-lightbox="example-set" data-title="Click the right half of the image to move forward."><img class="example-image" src="${images.pathThumbnail}" alt=""/></a>
+					
 					</c:forEach>
 				</div>
 			</div>
@@ -131,7 +131,7 @@
 	</section>		
 				
 	<script src="jquery/jquery.js"></script>
-<script src="jquery/jquery-ui.js"></script>
+	<script src="jquery/jquery-ui.js"></script>
 	<script src="jquery/lightbox.js"></script>
 <script>
 
