@@ -1,7 +1,7 @@
 <Context>
 
     <Environment name="wai_webcam" value="true" type="java.lang.Boolean" override="false"/>
-    <Environment name="projectPath" value="C:/wai/GitHub/wai_webcam/WebContent" type="java.lang.String" override="false"/>
+    <Environment name="projectPath" value="D:/waigithub/wai_webcam/WebContent" type="java.lang.String" override="false"/>
     <Environment name="configPath" value="/config" type="java.lang.String" override="false"/>
 
 	<Resource name="jdbc/libraryDB"
