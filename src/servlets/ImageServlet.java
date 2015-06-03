@@ -47,34 +47,18 @@ public class ImageServlet extends HttpServlet {
 			for(int i = 0; i< cameralist.size(); i++) {
 				imageDao.save(controller.saveImage(cameralist.get(i)));
 			}
-		}/*else if(request.getParameter("datum")!=null){
+		}else if(request.getParameter("datum")!=null){
 			
-			String timeStart =request.getParameter("timeStart");
-			String timeEnd = request.getParameter("timeEnd");
 			String dateStart = request.getParameter("dateStart");
 			String dateEnd = request.getParameter("dateEnd");
 			String cam = request.getParameter("cameras");
-//Vorbereitung um timestamp zu erzeugen
-			String startDate = dateStart + " " + timeStart+":00";
-			String endDate = dateEnd +" " + timeEnd+":00";
 			
-			List<Image> images = dao.getImages(dao.getCameraList().get(0).getId(), Timestamp.valueOf(startDate),Timestamp.valueOf(endDate));
-			for(int i=0;i<images.size();i++){
-				images.get(i).setPath(images.get(i).getPath().replaceFirst("WebContent/", ""));
-				images.get(i).setPathThumbnail(images.get(i).getPathThumbnail().replaceFirst("WebContent/", ""));
-				System.out.println("thumb pfad: "+images.get(i).getPathThumbnail());
-			}
-
+			List<Image> images = imageDao.find(cameraDao.find(Long.valueOf(cam)), Timestamp.valueOf(dateStart),Timestamp.valueOf(dateEnd));
 			request.setAttribute("imageList", images);
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
-		dispatcher.forward(request, response);
-		} else {
-			List<Camera> cameras = cameraDao.getListOfAllCameras();
-			request.setAttribute("cameraList", cameras);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
 			dispatcher.forward(request, response);
-		}
-		*/
+		} 
+		
 	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

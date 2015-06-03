@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,7 +15,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import crypto.MD5;
+import dao.CameraDao;
 import dao.UserDao;
+import model.Camera;
 import model.User;
 import exception.UserNotFoundException;
 
@@ -28,7 +31,8 @@ public class LoginServlet extends HttpServlet {
 	private static Logger jlog = Logger.getLogger(LoginServlet.class);
 
 	final UserDao userDao = new UserDao();
-
+	final CameraDao cameraDao = new CameraDao();
+	
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException,
 			java.io.IOException {
@@ -60,7 +64,10 @@ public class LoginServlet extends HttpServlet {
 			response.addCookie(userName);
 //			response.sendRedirect("ImagePage.jsp");
 			jlog.info("User: " + user.getName()+" logged in." );
+			List<Camera> cameras = cameraDao.list();
+			request.setAttribute("cameraList", cameras);
 			getServletContext().getRequestDispatcher("/ImagePage.jsp").forward(request, response);
+			
 		} else {
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
 			PrintWriter out = response.getWriter();
