@@ -141,7 +141,7 @@ public class PrivilegeDao {
 
 	public List<Long> listPrivileges(User user) {
 		if (user == null || user.getId() == null)
-			throw new IllegalArgumentException("userID can not be null");
+			throw new IllegalArgumentException("user can not be null");
 
 		Connection connection = null;
 		try {
@@ -168,7 +168,7 @@ public class PrivilegeDao {
 
 	public List<Long> listPrivileges(Camera camera) {
 		if (camera == null || camera.getId() == null)
-			throw new IllegalArgumentException("userID can not be null");
+			throw new IllegalArgumentException("camera can not be null");
 
 		Connection connection = null;
 		try {
@@ -180,7 +180,7 @@ public class PrivilegeDao {
 
 			List<Long> userIDs = new ArrayList<Long>();
 			while (resultSet.next()) {
-				userIDs.add(resultSet.getLong("cameraID"));
+				userIDs.add(resultSet.getLong("userID"));
 			}
 
 			return userIDs;
