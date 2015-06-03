@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import crypto.MD5;
 import dao.CameraDao;
+import dao.PrivilegeDao;
 import dao.UserDao;
 import model.Camera;
 import model.User;
@@ -31,7 +32,7 @@ public class LoginServlet extends HttpServlet {
 	private static Logger jlog = Logger.getLogger(LoginServlet.class);
 
 	final UserDao userDao = new UserDao();
-	final CameraDao cameraDao = new CameraDao();
+	final PrivilegeDao privilegeDao = new PrivilegeDao();
 	
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException,
@@ -64,7 +65,7 @@ public class LoginServlet extends HttpServlet {
 			response.addCookie(userName);
 //			response.sendRedirect("ImagePage.jsp");
 			jlog.info("User: " + user.getName()+" logged in." );
-			List<Camera> cameras = cameraDao.list();
+			List<Long> cameras = privilegeDao.listPrivileges(user);
 			request.setAttribute("cameraList", cameras);
 			getServletContext().getRequestDispatcher("/ImagePage.jsp").forward(request, response);
 			

@@ -30,7 +30,7 @@
 <body onload="validate()">
 
 
-<div id="dialog-message" title"Datum">
+<div id="dialog-message" title="Datum">
 <div id="datepicker"></div>
 <input type="text"id="time_text">
 <div id="time_slider"></div>
@@ -84,11 +84,13 @@
 				<div class="zeile">	
 					<select name="cameras"id="cameras">
 						<c:forEach var="camera" items="${cameraList}">
-							<option>${camera.id}</option>
+							<option>${camera}</option>
 						</c:forEach>
 					</select>
 				</div>
 				<input type="submit"name="datum" value="Suchen">
+				<input type="hidden"name="loggeduser" value="<%=userinfo.getId()%>">
+				
 			</form>
 		</fieldset>
 		<br> <br>
