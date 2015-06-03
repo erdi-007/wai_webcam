@@ -33,7 +33,7 @@
 <div id="dialog-message" title"Datum">
 	<div id="datepicker"></div>
 	<div id="time_div">
-		<input type="text"id="time_text">
+		<input type="text"id="time_text" value="10:00">
 		<div id="time_slider"></div>
 	</div>
 </div>	
