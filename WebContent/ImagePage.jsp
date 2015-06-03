@@ -147,12 +147,13 @@ $( "#dateEnd" ).click(function(){
 	$("#dialog-message").dialog( "open" );
 });
 
-$(function() {
+
     $( "#dialog-message" ).dialog({
       	autoOpen:false,
     	modal: true,
-    	height:600,
+    	height:460,
     	width:500,
+    	closeOnEscape:true,
       	buttons: {
 	        Ok: function() {
 	        	var date = $("#datepicker").datepicker().val();
@@ -161,18 +162,21 @@ $(function() {
 	        	var text = $("#dialog-message").data("textfield");
 	        	$("#"+text).val(date+' '+time+':00');
 	          $( this ).dialog( "close" );
-	        }
+	        },
+    		Abbrechen:function() {
+    		  $( this ).dialog( "close" );	
+    		}
       }
     });
-  });
 
-$(function() {
+
+
     $( "#datepicker" ).datepicker({
     	dateFormat:"yy-mm-dd"
     });
-  });
 
-$(function() {
+
+
 $( "#time_slider" ).slider({
    orientation:"vertical",
     min: 0,
@@ -193,9 +197,10 @@ $( "#time_slider" ).slider({
      
     }
   });
-});  
-/* $( "#timeStart" ).val($( "#time-range" ).slider( "values", 0 ));
-$( "#timeEnd" ).val($( "#time-range" ).slider( "values", 1 )); */
+ 
+
+
+	  $(".ui-dialog-titlebar").hide();    
 
 </script>
 
