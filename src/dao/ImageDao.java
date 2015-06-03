@@ -62,7 +62,6 @@ public class ImageDao {
 				
 				image.setCameraID(resultSet.getLong("cameraID"));
 				image.setDate(resultSet.getTimestamp("date"));
-				image.setName(resultSet.getString("name"));
 				
 				return image;
 			} else {
@@ -97,7 +96,6 @@ public class ImageDao {
 				
 				image.setCameraID(resultSet.getLong("cameraID"));
 				image.setDate(resultSet.getTimestamp("date"));
-//				image.setName(resultSet.getString("name"));
 				
 				images.add(image);
 			}
