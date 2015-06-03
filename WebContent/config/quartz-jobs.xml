@@ -32,7 +32,7 @@
 				<group>MYTRIGGER_GROUP</group>
 				<job-name>WAI-Job</job-name>
 				<job-group>GROUP-1</job-group>
-				<cron-expression>0 0/1 * * * ?</cron-expression>
+				<cron-expression>0 0/5 * * * ?</cron-expression>
 			</cron>
 		</trigger>
 	</schedule>    

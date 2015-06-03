@@ -49,8 +49,8 @@ public class Controller implements Job {
 		image.setCameraID(camera.getId());
 		image.setDate(new Timestamp(new Date().getTime()));	
 		
-		String path = generatePath(camera);
-		String pathThumbnail = generatePathThumbnail(camera);
+		String path = generatePath(camera, image.getDate());
+		String pathThumbnail = generatePathThumbnail(camera, image.getDate());
 		
 		String name = generateName(image.getDate());
 
@@ -99,23 +99,36 @@ public class Controller implements Job {
 		return name;
 	}
 	
-	public String generatePath(Camera camera) throws IOException {
+	public String generatePath(Camera camera, Timestamp date) throws IOException {
 		
 		if(camera == null)
 			throw new IllegalArgumentException("camera can not be null");
-		return  PATH + camera.getId() + "/";
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		
+		String year = Integer.toString(calendar.get(Calendar.YEAR));
+		String month = Integer.toString(calendar.get(Calendar.MONTH)+1);
+		String day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
+		
+		if((calendar.get(Calendar.MONTH)) < 10)
+			month = "0" + month;
+		if(calendar.get(Calendar.DAY_OF_MONTH) < 10)
+			day = "0" + day;	
+		
+		return  PATH + camera.getId() + "/" + year + "_" + month + "_" + day + "/";
 	}
 	
-	public String generatePathThumbnail(Camera camera) throws IOException {
+	public String generatePathThumbnail(Camera camera, Timestamp date) throws IOException {
 		
 		if(camera == null)
 			throw new IllegalArgumentException("camera can not be null");
-		return  PATH + camera.getId() + "/thumbnail/";
+		return  generatePath(camera, date) + "/thumbnail/";
 	}
 	
 	public void deleteDirectory(Camera camera) throws IOException {
 		
-		String path = generatePath(camera);
+		String path = PATH + camera.getId();
 		File dir = new File(path);
 		
 		FileUtils.deleteDirectory(dir);
