@@ -31,11 +31,9 @@
 
 
 <div id="dialog-message" title"Datum">
-	<div id="datepicker"></div>
-	<div id="time_div">
-		<input type="text"id="time_text">
-		<div id="time_slider"></div>
-	</div>
+<div id="datepicker"></div>
+<input type="text"id="time_text">
+<div id="time_slider"></div>
 </div>
 	<%
 		//allow access only if session exists
@@ -70,15 +68,11 @@
 				
 				<div class="zeile">
 					<label for="dateStart">Start</label>
-				</div>
-				<div class="zeile">	
 					<input type="text"name="dateStart"id="dateStart"value=""class="datum">
 				</div>
 				
 				<div class="zeile">
 					<label for="dateEnd">Ende</label>
-				</div>
-				<div class="zeile">	
 					<input type="text"name="dateEnd"id="dateEnd"value=""class="datum">
 				</div>
 				
@@ -153,13 +147,12 @@ $( "#dateEnd" ).click(function(){
 	$("#dialog-message").dialog( "open" );
 });
 
-
+$(function() {
     $( "#dialog-message" ).dialog({
       	autoOpen:false,
     	modal: true,
-    	height:460,
+    	height:600,
     	width:500,
-    	closeOnEscape:true,
       	buttons: {
 	        Ok: function() {
 	        	var date = $("#datepicker").datepicker().val();
@@ -168,21 +161,18 @@ $( "#dateEnd" ).click(function(){
 	        	var text = $("#dialog-message").data("textfield");
 	        	$("#"+text).val(date+' '+time+':00');
 	          $( this ).dialog( "close" );
-	        },
-    		Abbrechen:function() {
-    		  $( this ).dialog( "close" );	
-    		}
+	        }
       }
     });
+  });
 
-
-
+$(function() {
     $( "#datepicker" ).datepicker({
     	dateFormat:"yy-mm-dd"
     });
+  });
 
-
-
+$(function() {
 $( "#time_slider" ).slider({
    orientation:"vertical",
     min: 0,
@@ -203,10 +193,9 @@ $( "#time_slider" ).slider({
      
     }
   });
- 
-
-
-	  $(".ui-dialog-titlebar").hide();    
+});  
+/* $( "#timeStart" ).val($( "#time-range" ).slider( "values", 0 ));
+$( "#timeEnd" ).val($( "#time-range" ).slider( "values", 1 )); */
 
 </script>
 

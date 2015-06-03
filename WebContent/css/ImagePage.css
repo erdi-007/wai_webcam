@@ -16,27 +16,16 @@ fieldset {
 	display:table-row;
 	width:100%;
 }
+input#timeStart{
+	width:3em;
+	float:left;
+}
+
+ input#timeEnd{
+	width:3em;
+	float:right;
+}
 
 select{
 	width:6em;
-}
-#time_text{
-	width:4em;
-	text-align: center;
-	height:2em;
-	border: 1px solid #e78f08;
-	background: #f6a828 url("images/ui-bg_gloss-wave_35_f6a828_500x100.png") 50% 50% repeat-x;
-	color: #ffffff;
-	font-weight: bold;
-}
-#time_div{
-	float:right;
-}
-#time_slider{
-	margin:0 auto; /* mittig anordnen */
-	margin-top: 2em;
-	height: 10em;
-}
-#datepicker{
-	float:left;
 }
