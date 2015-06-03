@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import utils.JndiFactory;
 import exception.UserNotDeletedException;
 import exception.UserNotFoundException;
@@ -135,7 +137,7 @@ public class UserDao {
 			} else {
 				throw new UserNotFoundException();
 			}
-		} catch (Exception e) {
+		} catch (SQLException | NamingException e) {
 			e.printStackTrace();
 			System.out.println("Error - finding user by name: " + e.getMessage());
 			throw new UserNotFoundException();
