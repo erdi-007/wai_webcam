@@ -30,6 +30,11 @@
 </head>
 <body onload="validate()">
 	<%
+	
+		if(userinfo.isAdmin() == false)
+		{
+			response.sendRedirect("error.jsp");
+		}
 		//allow access only if session exists
 		String user = null;
 		if (session.getAttribute("userinfo") == null) {
