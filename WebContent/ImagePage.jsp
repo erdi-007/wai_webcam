@@ -101,7 +101,7 @@
 					<font color="#ffffff">No images found!</font>
 				</div>
 			</center>
-			<legend>Bilder suche</legend>
+			<legend>Search parameters</legend>
 			<form action="ImageServlet" method="get">
 
 				<div class="row">
@@ -134,7 +134,7 @@
 						</c:forEach>
 					</select>
 				</div>
-				<input type="submit" name="date" value="Search" class="button"
+				<input type="submit" name="date" value="Scan" class="button"
 					id="fieldButton"> <input type="hidden" name="loggeduser"
 					value="<%=userinfo.getId()%>">
 			</form>
