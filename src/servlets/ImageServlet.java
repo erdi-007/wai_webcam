@@ -41,12 +41,7 @@ public class ImageServlet extends HttpServlet {
 			controller = new Controller();
 		
 		
-		if(request.getParameter("image")!=null){
-			List<Camera> cameralist = cameraDao.list();
-			for(int i = 0; i< cameralist.size(); i++) {
-				imageDao.save(controller.saveImage(cameralist.get(i)));
-			}
-		}else if(request.getParameter("datum")!=null){
+		if(request.getParameter("datum")!=null){
 			
 			String dateStart = request.getParameter("dateStart");
 			String dateEnd = request.getParameter("dateEnd");

@@ -4,21 +4,53 @@
     margin: 0;
     padding: 0;
 }
+#leftside{
+	margin-top:5em;
+	float:left;
+	width:23em;
+	background: #f6a828 url("images/ui-bg_gloss-wave_35_f6a828_500x100.png")71% 29% repeat-x;
+}
+#head{
+	margin-top:0.2em;
+	margin-bottom:0.2em;
+	width:100%;
+	text-align: center;
+}
 
+#menu{
+	margin: 0 auto;
+	
+}
+#menu1{
+	margin-left:1.2em;
+	float:left;
+}
+#menu2{
+	margin-left:4em;
+}
 fieldset {
     margin: 1em;
+    margin-top:3em;
     padding: 1em;
     width: 16em;
     border: 0.1em solid #000;
     float:left;
 }
 .zeile{
+	text-align:center;
 	display:table-row;
 	width:100%;
 }
 
 select{
+	text-align:center;
 	width:6em;
+}
+#fieldButton{
+	margin-top: 2em;
+}
+input{
+	text-align: center;
 }
 #time_text{
 	width:4em;

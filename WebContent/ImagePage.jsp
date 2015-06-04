@@ -56,24 +56,49 @@
 			}
 		}
 	%>
-	<center>
+
+<div id="leftside">
+	
+	<div id="head">
 		Name:
 		<%=userinfo.getName()%>
 		<br> Admin-Status:
 		<%=userinfo.isAdmin()%>
-		<br> <br>
-<!--		<img src="/images/image-1.jpg"> -->
+	</div>
+
+
+		
+					<div id="menu">
+					
+					<div id="menu1">
+						<form action="UserServlet" method="get">
+							<input type="submit" value="Settings" class="button">
+						</form>
+					</div>
+				
+					<div id=menu2>
+					<form action="LogoutServlet" method="get">
+						<input type="submit" value="Logout" class="button">
+					</form>
+					</div>
+				</div>
+				
+				
 		<fieldset>
 			<legend>Bilder suche</legend>
 			<form action="ImageServlet" method="get">
 				
 				<div class="zeile">
 					<label for="dateStart">Start</label>
+				</div>	
+				<div class="zeile">	
 					<input type="text"name="dateStart"id="dateStart"value=""class="datum">
 				</div>
 				
 				<div class="zeile">
 					<label for="dateEnd">Ende</label>
+				</div>	
+				<div class="zeile">	
 					<input type="text"name="dateEnd"id="dateEnd"value=""class="datum">
 				</div>
 				
@@ -89,35 +114,15 @@
 						</c:forEach>
 					</select>
 				</div>
-				<input type="submit"name="datum" value="Suchen">
+				<input type="submit"name="datum" value="Suchen" class="button" id="fieldButton">
 				<input type="hidden"name="loggeduser" value="<%=userinfo.getId()%>">
 			</form>
 		</fieldset>
-		<br> <br>
-		<table>
-			<tr>
-				<td>
-					<form action="ImageServlet" method="get">
-						<input type="submit" name ="image"value="Image">
-					</form>
-				</td>
-				<td>
-					<div id="settings">
-						<form action="UserServlet" method="get">
-							<input type="submit" value="Settings">
-						</form>
-					</div>
-				</td>
-				<td>
-					<form action="LogoutServlet" method="get">
-						<input type="submit" value="Logout">
-					</form>
-				</td>
-			</tr>
-		</table>
-	</center>
-<a class="example-image-link" href="/cam_1/2015_06_03/23_30.jpg" data-lightbox="example-set" data-title="Click the right half of the image to move forward."><img class="example-image" src="/cam_1/2015_06_03/thumbnail/23_30.jpg" alt="Bild"/></a>
-<section id="examples" class="examples-section">
+		
+</div>
+	
+	
+<section>
 <div class="container">
 			<div class="image-row">
 				<div class="image-set">
@@ -128,7 +133,7 @@
 				</div>
 			</div>
 	</div>
-	</section>		
+</section>		
 				
 	<script src="jquery/jquery.js"></script>
 	<script src="jquery/jquery-ui.js"></script>
