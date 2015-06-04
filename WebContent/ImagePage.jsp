@@ -92,14 +92,14 @@
 					<label for="dateStart">Start</label>
 				</div>	
 				<div class="zeile">	
-					<input type="text"name="dateStart"id="dateStart"value=""class="datum">
+					<input type="text"name="dateStart"id="dateStart"value=""class="datum" required>
 				</div>
 				
 				<div class="zeile">
 					<label for="dateEnd">Ende</label>
 				</div>	
 				<div class="zeile">	
-					<input type="text"name="dateEnd"id="dateEnd"value=""class="datum">
+					<input type="text"name="dateEnd"id="dateEnd"value=""class="datum"required>
 				</div>
 				
 							
