@@ -33,7 +33,10 @@
 	
 		if(userinfo.isAdmin() == false)
 		{
-			response.sendRedirect("error.jsp");
+			request.setAttribute("error", "not allowed!");
+			RequestDispatcher dispatcher = getServletContext()
+					.getRequestDispatcher("/error.jsp");
+			dispatcher.forward(request, response);
 		}
 		//allow access only if session exists
 		String user = null;
