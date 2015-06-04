@@ -96,7 +96,7 @@
 				</div>
 				
 				<div class="row">
-					<label for="dateEnd">Ende</label>
+					<label for="dateEnd">End</label>
 				</div>	
 				<div class="row">	
 					<input type="text"name="dateEnd"id="dateEnd"value="${dateEnd }"required>
@@ -104,19 +104,17 @@
 				
 							
 				<div class="row">
-					<label for="cameras">Kamera</label>
+					<label for="cameras">Camera</label>
 				</div>
 				
 				<div class="row">	
 					<select name="cameras" id="cameras">
 						<c:forEach var="camera" items="${cameraList}">
-							<option>
-								${camera.id}: ${camera.name}
-							</option>
+							<option value="${camera.id}: ${camera.name}" ${camera.id == cam ? 'selected="selected"' : '' }>${camera.id}: ${camera.name}</option>
 						</c:forEach>
 					</select>
 				</div>
-				<input type="submit"name="date" value="Suchen" class="button" id="fieldButton">
+				<input type="submit"name="date" value="Search" class="button" id="fieldButton">
 				<input type="hidden"name="loggeduser" value="<%=userinfo.getId()%>">
 			</form>
 		</fieldset>
@@ -138,6 +136,7 @@
 
 
 $("#cameras").selectmenu();  
+
 
 $( "#dateStart" ).click(function(){
 	$("#datepicker").datepicker('setDate',new Date());
