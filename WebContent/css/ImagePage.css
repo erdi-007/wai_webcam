@@ -7,8 +7,8 @@
 #leftside{
 	margin-top:5em;
 	float:left;
-	width:23em;
-	background: #f6a828 url("images/ui-bg_gloss-wave_35_f6a828_500x100.png")71% 29% repeat-x;
+	width:30em;
+	background: #f6a828 url("images/ui-bg_gloss-wave_35_f6a828_500x100.png")80% 20% repeat-x;
 }
 #head{
 	margin-top:0.2em;
@@ -22,7 +22,7 @@
 	
 }
 #menu1{
-	margin-left:1.2em;
+	margin-left:4em;
 	float:left;
 }
 #menu2{
@@ -32,9 +32,10 @@ fieldset {
     margin: 1em;
     margin-top:3em;
     padding: 1em;
-    width: 16em;
+    width: 14em;
     border: 0.1em solid #000;
     float:left;
+    font-size: 1.8rem;
 }
 .zeile{
 	text-align:center;
@@ -72,3 +73,7 @@ input{
 #datepicker{
 	float:left;
 }
+
+.ui-datepicker { 
+	font-size: 20px; 
+ }

@@ -4,6 +4,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="css/screen.css">
+<link rel="stylesheet" href="css/User.css">
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Cameras</title>
 <script type="text/javascript">
@@ -60,11 +62,11 @@
 	<table>
 		<tr>
 			<td valign="top">Camera-Liste
-				<table id="cameratable" border="1">
+				<table id="cameratable">
 					<tbody>
 						<tr>
-							<td>Id</td>
-							<td>Name</td>
+							<th>Id</th>
+							<th>Name</th>
 						</tr>
 						<c:forEach var="camera_" items="${cameralist}">
 							<tr>
@@ -83,8 +85,8 @@
 						<tr id="editButton">
 							<td colspan="3">
 								<form>
-									<input type="submit" value="Edit" onclick="form.action='CameraServlet?action=edit&id=${selectedCamera.id}';  form.method='post'">
-									<input type="submit" value="Delete" onclick="form.action='CameraServlet?action=delete&id=${selectedCamera.id}';  form.method='post'">	
+									<input type="submit" value="Edit" onclick="form.action='CameraServlet?action=edit&id=${selectedCamera.id}';  form.method='post'"class="button">
+									<input type="submit" value="Delete" onclick="form.action='CameraServlet?action=delete&id=${selectedCamera.id}';  form.method='post'"class="button">	
 								</form>								
 							</td>
 						</tr>
@@ -95,12 +97,12 @@
 				<div id="privileges">
 					<form action="CameraServlet?action=privilege&id=${selectedCamera.id}" method="post">
 						User
-						<table border="1">
+						<table id="usertable">
 							<tbody>
 								<tr>
-									<td>Id</td>
-									<td>Name</td>
-									<td>Privilege</td>
+									<th>Id</th>
+									<th>Name</th>
+									<th>Privilege</th>
 								</tr>
 								<c:forEach var="user_" items="${userlist}">
 									<tr>
@@ -113,7 +115,7 @@
 								<tr>
 									<td colspan=2></td>
 									<td>
-										<input type="submit" value="Save">
+										<input type="submit" value="Save"class="button">
 									</td>
 								</tr>
 							</tbody>
@@ -125,7 +127,7 @@
 	</table>
 	<br>
 	<form action="CameraServlet?action=new" method="post">
-		<input type="submit" value="New Camera">
+		<input type="submit" value="New Camera" class="button">
 	</form>
 </body>
 </html>

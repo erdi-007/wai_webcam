@@ -4,9 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="css/jquery-ui.css">
 <link rel="stylesheet" href="css/screen.css">
-<link rel="stylesheet" href="css/lightbox.css">
 <link rel="stylesheet" href="css/User.css">
 <%
 	User userinfo = (User) (session.getAttribute("userinfo"));
@@ -110,7 +108,7 @@
 				<div id="privileges">
 					<form action="UserServlet?action=privilege&id=${selectedUser.id}" method="post">
 						Cameras
-						<table id="cameras">
+						<table id="cameratable">
 							<tbody>
 								<tr>
 									<th>Id</th>

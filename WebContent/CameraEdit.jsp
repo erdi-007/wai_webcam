@@ -4,6 +4,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="css/screen.css">
+<link rel="stylesheet" href="css/User.css">
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Camera</title>
 <script type="text/javascript">
@@ -50,7 +52,7 @@
 		<table>
 			<tr>
 				<td valign="top">Camera
-						<table border="1">
+						<table id="cameratable">
 							<tbody>
 								<tr>
 									<td>Name:</td>
@@ -66,8 +68,8 @@
 								</tr>
 								<tr>
 									<td colspan="3">
-										<input type="submit" value="Save" onclick="form.action='CameraServlet?action=save'; form.method='post'">
-										<input type="submit" value="Cancel" onclick="form.action='CameraServlet'; form.method='get'">										
+										<input type="submit" value="Save" onclick="form.action='CameraServlet?action=save'; form.method='post'"class="button">
+										<input type="submit" value="Cancel" onclick="form.action='CameraServlet'; form.method='get'" class="button">										
 									</td>
 								</tr>
 							</tbody>
@@ -77,12 +79,12 @@
 				<td valign="top" >				
 					<div id="privileges">
 						User
-						<table border="1">
+						<table id="usertable">
 							<tbody>
 								<tr>
-									<td>Id</td>
-									<td>Name</td>
-									<td>Privilege</td>
+									<th>Id</th>
+									<th>Name</th>
+									<th>Privilege</th>
 								</tr>
 								<c:forEach var="user_" items="${userlist}">
 									<tr>

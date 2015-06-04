@@ -4,6 +4,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="css/screen.css">
+<link rel="stylesheet" href="css/User.css">
 <%
 	User userinfo = (User) (session.getAttribute("userinfo"));
 %>
@@ -66,7 +68,7 @@
 		<table>
 			<tr>
 				<td valign="top">User
-						<table border="1">
+						<table id="usertable">
 							<tbody>
 								<tr>
 									<td>Name:</td>
@@ -82,9 +84,9 @@
 								</tr>
 								<tr>
 									<td colspan="3">
-										<input type="submit" id="saveButton" value="Save" onclick="form.action='UserServlet?action=save'; form.method='post'">
-										<input type="submit" id="updateButton" value="Update" onclick="form.action='UserServlet?action=update'; form.method='post'">
-										<input type="submit" value="Cancel" onclick="form.action='UserServlet'; form.method='get'">										
+										<input type="submit" id="saveButton" value="Save" onclick="form.action='UserServlet?action=save'; form.method='post'" class="button">
+										<input type="submit" id="updateButton" value="Update" onclick="form.action='UserServlet?action=update'; form.method='post'"class="button">
+										<input type="submit" value="Cancel" onclick="form.action='UserServlet'; form.method='get'" class="button">										
 									</td>
 								</tr>
 							</tbody>
@@ -95,12 +97,12 @@
 				<td valign="top" >				
 					<div id="privileges">
 						Cameras
-						<table border="1">
+						<table id="cameratable">
 							<tbody>
 								<tr>
-									<td>Id</td>
-									<td>Name</td>
-									<td>Privilege</td>
+									<th>Id</th>
+									<th>Name</th>
+									<th>Privilege</th>
 								</tr>
 								<c:forEach var="camera_" items="${cameralist}">
 									<tr>

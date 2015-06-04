@@ -181,6 +181,7 @@ $( "#dateEnd" ).click(function(){
 
     $( "#datepicker" ).datepicker({
     	dateFormat:"yy-mm-dd"
+    	
     });
 
 
