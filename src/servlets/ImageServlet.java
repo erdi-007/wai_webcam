@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -46,6 +47,8 @@ public class ImageServlet extends HttpServlet {
 			String dateStart = request.getParameter("dateStart");
 			String dateEnd = request.getParameter("dateEnd");
 			String cam = request.getParameter("cameras");
+			//Name wieder wegfiltern!
+			cam = cam.split(":")[0];
 			Camera camera = cameraDao.find(Long.valueOf(cam));
 			
 			List<Image> images = imageDao.find(camera, Timestamp.valueOf(dateStart),Timestamp.valueOf(dateEnd));
@@ -61,7 +64,12 @@ public class ImageServlet extends HttpServlet {
 			
 			String loggeduser = request.getParameter("loggeduser");
 			User user = userDao.find(Long.valueOf(loggeduser));
-			List<Long> cameras = privilegeDao.listPrivileges(user);
+			List<Long> cameraIds = privilegeDao.listPrivileges(user);
+			List<Camera> cameras = new ArrayList<Camera>();
+			for (int i = 0; i < cameraIds.size(); i++)
+			{
+				cameras.add(cameraDao.find(cameraIds.get(i)));
+			}
 			request.setAttribute("cameraList", cameras);			
 			request.setAttribute("imageList", images);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
@@ -69,7 +77,12 @@ public class ImageServlet extends HttpServlet {
 		} else {
 			String loggeduser = request.getParameter("loggeduser");
 			User user = userDao.find(Long.valueOf(loggeduser));
-			List<Long> cameras = privilegeDao.listPrivileges(user);
+			List<Long> cameraIds = privilegeDao.listPrivileges(user);
+			List<Camera> cameras = new ArrayList<Camera>();
+			for (int i = 0; i < cameraIds.size(); i++)
+			{
+				cameras.add(cameraDao.find(cameraIds.get(i)));
+			}
 			request.setAttribute("cameraList", cameras);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
 			dispatcher.forward(request, response);
