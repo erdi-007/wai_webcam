@@ -77,6 +77,8 @@ public class CameraDao {
 
 		PrivilegeDao privilegeDao = new PrivilegeDao();
 		privilegeDao.deletePrivilegesFor(camera);
+		ImageDao imageDao = new ImageDao();
+		imageDao.deleteImages(camera);
 
 		Connection connection = null;
 		try {
