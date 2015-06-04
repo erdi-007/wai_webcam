@@ -108,9 +108,11 @@
 				</div>
 				
 				<div class="zeile">	
-					<select name="cameras"id="cameras">
+					<select name="cameras" id="cameras">
 						<c:forEach var="camera" items="${cameraList}">
-							<option>${camera}</option>
+							<option>
+								${camera.id}: ${camera.name}
+							</option>
 						</c:forEach>
 					</select>
 				</div>
