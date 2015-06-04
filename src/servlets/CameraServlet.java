@@ -15,8 +15,10 @@ import dao.CameraDao;
 import dao.PrivilegeDao;
 import dao.UserDao;
 import exception.CameraNotDeletedException;
+import exception.CameraNotFoundException;
 import exception.CameraNotSavedException;
 import exception.PrivilegeNotSavedException;
+import exception.UserNotFoundException;
 import model.User;
 import model.Camera;
 
@@ -67,6 +69,7 @@ public class CameraServlet extends HttpServlet {
 			case "delete": actionDelete(request, response); break;
 			case "privilege": actionPrivilege(request, response); break;
 			case "save": actionSave(request, response); break;
+			case "update": actionUpdate(request, response); break;
     	}
     }
     
@@ -183,25 +186,15 @@ public class CameraServlet extends HttpServlet {
 		camera.setName(request.getParameter("name"));
 		camera.setUrl(request.getParameter("url").replace("\r", "").replace("\n", ""));
 		camera.setDescription(request.getParameter("description"));
-		
-		if(isKnownCamera(request.getParameter("id"))) {
-			camera.setId(extractID(request.getParameter("id")));
-			status = camera.getName() + " has been edited!";
-		} else {
-			status = camera.getName() + " has been added!";
-		}
-		
-		try {		
-			cameraDao.create(camera);
-			actionPrivilege(request, response);
 			
-			Long id = null;
-	    	if(isKnownCamera(request.getParameter("id")))
-	    		id = extractID(request.getParameter("id"));
-	    	else
-	    		id = getNewCameraID();
-	    	
-			response.sendRedirect("CameraServlet?id="+id+"&selected=&status="+status);
+		try {		
+			cameraDao.create(camera);			
+			camera.setId(getNewCameraID());
+			
+			status = camera.getId() + ":" + camera.getName() + " has been created.";
+			
+			actionPrivilege(request, response);
+			response.sendRedirect("CameraServlet?id=" + camera.getId() + "&selected=&status=" + status);
 			
 		}  catch (CameraNotSavedException e) {
 			//Camera konnte nicht gespeichert werden
@@ -211,6 +204,50 @@ public class CameraServlet extends HttpServlet {
     		return;
 		}
     }  
+    
+    void actionUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String status = null;
+    	 	
+    	if(nameIsEmpty(request.getParameter("name"))) {
+			request.setAttribute("error", "No name entered!");
+    		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
+    		dispatcher.forward(request, response);
+    		return;
+		}
+		
+		if(urlIsEmpty(request.getParameter("url"))) {
+			request.setAttribute("error", "No url entered!");
+    		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
+    		dispatcher.forward(request, response);
+    		return;
+		}
+
+		Long cameraID = extractID(request.getParameter("id"));
+		
+		try {
+			Camera camera = cameraDao.find(cameraID);
+			camera.setName(request.getParameter("name"));
+			camera.setUrl(request.getParameter("url"));
+			camera.setDescription(request.getParameter("description"));
+			
+			cameraDao.update(camera);
+			status = camera.getId() + ":" + camera.getName() + " has been edited.";
+			
+			actionPrivilege(request, response);
+			response.sendRedirect("CameraServlet?id=" + camera.getId() + "&selected=&status=" + status);
+		} catch (CameraNotSavedException e) {
+			request.setAttribute("error", e.getMessage());
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
+			dispatcher.forward(request, response);
+    		return;
+		} catch (CameraNotFoundException e) {
+			System.out.println("Error - camera with id " + cameraID + " not found.");
+			request.setAttribute("error", e.getMessage());
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
+			dispatcher.forward(request, response);
+			return;
+		}	
+    }
     
 	private Long extractID(String id) {
 		return Long.valueOf(id);
