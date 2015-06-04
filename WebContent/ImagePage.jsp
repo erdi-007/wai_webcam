@@ -131,7 +131,8 @@
 	</div>
 
 	<div id=images>
-
+		<div>${selectedCamera}</div>
+		<br>
 		<c:forEach var="images" items="${imageList}">
 			<a class="example-image-link" href="${images.path}"
 				data-lightbox="example-set"

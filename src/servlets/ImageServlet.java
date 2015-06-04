@@ -79,12 +79,14 @@ public class ImageServlet extends HttpServlet implements Job {
 			{
 				cameras.add(cameraDao.find(cameraIds.get(i)));
 			}
-			request.setAttribute("cameraList", cameras);			
+			request.setAttribute("cameraList", cameras);	
 			request.setAttribute("imageList", images);
 			request.setAttribute("dateStart", dateStart);
 			request.setAttribute("dateEnd", dateEnd);
-			if(images.size() > 0)
+			if(images.size() > 0){
 				request.setAttribute("imagefound", 1);
+				request.setAttribute("selectedCamera", camera.getDescription());
+			}
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
 			dispatcher.forward(request, response);
 		} else {
