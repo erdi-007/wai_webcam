@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import control.Controller;
 import crypto.MD5;
 import dao.CameraDao;
 import dao.PrivilegeDao;
@@ -30,8 +29,6 @@ public class UserServlet extends HttpServlet {
 	final UserDao userDao = new UserDao();
 	final CameraDao cameraDao = new CameraDao();
 	final PrivilegeDao privilegeDao = new PrivilegeDao();
-
-	Controller controller = new Controller();
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
