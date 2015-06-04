@@ -42,7 +42,7 @@ public class ImageServlet extends HttpServlet {
 			controller = new Controller();
 		
 		
-		if(request.getParameter("datum")!=null){
+		if(request.getParameter("date")!=null){
 			
 			String dateStart = request.getParameter("dateStart");
 			String dateEnd = request.getParameter("dateEnd");
