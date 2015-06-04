@@ -4,6 +4,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="css/jquery-ui.css">
+<link rel="stylesheet" href="css/screen.css">
+<link rel="stylesheet" href="css/lightbox.css">
+<link rel="stylesheet" href="css/User.css">
 <%
 	User userinfo = (User) (session.getAttribute("userinfo"));
 %>
@@ -61,15 +65,20 @@
 	<p>${status}</p>
 	<br>
 	<table>
+	
 		<tr>
-			<td valign="top">User-Liste
-				<table id="usertable" border="1">
-					<tbody>
+			<td valign="top" id="thead">User-Liste
+			
+				<table id="usertable">
+				
+				<tbody>	
 						<tr>
-							<td>Id</td>
-							<td>Name</td>
-							<td>Admin</td>
+							<th>Id</th>
+							<th>Name</th>
+							<th>Admin</th>
 						</tr>
+					
+					
 						<c:forEach var="user_" items="${userlist}">
 							<tr>
 								<c:choose>
@@ -89,8 +98,8 @@
 						<tr id="editButton">
 							<td colspan="3">
 								<form>
-									<input type="submit" value="Edit" onclick="form.action='UserServlet?action=edit&id=${selectedUser.id}';  form.method='post'">
-									<input type="submit" value="Delete" onclick="form.action='UserServlet?action=delete&id=${selectedUser.id}';  form.method='post'">	
+									<input type="submit" value="Edit" onclick="form.action='UserServlet?action=edit&id=${selectedUser.id}';  form.method='post'"class="button">
+									<input type="submit" value="Delete" onclick="form.action='UserServlet?action=delete&id=${selectedUser.id}';  form.method='post'" class="button">	
 								</form>								
 							</td>
 						</tr>
@@ -101,12 +110,12 @@
 				<div id="privileges">
 					<form action="UserServlet?action=privilege&id=${selectedUser.id}" method="post">
 						Cameras
-						<table border="1">
+						<table id="cameras">
 							<tbody>
 								<tr>
-									<td>Id</td>
-									<td>Name</td>
-									<td>Privilege</td>
+									<th>Id</th>
+									<th>Name</th>
+									<th>Privilege</th>
 								</tr>
 								<c:forEach var="camera_" items="${cameralist}">
 									<tr>
@@ -119,7 +128,7 @@
 								<tr>
 									<td colspan=2></td>
 									<td>
-										<input type="submit" value="Save">
+										<input type="submit" value="Save" class="button">
 									</td>
 								</tr>
 							</tbody>
@@ -131,7 +140,7 @@
 	</table>
 	<br>
 	<form action="UserServlet?action=new" method="post">
-		<input type="submit" value="New User">
+		<input type="submit" value="New User" class="button">
 	</form>
 </body>
 </html>

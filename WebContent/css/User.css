@@ -1,0 +1,42 @@
+@CHARSET "ISO-8859-1";
+
+.nav{
+	
+	height:4em;
+	background: #f6a828 url("images/ui-bg_gloss-wave_35_f6a828_500x100.png")71% 29% repeat-x;
+	font-size: 3em; 
+}
+nav ul{
+	text-align: center;
+	
+}
+
+nav li {
+	display:inline-block;
+	margin-top:0.4em;
+	margin-left: 2em;
+}
+
+table{
+	font-size: 1.6em;
+	border-spacing: 0px;
+	color:black;
+}
+th ,td{
+	padding: 10px;
+	text-align: center;
+}
+th{
+	background: #f6a828;
+}
+
+#usertable tr, #cameras tr{
+	background-color: #fdefd9;
+}
+
+#usertable tr:nth-child(odd),#cameras tr:nth-child(odd){
+	background-color:#fbd18c;
+}
+
+
+
