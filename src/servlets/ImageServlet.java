@@ -83,6 +83,7 @@ public class ImageServlet extends HttpServlet implements Job {
 			request.setAttribute("imageList", images);
 			request.setAttribute("dateStart", dateStart);
 			request.setAttribute("dateEnd", dateEnd);
+			request.setAttribute("cam", cam);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
 			dispatcher.forward(request, response);
 		} else {

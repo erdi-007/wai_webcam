@@ -110,9 +110,7 @@
 				<div class="row">	
 					<select name="cameras" id="cameras">
 						<c:forEach var="camera" items="${cameraList}">
-							<option>
-								${camera.id}: ${camera.name}
-							</option>
+							<option value="${camera.id}: ${camera.name}" ${camera.id == cam ? 'selected="selected"' : '' }>${camera.id}: ${camera.name}</option>
 						</c:forEach>
 					</select>
 				</div>
@@ -138,6 +136,7 @@
 
 
 $("#cameras").selectmenu();  
+
 
 $( "#dateStart" ).click(function(){
 	$("#datepicker").datepicker('setDate',new Date());
