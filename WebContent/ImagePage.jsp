@@ -92,14 +92,14 @@
 					<label for="dateStart">Start</label>
 				</div>	
 				<div class="row">	
-					<input type="text"name="dateStart"id="dateStart"value="" required>
+					<input type="text"name="dateStart"id="dateStart"value="${dateStart}" required>
 				</div>
 				
 				<div class="row">
 					<label for="dateEnd">Ende</label>
 				</div>	
 				<div class="row">	
-					<input type="text"name="dateEnd"id="dateEnd"value=""required>
+					<input type="text"name="dateEnd"id="dateEnd"value="${dateEnd }"required>
 				</div>
 				
 							
@@ -140,13 +140,13 @@
 $("#cameras").selectmenu();  
 
 $( "#dateStart" ).click(function(){
-	$("#datepicker").datepicker('setDate','2015-06-03');
+	$("#datepicker").datepicker('setDate',new Date());
 	$("#dialog-message").data("textfield",'dateStart');
 	$("#dialog-message").dialog( "open" );
 });
 
 $( "#dateEnd" ).click(function(){
-	$("#datepicker").datepicker('setDate','2015-06-03');
+	$("#datepicker").datepicker('setDate',new Date());
 	$("#dialog-message").data("textfield",'dateEnd');
 	$("#dialog-message").dialog( "open" );
 });

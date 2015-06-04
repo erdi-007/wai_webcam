@@ -72,6 +72,8 @@ public class ImageServlet extends HttpServlet {
 			}
 			request.setAttribute("cameraList", cameras);			
 			request.setAttribute("imageList", images);
+			request.setAttribute("dateStart", dateStart);
+			request.setAttribute("dateEnd", dateEnd);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
 			dispatcher.forward(request, response);
 		} else {
