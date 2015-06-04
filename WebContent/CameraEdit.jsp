@@ -6,6 +6,9 @@
 <head>
 <link rel="stylesheet" href="css/screen.css">
 <link rel="stylesheet" href="css/User.css">
+<%
+	User userinfo = (User) (session.getAttribute("userinfo"));
+%>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Camera</title>
 <script type="text/javascript">
@@ -40,7 +43,7 @@
 	<nav>
 		<div class="nav">
 			<ul>
-				<li><a href="ImagePage.jsp">Images</a></li>
+				<li><a href="ImageServlet?loggeduser=<%=userinfo.getId()%>">Images</a></li>
 				<li><a href="UserServlet">User</a></li>
 				<li><a href="CameraServlet">Cameras</a></li>
 				<li><a href="LogoutServlet">Logout</a></li>
