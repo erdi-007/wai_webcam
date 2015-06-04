@@ -51,7 +51,7 @@ public class ImageServlet extends HttpServlet implements Job {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
-		if(request.getParameter("datum")!=null){
+		if(request.getParameter("date")!=null){
 			
 			String dateStart = request.getParameter("dateStart");
 			String dateEnd = request.getParameter("dateEnd");
