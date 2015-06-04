@@ -18,9 +18,9 @@
 <script type="text/javascript">
 	function validate() {
 		if (<%=userinfo.isAdmin()%> == true) {
-			document.getElementById('settings').style.display = 'block';
+			document.getElementById('menu1').style.display = 'block';
 		} else if (<%=userinfo.isAdmin()%> == false) {
-			document.getElementById('settings').style.display = 'none';
+			document.getElementById('menu1').style.display = 'none';
 		}
 	}
 	
