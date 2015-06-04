@@ -23,7 +23,7 @@
 		<job>
 			<name>WAI-Job</name>
 			<group>GROUP-1</group>
-			<job-class>control.Controller</job-class>
+			<job-class>servlets.ImageServlet</job-class>
 		</job>
 	
 		<trigger>

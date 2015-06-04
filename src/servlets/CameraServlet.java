@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import control.Controller;
 import dao.CameraDao;
 import dao.PrivilegeDao;
 import dao.UserDao;
@@ -18,7 +17,6 @@ import exception.CameraNotDeletedException;
 import exception.CameraNotFoundException;
 import exception.CameraNotSavedException;
 import exception.PrivilegeNotSavedException;
-import exception.UserNotFoundException;
 import model.User;
 import model.Camera;
 
@@ -30,7 +28,6 @@ public class CameraServlet extends HttpServlet {
 	final CameraDao cameraDao = new CameraDao();
 	final UserDao userDao = new UserDao();
 	final PrivilegeDao privilegeDao = new PrivilegeDao();
-	Controller controller = new Controller();
        
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
