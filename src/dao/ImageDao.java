@@ -11,6 +11,7 @@ import java.util.List;
 import utils.JndiFactory;
 import exception.ImageNotFoundException;
 import exception.ImageNotSavedException;
+import exception.ImagesNotDeletedException;
 import model.Camera;
 import model.Image;
 
@@ -74,6 +75,24 @@ public class ImageDao {
 		} finally {
 			closeConnection(connection);
 		}
+	}
+	
+	public void deleteImages(Camera camera) {
+
+		if (camera == null)
+			throw new IllegalArgumentException("camera can not be null");
+				
+		Connection connection = null;		
+		try {
+			connection = jndi.getConnection("jdbc/libraryDB");
+			PreparedStatement pstmt = connection.prepareStatement("delete from public.images where cameraID = ?");
+			pstmt.setLong(1, camera.getId());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ImagesNotDeletedException();
+		} finally {
+			closeConnection(connection);
+		}		
 	}
 	
 	public List<Image> find(Camera camera, Timestamp startDate, Timestamp endDate) {
