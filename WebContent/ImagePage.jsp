@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="US-ASCII" import="model.User"%>
+	pageEncoding="UTF-8" import="model.User"%>
 <%@ page import="model.*"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -88,26 +88,26 @@
 			<legend>Bilder suche</legend>
 			<form action="ImageServlet" method="get">
 				
-				<div class="zeile">
+				<div class="row">
 					<label for="dateStart">Start</label>
 				</div>	
-				<div class="zeile">	
-					<input type="text"name="dateStart"id="dateStart"value=""class="datum" required>
+				<div class="row">	
+					<input type="text"name="dateStart"id="dateStart"value="" required>
 				</div>
 				
-				<div class="zeile">
+				<div class="row">
 					<label for="dateEnd">Ende</label>
 				</div>	
-				<div class="zeile">	
-					<input type="text"name="dateEnd"id="dateEnd"value=""class="datum"required>
+				<div class="row">	
+					<input type="text"name="dateEnd"id="dateEnd"value=""required>
 				</div>
 				
 							
-				<div class="zeile">
+				<div class="row">
 					<label for="cameras">Kamera</label>
 				</div>
 				
-				<div class="zeile">	
+				<div class="row">	
 					<select name="cameras" id="cameras">
 						<c:forEach var="camera" items="${cameraList}">
 							<option>
@@ -116,27 +116,21 @@
 						</c:forEach>
 					</select>
 				</div>
-				<input type="submit"name="datum" value="Suchen" class="button" id="fieldButton">
+				<input type="submit"name="date" value="Suchen" class="button" id="fieldButton">
 				<input type="hidden"name="loggeduser" value="<%=userinfo.getId()%>">
 			</form>
 		</fieldset>
 		
 </div>
 	
-	
-<section>
-<div class="container">
-			<div class="image-row">
-				<div class="image-set">
+<div id=images>	
+
 					<c:forEach var="images" items="${imageList}">
-						<a class="example-image-link" href="${images.path}" data-lightbox="example-set" data-title="Click the right half of the image to move forward."><img class="example-image" src="${images.pathThumbnail}" alt=""/></a>
+						<a class="example-image-link" href="${images.path}" data-lightbox="example-set" data-title="Navigieren über die Pfeile oder Tastatur"><img class="example-image" src="${images.pathThumbnail}" alt="Bild nicht gefunden"/></a>
 					
 					</c:forEach>
-				</div>
-			</div>
-	</div>
-</section>		
-				
+			
+</div>				
 	<script src="jquery/jquery.js"></script>
 	<script src="jquery/jquery-ui.js"></script>
 	<script src="jquery/lightbox.js"></script>

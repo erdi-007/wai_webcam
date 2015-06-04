@@ -37,7 +37,9 @@ fieldset {
     float:left;
     font-size: 1.8rem;
 }
-.zeile{
+
+
+.row{
 	text-align:center;
 	display:table-row;
 	width:100%;
@@ -53,6 +55,16 @@ select{
 input{
 	text-align: center;
 }
+
+#images{
+	margin-top:5em;
+	float:right;
+	width:70%;
+	height:42em;
+	
+	overflow:auto;
+	
+}
 #time_text{
 	width:4em;
 	text-align: center;
@@ -62,6 +74,8 @@ input{
 	color: #ffffff;
 	font-weight: bold;
 }
+
+
 #time_div{
 	float:right;
 }
