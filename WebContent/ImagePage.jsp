@@ -92,7 +92,7 @@
 
 		<fieldset>
 			<center><div id="noimages"><font color="#ffffff">No images found!</font></div></center>
-			<legend>Bilder suche</legend>
+			<legend>Search parameter</legend>
 			<form action="ImageServlet" method="get">
 
 				<div class="row">
@@ -104,7 +104,7 @@
 				</div>
 
 				<div class="row">
-					<label for="dateEnd">Ende</label>
+					<label for="dateEnd">End</label>
 				</div>
 				<div class="row">
 					<input type="text" name="dateEnd" id="dateEnd" value="${dateEnd }"
@@ -113,7 +113,7 @@
 
 
 				<div class="row">
-					<label for="cameras">Kamera</label>
+					<label for="cameras">Camera</label>
 				</div>
 				<div class="row">
 					<select name="cameras" id="cameras">
@@ -122,7 +122,7 @@
 						</c:forEach>
 					</select>
 				</div>
-				<input type="submit" name="date" value="Suchen" class="button"
+				<input type="submit" name="date" value="Scan" class="button"
 					id="fieldButton"> <input type="hidden" name="loggeduser"
 					value="<%=userinfo.getId()%>">
 			</form>
