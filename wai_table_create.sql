@@ -35,11 +35,11 @@ INSERT INTO public.cameras
 INSERT INTO public.cameras
 (name, description, url) values ('Hamburg', 'Webcam der Deutsche Afrika-Linien John T. Essberger', 'http://my.dal.biz/cgi-bin/webcam/getpics.cgi?Cam=east');
 INSERT INTO public.cameras
-(name, description, url) values ('Hamburg', 'Webcam der MPC Münchmeyer Petersen & Co. GmbH', 'http://www.mpc-it.de/webcam/big.jpg');
+(name, description, url) values ('Hamburg', 'Webcam der MPC Muenchmeyer Petersen & Co. GmbH', 'http://www.mpc-it.de/webcam/big.jpg');
 INSERT INTO public.cameras
 (name, description, url) values ('Ludwigshafen am Bodensee', 'Webcam mit Blick auf den Bodensee vom Zollhaus', 'http://www.die-ersten-am-see.de/webcam/camluzo.jpg');
 INSERT INTO public.cameras
-(name, description, url) values ('Füssen', 'Webcam mit Blick in die Fussgängerzone (Reichenstrasse)', 'http://www.webcamfuessen.de/webcam/webcamfuessen.jpg');
+(name, description, url) values ('Fuessen', 'Webcam mit Blick in die Fussgaengerzone (Reichenstrasse)', 'http://www.webcamfuessen.de/webcam/webcamfuessen.jpg');
 
 INSERT INTO privileges
 (userid, cameraid) VALUES (1, 1);
