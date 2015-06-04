@@ -16,7 +16,16 @@
 
 		<c:forEach var="privilege_" items="${privilegeList}">
 		document.getElementById('user' + "${privilege_}").checked = true;
-		</c:forEach>	
+		</c:forEach>
+		
+		<c:choose>
+			<c:when test="${empty selectedCamera}">
+				document.getElementById('updateButton').style.display = 'none';				
+			</c:when>
+			<c:otherwise>
+				document.getElementById('saveButton').style.display = 'none';			
+			</c:otherwise>
+		</c:choose>
 	}
 </script>
 </head>
@@ -71,7 +80,8 @@
 								</tr>
 								<tr>
 									<td colspan="3">
-										<input type="submit" value="Save" onclick="form.action='CameraServlet?action=save'; form.method='post'"class="button">
+										<input type="submit" id="saveButton" value="Save" onclick="form.action='CameraServlet?action=save'; form.method='post'"class="button">
+										<input type="submit" id="updateButton" value="Update" onclick="form.action='CameraServlet?action=update'; form.method='post'"class="button">
 										<input type="submit" value="Cancel" onclick="form.action='CameraServlet'; form.method='get'" class="button">										
 									</td>
 								</tr>
