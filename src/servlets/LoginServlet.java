@@ -73,6 +73,7 @@ public class LoginServlet extends HttpServlet {
 			{
 				cameras.add(cameraDao.find(cameraIds.get(i)));
 			}
+			request.setAttribute("imagefound", 1);
 			request.setAttribute("cameraList", cameras);
 			getServletContext().getRequestDispatcher("/ImagePage.jsp").forward(request, response);
 			

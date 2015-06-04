@@ -22,21 +22,29 @@
 		} else if (<%=userinfo.isAdmin()%> == false) {
 			document.getElementById('menu1').style.display = 'none';
 		}
+		
+		<c:choose>
+			<c:when test="${empty imagefound}">
+				document.getElementById('noimages').style.display = 'block';			
+			</c:when>
+			<c:otherwise>
+				document.getElementById('noimages').style.display = 'none';
+			</c:otherwise>
+		</c:choose>
 	}
-	
 	 
 </script>
 </head>
 <body onload="validate()">
 
 
-<div id="dialog-message" title="Datum">
-	<div id="datepicker"></div>
-	<div id="time_div">
-		<input type="text"id="time_text" value="10:00">
-		<div id="time_slider"></div>
+	<div id="dialog-message" title="Datum">
+		<div id="datepicker"></div>
+		<div id="time_div">
+			<input type="text" id="time_text" value="10:00">
+			<div id="time_slider"></div>
+		</div>
 	</div>
-</div>	
 	<%
 		//allow access only if session exists
 		String user = null;
@@ -57,84 +65,88 @@
 		}
 	%>
 
-<div id="leftside">
-	
-	<div id="head">
-		Name:
-		<%=userinfo.getName()%>
-		<br> Admin-Status:
-		<%=userinfo.isAdmin()%>
-	</div>
+	<div id="leftside">
+
+		<div id="head">
+			Name:
+			<%=userinfo.getName()%>
+			<br> Admin-Status:
+			<%=userinfo.isAdmin()%>
+		</div>
+
+		<div id="menu">
+
+			<div id="menu1">
+				<form action="UserServlet" method="get">
+					<input type="submit" value="Settings" class="button">
+				</form>
+			</div>
+
+			<div id=menu2>
+				<form action="LogoutServlet" method="get">
+					<input type="submit" value="Logout" class="button">
+				</form>
+			</div>
+		</div>
 
 
-		
-					<div id="menu">
-					
-					<div id="menu1">
-						<form action="UserServlet" method="get">
-							<input type="submit" value="Settings" class="button">
-						</form>
-					</div>
-				
-					<div id=menu2>
-					<form action="LogoutServlet" method="get">
-						<input type="submit" value="Logout" class="button">
-					</form>
-					</div>
-				</div>
-				
-				
 		<fieldset>
+			<center><div id="noimages"><font color="#ffffff">No images found!</font></div></center>
 			<legend>Bilder suche</legend>
 			<form action="ImageServlet" method="get">
-				
+
 				<div class="row">
 					<label for="dateStart">Start</label>
-				</div>	
-				<div class="row">	
-					<input type="text"name="dateStart"id="dateStart"value="${dateStart}" required>
 				</div>
-				
+				<div class="row">
+					<input type="text" name="dateStart" id="dateStart"
+						value="${dateStart}" required>
+				</div>
+
 				<div class="row">
 					<label for="dateEnd">Ende</label>
-				</div>	
-				<div class="row">	
-					<input type="text"name="dateEnd"id="dateEnd"value="${dateEnd }"required>
 				</div>
-				
-							
+				<div class="row">
+					<input type="text" name="dateEnd" id="dateEnd" value="${dateEnd }"
+						required>
+				</div>
+
+
 				<div class="row">
 					<label for="cameras">Kamera</label>
 				</div>
-				
-				<div class="row">	
+				<div class="row">
 					<select name="cameras" id="cameras">
 						<c:forEach var="camera" items="${cameraList}">
-							<option>
-								${camera.id}: ${camera.name}
-							</option>
+							<option>${camera.id}: ${camera.name}</option>
 						</c:forEach>
 					</select>
 				</div>
-				<input type="submit"name="date" value="Suchen" class="button" id="fieldButton">
-				<input type="hidden"name="loggeduser" value="<%=userinfo.getId()%>">
+				<input type="submit" name="date" value="Suchen" class="button"
+					id="fieldButton"> <input type="hidden" name="loggeduser"
+					value="<%=userinfo.getId()%>">
 			</form>
 		</fieldset>
-		
-</div>
-	
-<div id=images>	
 
-					<c:forEach var="images" items="${imageList}">
-						<a class="example-image-link" href="${images.path}" data-lightbox="example-set" data-title="Navigieren über die Pfeile oder Tastatur"><img class="example-image" src="${images.pathThumbnail}" alt="Bild nicht gefunden"/></a>
-					
-					</c:forEach>
-			
-</div>				
+	</div>
+
+	<div id=images>
+
+		<c:forEach var="images" items="${imageList}">
+			<a class="example-image-link" href="${images.path}"
+				data-lightbox="example-set"
+				data-title="Navigieren über die Pfeile oder Tastatur"><img
+				class="example-image" src="${images.pathThumbnail}"
+				alt="Bild nicht gefunden" /></a>
+
+		</c:forEach>
+
+	</div>
+	
 	<script src="jquery/jquery.js"></script>
 	<script src="jquery/jquery-ui.js"></script>
 	<script src="jquery/lightbox.js"></script>
-<script>
+	<script>
 
 
 $("#cameras").selectmenu();  

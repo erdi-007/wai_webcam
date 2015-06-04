@@ -83,6 +83,8 @@ public class ImageServlet extends HttpServlet implements Job {
 			request.setAttribute("imageList", images);
 			request.setAttribute("dateStart", dateStart);
 			request.setAttribute("dateEnd", dateEnd);
+			if(images.size() > 0)
+				request.setAttribute("imagefound", 1);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
 			dispatcher.forward(request, response);
 		} else {
@@ -94,6 +96,7 @@ public class ImageServlet extends HttpServlet implements Job {
 			{
 				cameras.add(cameraDao.find(cameraIds.get(i)));
 			}
+			request.setAttribute("imagefound", 1);
 			request.setAttribute("cameraList", cameras);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ImagePage.jsp");
 			dispatcher.forward(request, response);
